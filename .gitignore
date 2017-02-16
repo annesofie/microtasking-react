@@ -29,5 +29,5 @@ node_modules
 # Ignore build files
 public
 
-# WebStorm
-.idea
+# WebStorm / JetBrains
+.idea/
