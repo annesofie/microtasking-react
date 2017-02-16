@@ -1,0 +1,20 @@
+
+$button-color: #6f6f6f;
+$button-backgroundcolor: #bebebe;
+
+.redBg {
+    background-color: red;
+    border-radius: 51px;
+    color: white;
+    padding: 5px;
+}
+
+#start-survey-btn-div{
+  padding-top: 10%;
+}
+.start-survey {
+    background-color: $button-backgroundcolor;
+    color: $button-color;
+    width: 24vw;
+    height: 6vh;
+}
