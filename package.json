@@ -15,7 +15,7 @@
   },
   "author": "Ali Al Dallal",
   "license": "MIT",
-  "homepage": "https://annesofie.github.io/microtasking-react/",
+  "homepage": "https://annesofie.github.io/microtasking-react",
   "dependencies": {
     "leaflet": "^1.0.3",
     "lodash": "^4.17.4",
