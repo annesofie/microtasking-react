@@ -21,6 +21,7 @@ module.exports = {
 		path: path.join(__dirname, 'public'),
 		filename: '[chunkhash].js'
 	},
+
 	resolve: {
 		extensions: ['', '.js', '.jsx']
 	},
