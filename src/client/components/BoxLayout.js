@@ -7,9 +7,11 @@ class BoxLayout extends Component {
 
 	render() {
 		return (
-			<div className="d-flex flex-column map-box">
+			<div className="d-flex map-box">
+				<div className="d-flex align-items-start"></div>
+				<div className="d-flex align-items-end">
 					{this.props.children}
-				<div className="search-footer pagination"></div>
+				</div>
 			</div>
 		);
 	}
