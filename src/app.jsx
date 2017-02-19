@@ -1,5 +1,5 @@
 import React from 'react';
-import { browserHistory, Router, Route, Link, IndexRoute } from 'react-router'
+import { browserHistory, Router, Route, Link, IndexRoute, hashHistory } from 'react-router'
 
 import Header from './client/components/HeaderComponent';
 import MainLayout from './client/components/MainLayout';
@@ -13,7 +13,7 @@ import MapLayout from './client/components/views/MapView';
 export default class App extends React.Component {
   render() {
     return (
-				<Router history={browserHistory}>
+				<Router history={hashHistory}>
 					<Route path="/">
 						<IndexRoute component={Header}/>
 							<Route component={MainLayout}>

@@ -1,0 +1,24 @@
+.task-map-box {
+  padding-top: 5%;
+  padding-left: 10%;
+}
+.task-box {
+  background-image: url("../src/client/components/assets/RectangleView.png");
+  background-repeat: no-repeat;
+  //background-position: center;
+  height: 70vh;
+  width: 30vw;
+  text-align: center;
+}
+.map-box .leaflet-container {
+  height: 69vh;
+  width: 40vw;
+  margin: 0 auto;
+  position: relative;
+}
+.task-header {
+  margin-top: 2%;
+}
+.task-div {
+  padding-top: 6%;
+}
