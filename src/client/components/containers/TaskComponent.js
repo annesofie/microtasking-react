@@ -17,7 +17,7 @@ const ListContainer = React.createClass({
 	},
 
 	componentDidMount: function() {
-		taskApi.getTasks().then(tasks => {
+		taskApi.getTask().then(tasks => {
 			this.setState({tasks: tasks.results})
 		});
 	},

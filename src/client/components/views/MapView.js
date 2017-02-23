@@ -1,35 +1,50 @@
 import React, { Component } from 'react'
-//import L from 'leaflet';
-//delete L.Icon.Default.prototype._getIconUrl;
-//
-//L.Icon.Default.mergeOptions({
-//	iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-//	iconUrl: require('leaflet/dist/images/marker-icon.png'),
-//	shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-//});
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
+import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON} from 'react-leaflet'
 
-export default class SimpleExample extends Component {
-	state = {
-		lat: 51.505,
-		lng: -0.09,
-		zoom: 13,
-	}
+import markerIcon from '../assets/images/marker-icon.png';
+import shadowIcon from '../assets/images/marker-shadow.png';
 
-	render () {
-		const position = [this.state.lat, this.state.lng]
-		return (
-			<Map center={position} zoom={this.state.zoom}>
+
+export default function(props){
+
+
+	var position = [props.mapOptions.lat, props.mapOptions.lng];
+	var customIcon = L.icon({
+		iconUrl: markerIcon,
+		shadowUrl: shadowIcon
+	});
+	console.log(props);
+
+	return (
+		<div className="p-2 map-box">
+			<Map center={position} zoom={props.mapOptions.zoom}>
 				<TileLayer
 					attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 					url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
 				/>
-				<Marker position={position}>
+				<Marker position={position} icon={customIcon}>
 					<Popup>
-						<span>A pretty CSS3 popup. <br /> Easily customizable.</span>
+						<span></span>
 					</Popup>
 				</Marker>
+				{props.taskelements.features.map(elem => {
+					return (
+						<GeoJSON data={elem} color="purple"/>
+					)
+				})}
+				{props.conflictelements.features.map(elem => {
+					return (
+						<GeoJSON data={elem} color="blue"/>
+					)
+				})}
 			</Map>
-		)
-	}
+		</div>
+	)
 }
+
+//MapContainer.propTypes = {
+//	mapOptions: PropTypes.string
+//};
+
+//<p>{this.state.geom}</p>
+//{props.geom}
