@@ -13,7 +13,7 @@ class HeaderComponent extends Component {
 	render() {
 		return (
 			<div id="header" className="container-fluid">
-				<div className="d-flex flex-row justify-content-center">
+				<div className="">
 					<h1 className="header-text">Welcome to Micro tasking Survey</h1>
 				</div>
 				<div className="d-flex flex-row justify-content-center">
