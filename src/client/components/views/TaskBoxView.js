@@ -2,15 +2,49 @@
  * Created by AnneSofie on 23.02.2017.
  */
 import React, {Component} from 'react';
-import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
-//View
-//import Table from './BootstrapTable';
+//Views
+import MetadataTask from './metadataTask';
 
 class TaskBoxView extends Component {
 
-	setChosenGeomLayer() {
-		var chosenGeomLayer;
+	constructor(props) {
+		super(props);
+		this.state = {
+			taskmode: 'geom_task',
+			nameBtn: 'next'
+		};
+		// this._handleTaskChange = this._handleTaskChange.bind(this);
+		this._taskChange = this._taskChange.bind(this);
+	}
+
+	_taskChange() {
+		console.log(this.state.taskmode);
+		this.setState({taskmode: 'meta_task'});
+		this.setState({nameBtn: 'finish'});
+	}
+
+	_handleTaskChange() {
+		let shownTask;
+		if (this.state.taskmode == 'geom_task') {
+			let chosenGeomLayer = this._setChosenGeomLayer();
+			shownTask =
+				<div className="task-div">
+					<h5>Which geometry to use?</h5>
+					{chosenGeomLayer}
+				</div>;
+		} else if (this.state.taskmode == 'meta_task'){
+			shownTask =
+				<MetadataTask
+					activeTaskObj1={this.props.activeTaskObj1}
+					taskmode={this.props.taskmode}
+				/>;
+		}
+		return shownTask;
+	}
+
+	_setChosenGeomLayer() {
+		let chosenGeomLayer;
 		if(this.props.chosenGeomLayer) {
 			chosenGeomLayer = <h6 id="chosenGeom">You chose {this.props.chosenGeomLayer.feature.properties.title}</h6>;
 		} else {
@@ -19,64 +53,19 @@ class TaskBoxView extends Component {
 		return chosenGeomLayer;
 	}
 
-	setInputInMetaTable() {
-		var tableinput;
-		if (this.props.taskmode == 1){
-			tableinput = <tr>
-				<td key={0+this.props.activeTaskObj.id}>{this.props.activeTaskObj.properties.title}</td>
-				<td key={1+this.props.activeTaskObj.id}>{this.props.activeTaskObj.properties.info1}</td>
-				<td key={2+this.props.activeTaskObj.id}>{this.props.activeTaskObj.properties.info2}</td>
-				<td key={3+this.props.activeTaskObj.id}>{this.props.activeTaskObj.properties.info3}</td>
-			</tr>;
-		} else if (this.props.taskmode == 3) {
-			tableinput =
-				this.props.activeTaskObj.map(elem => {
-					return (
-						<tr>
-							<td key={0+elem.id}>{elem.properties.title}</td>
-							<td key={1+elem.id}>{elem.properties.info1}</td>
-							<td key={2+elem.id}>{elem.properties.info2}</td>
-							<td key={3+elem.id}>{elem.properties.info3}</td>
-						</tr>
-							)
-				});
-		} else {
-			tableinput =
-				this.props.taskelements.features.map(elem => {
-					return (
-						<tr>
-							<td key={0+elem.id}>{elem.properties.title}</td>
-							<td key={1+elem.id}>{elem.properties.info1}</td>
-							<td key={2+elem.id}>{elem.properties.info2}</td>
-							<td key={3+elem.id}>{elem.properties.info3}</td>
-						</tr>
-					)
-				});
-		}
-		return tableinput;
-	}
 
 	render() {
-		var chosenGeomLayer = this.setChosenGeomLayer();
-		var tableInput = this.setInputInMetaTable();
+		let shownTask = this._handleTaskChange();
 		return (
 				<div className="p-2 task-box">
-					<h3>{this.props.task.title}</h3>
+					<h4>{this.props.task.title}</h4>
 					<p>{this.props.task.description}</p>
-					<div className="task-div">
-						<h5>Which geometry to use?</h5>
-						{chosenGeomLayer}
+					{shownTask}
+					<div className="next-btn">
+						<button className="btn-sm btn-outline-secondary choose-btn" onClick={this._taskChange}>
+							{this.state.nameBtn}
+						</button>
 					</div>
-					<div className="task-div">
-						<h5>Which metadata to use?</h5>
-						<table>
-							{tableInput}
-						</table>
-						<button type="button" className="btn-sm btn-outline-secondary choose-btn">Object 1</button>
-						<button type="button" className="btn-sm btn-outline-secondary choose-btn">Object 2</button>
-						<button type="button" className="btn-sm btn-outline-secondary choose-btn">Merge</button>
-					</div>
-					<button className="btn-sm btn-outline-secondary choose-btn">next</button>
 				</div>
 		);
 	}

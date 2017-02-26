@@ -1,14 +1,14 @@
 .task-map-box {
-  padding-top: 5%;
-  padding-left: 10%;
-  padding-right: 10%;
+  padding-top: 7%;
+  padding-left: 5%;
+  padding-right: 5%;
 }
 .task-box {
   background-image: url("../src/client/components/assets/RectangleView.png");
   background-repeat: no-repeat;
   //background-position: center;
   height: 70vh;
-  width: 30vw;
+  width: 60vw;
   text-align: center;
 }
 .react-bs-table-container {
@@ -27,6 +27,7 @@
 }
 .task-div {
   padding-top: 6%;
+  padding-left: 2%;
 }
 .leaflet-popup-content-wrapper {
   width: 8vw;

@@ -16,16 +16,19 @@ import MapContainer from './client/components/containers/MapComponent';
 export default class extends Component {
 
 	constructor() {
+		var idx = 1;
+		var idy = 3;
 		super();
 		this.state = {
 			mode: 'home',
 			user: [],
-			taskid: Math.floor(Math.random() * ((8-6)+1) + 6),
+			taskid: Math.floor(Math.random() * ((idy-idx)+1) + idx),
 			taskmode: 0,
 			task: [],
 			elements: [],
 			conflicts: [],
-			activeTaskObj: null,
+			activeTaskObj1: null,
+			activeTaskObj2: null,
 			chosenGeomLayer: null
 		};
 		this.num=0;
@@ -48,28 +51,30 @@ export default class extends Component {
 		});
 	}
 
-	_handleModeChange() {
+	_handleModeChange(mode) {
 		if(this.state.mode === 'home'){
 			console.log('modeChange');
 			this._handleTaskMode();
 			this.setState({mode: 'taskview'});
 		}
 	}
-
 	_setChosenGeom(layer) {
 		this.setState({chosenGeomLayer: layer});
 	}
-
 	_handleTaskMode() {
 		console.log(this.state.taskmode);
 		if (this.state.taskmode == 1) {
-			this.setState({activeTaskObj: this.state.elements.features[this.num]});
+			this.setState({activeTaskObj1: this.state.elements.features[this.num]});
+			this.setState({activeTaskObj2: this.state.conflicts.features[this.num]});
 			this.num += 1;
 		} else if (this.state.taskmode == 3) {
-			this.setState({activeTaskObj: this.state.elements.features.slice(1, 4)});
+			this.setState({activeTaskObj1: this.state.elements.features.slice(1, 4)});
+			this.setState({activeTaskObj2: this.state.conflicts.features.slice(1, 4)});
 			this.num += 3;
 		} else{
 			//use all
+			this.setState({activeTaskObj1: this.state.elements.features});
+			this.setState({activeTaskObj2: this.state.conflicts.features});
 		}
 	}
 
@@ -89,7 +94,8 @@ export default class extends Component {
 											 taskmode={this.state.taskmode}
 											 taskelements={this.state.elements}
 											 conflictelements={this.state.conflicts}
-											 activeTaskObj={this.state.activeTaskObj}
+											 activeTaskObj1={this.state.activeTaskObj1}
+											 activeTaskObj2={this.state.activeTaskObj2}
 											 chosenGeomLayer={this.state.chosenGeomLayer}
 					/>
 					<div className="mapbox">
@@ -97,8 +103,9 @@ export default class extends Component {
 													taskmode={this.state.taskmode}
 													taskelements={this.state.elements}
 													conflictelements={this.state.conflicts}
-													activeTaskObj={this.state.activeTaskObj}
-													setChosenGeomLayer={this._setChosenGeom}
+													activeTaskObj={this.state.activeTaskObj1}
+													activeTaskObj2={this.state.activeTaskObj2}
+													_setChosenGeomLayer={this._setChosenGeom}
 						/>
 					</div>
 				</div>

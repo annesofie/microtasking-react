@@ -14,9 +14,9 @@ export default class MapComponent extends Component {
 	constructor(props) {
 		super(props);
 		this.mapOptions = {
-			lat: 63.422492,
-			lng: 10.398127,
-			zoom: 18
+			lat: 63.4239779,
+			lng: 10.4499185,
+			zoom: 17
 		};
 		this.activelayer=null;
 		this._clickEventHandler1 = this._clickEventHandler1.bind(this);
@@ -41,7 +41,7 @@ export default class MapComponent extends Component {
 					weight: 5
 				});
 				this.activelayer=e.target;
-				this.props.setChosenGeomLayer(this.activelayer);
+				this.props._setChosenGeomLayer(this.activelayer);
 			}.bind(this));
 	}
 
@@ -58,7 +58,7 @@ export default class MapComponent extends Component {
 				weight: 5
 			});
 			this.activelayer=e.target;
-			this.props.setChosenGeomLayer(this.activelayer);
+			this.props._setChosenGeomLayer(this.activelayer);
 		}.bind(this));
 	}
 
@@ -69,7 +69,7 @@ render() {
 								 taskmode={this.props.taskmode}
 								 taskelements={this.props.taskelements}
 								 conflictelements={this.props.conflictelements}
-								 activeTaskObj={this.props.activeTaskObj}
+								 activeTaskObj={this.props.activeTaskObj1}
 								 clickHandler1={this._clickEventHandler1}
 								 clickHandler2={this._clickEventHandler2}
 

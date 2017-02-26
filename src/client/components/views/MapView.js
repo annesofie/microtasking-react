@@ -16,11 +16,11 @@ export default function(props){
 	var laygroup;
 	if (props.taskmode == 1){
 		 laygroup = <LayerGroup>
-					<GeoJSON key={props.activeTaskObj.id} data={props.activeTaskObj} color="purple" onEachFeature={props.clickHandler1}/>
+					<GeoJSON key={props.activeTaskObj1.id} data={props.activeTaskObj1} color="purple" onEachFeature={props.clickHandler1}/>
 		</LayerGroup>;
 	} else if (props.taskmode == 3) {
 		laygroup = <LayerGroup>
-			{props.activeTaskObj.map(elem => {
+			{props.activeTaskObj1.map(elem => {
 				return (
 					<GeoJSON key={elem.id} data={elem} onEachFeature={props.clickHandler1}/>
 				)

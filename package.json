@@ -18,6 +18,7 @@
   "license": "MIT",
   "homepage": "https://annesofie.github.io/microtasking-react",
   "dependencies": {
+    "axios": "^0.15.3",
     "leaflet": "^1.0.3",
     "lodash": "^4.17.4",
     "node-sass": "^4.3.0",
