@@ -14,12 +14,10 @@ class TaskBoxView extends Component {
 			taskmode: 'geom_task',
 			nameBtn: 'next'
 		};
-		// this._handleTaskChange = this._handleTaskChange.bind(this);
 		this._taskChange = this._taskChange.bind(this);
 	}
 
 	_taskChange() {
-		console.log(this.state.taskmode);
 		this.setState({taskmode: 'meta_task'});
 		this.setState({nameBtn: 'finish'});
 	}
@@ -27,7 +25,7 @@ class TaskBoxView extends Component {
 	_handleTaskChange() {
 		let shownTask;
 		if (this.state.taskmode == 'geom_task') {
-			let chosenGeomLayer = this._setChosenGeomLayer();
+			let chosenGeomLayer = this._infoClickedLayer();
 			shownTask =
 				<div className="task-div">
 					<h5>Which geometry to use?</h5>
@@ -37,22 +35,21 @@ class TaskBoxView extends Component {
 			shownTask =
 				<MetadataTask
 					activeTaskObj1={this.props.activeTaskObj1}
+					taskElemConflPair={this.props.taskElemConflPair}
 					taskmode={this.props.taskmode}
 				/>;
 		}
 		return shownTask;
 	}
 
-	_setChosenGeomLayer() {
+	_infoClickedLayer() {
 		let chosenGeomLayer;
-		if(this.props.chosenGeomLayer) {
-			chosenGeomLayer = <h6 id="chosenGeom">You chose {this.props.chosenGeomLayer.feature.properties.title}</h6>;
-		} else {
-			chosenGeomLayer = <h7>Click on the object you believe is the right one</h7>
-		}
+		var base = this.props;
+		chosenGeomLayer = <h6 id="chosenGeom">
+			Building 1 = {base.B1 ? base.B1.feature.properties.title : 'not chosen'}
+		</h6>;
 		return chosenGeomLayer;
 	}
-
 
 	render() {
 		let shownTask = this._handleTaskChange();

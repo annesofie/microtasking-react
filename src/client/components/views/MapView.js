@@ -13,12 +13,27 @@ export default function(props){
 		iconUrl: markerIcon,
 		shadowUrl: shadowIcon
 	});
+
 	var laygroup;
+	var conflgroup;
+	var layersControlOverlay;
 	if (props.taskmode == 1){
-		 laygroup = <LayerGroup>
-					<GeoJSON key={props.activeTaskObj1.id} data={props.activeTaskObj1} color="purple" onEachFeature={props.clickHandler1}/>
+		laygroup = <LayerGroup>
+			<GeoJSON key={props.activeTaskObj1.id} data={props.activeTaskObj1} color="purple" onEachFeature={props.clickHandler1}/>
 		</LayerGroup>;
-	} else if (props.taskmode == 3) {
+		conflgroup = <LayerGroup>
+			<GeoJSON key={props.activeTaskObj2.id} data={props.activeTaskObj2} color="orange" onEachFeature={props.clickHandler2}/>
+		</LayerGroup>
+	//} else if (props.taskmode == 3) {
+	//	layersControlOverlay = <LayersControl key="ksjdhaskj" position='topright'>{props.taskElemConflPair.map(elem => {
+	//		return <LayersControl.Overlay key={'LCO'+elem.elem.properties.title} name={elem.elem.properties.title} checked={true}>
+	//			<LayerGroup key={'lg'+elem.elem.properties.title}>
+	//				<GeoJSON key={'0'+elem.elem.title} data={elem.elem} color="blue" onEachFeature={props.clickHandler1}/>
+	//				<GeoJSON key={'1'+elem.confl.title} data={elem.confl} color="purple" onEachFeature={props.clickHandler1}/>
+	//			</LayerGroup>
+	//		</LayersControl.Overlay>;
+	//	})}</LayersControl>
+	} else {
 		laygroup = <LayerGroup>
 			{props.activeTaskObj1.map(elem => {
 				return (
@@ -26,16 +41,22 @@ export default function(props){
 				)
 			})}
 		</LayerGroup>;
-	} else {
-		laygroup = <LayerGroup>
-			{props.taskelements.features.map(elem => {
+		conflgroup = <LayerGroup>
+			{props.activeTaskObj2.map(elem => {
 				return (
-					<GeoJSON key={elem.id} data={elem} color="purple" onEachFeature={props.clickHandler2}/>
+					<GeoJSON key={elem.id} data={elem} color="orange" onEachFeature={props.clickHandler2}/>
 				)
 			})}
 		</LayerGroup>;
 	}
-
+	var onetaskoverlay = <LayersControl position='topright'>
+		<LayersControl.Overlay name="Overlay1" checked={true}>
+			{laygroup}
+		</LayersControl.Overlay>
+		<LayersControl.Overlay name="Overlay2" checked={true}>
+			{conflgroup}
+		</LayersControl.Overlay>
+	</LayersControl>;
 
 	return (
 		<div className="p-2 map-box">
@@ -45,30 +66,9 @@ export default function(props){
 					attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 					url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
 				/>
-			<LayersControl position='topright'>
-				<LayersControl.Overlay name="Elements 1" checked={true}>
-					{laygroup}
-				</LayersControl.Overlay>
-				<LayersControl.Overlay name="Elements 2" checked={true}>
-					<LayerGroup>
-						{props.conflictelements.features.map(elem => {
-							return (
-								<GeoJSON key={elem.id} data={elem} color="orange" onEachFeature={props.clickHandler2}/>
-							)
-						})}
-					</LayerGroup>
-				</LayersControl.Overlay>
-			</LayersControl>
+				{onetaskoverlay}
 			</Map>
 		</div>
 	)
 }
 
-//ref={m => {props.leafletMap = m; }}
-
-//MapContainer.propTypes = {
-//	mapOptions: PropTypes.string
-//};
-
-//<p>{this.state.geom}</p>
-//{props.geom}
