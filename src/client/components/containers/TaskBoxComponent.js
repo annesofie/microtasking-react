@@ -26,6 +26,7 @@ class TaskBoxComponent extends Component {
 	onMetadataChange(index, e) {
 			console.log(index);
 		if (index) {
+			console.log(e);
 			this.metadata[index] = e.currentTarget.value;
 		} else {
 			this.metadata[0] = e.currentTarget.value;
@@ -55,7 +56,9 @@ class TaskBoxComponent extends Component {
 			shownTask =
 				<div className="task-div">
 					<h4>1. Which geometry to use?</h4>
-					{chosenGeomLayer}
+					{chosenGeomLayer.map(elem => {
+						return elem;
+					})}
 				</div>;
 		} else if (this.state.taskmode == 'meta_task'){
 			shownTask =
@@ -68,17 +71,17 @@ class TaskBoxComponent extends Component {
 		}
 		return shownTask;
 	}
-
 	_infoClickedLayer() {
-		let chosenGeomLayer;
+		let chosenGeomLayer = [];
 		let num = this.state.count;
 		var base = this.props;
-			chosenGeomLayer = <h5 id="chosenGeom">
-				Building {num} : {base.chosenBuildingGeom ? base.chosenBuildingGeom.feature.properties.title : 'not chosen, click on the layer on the map you believe has the buildings most correct geometry'}
-			</h5>;
+		for (var i = 1; i <= this.props.taskmode; i++) {
+			chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
+				Building {i} : {base.chosenBuildingGeom[i] ? 'You chose ' + base.chosenBuildingGeom[i].properties.title : 'not chosen, click on a layer on the map'}
+			</h5>
+		}
 		return chosenGeomLayer;
 	}
-
 	render() {
 		let shownTask = this._handleTaskChange();
 		return (

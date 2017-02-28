@@ -10,13 +10,13 @@ class OneTaskMapView extends Component {
 	oneTaskElemLayerGroup() {
 		return <LayerGroup>
 			<GeoJSON key={'1'+this.props.taskElemConflPair.elem.id} data={this.props.taskElemConflPair.elem} color={this.props.colorPair[0]}
-							 onEachFeature={this.props.clickHandler1}/>
+							 onEachFeature={this.props.clickHandler1.bind(this.props.taskElemConflPair.confl.id, id)}/>
 		</LayerGroup>;
 	}
 	oneTaskConflLayerGroup() {
 		return <LayerGroup>
 			<GeoJSON key={'2'+this.props.taskElemConflPair.confl.id} data={this.props.taskElemConflPair.confl} color={this.props.colorPair[1]}
-							 onEachFeature={this.props.clickHandler2}/>
+							 onEachFeature={this.props.clickHandler2.bind(this, this.props.taskElemConflPair.confl.id)}/>
 		</LayerGroup>;
 	}
 

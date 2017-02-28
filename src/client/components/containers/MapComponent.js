@@ -9,6 +9,7 @@ import * as taskApi from '../../api/task-api';
 //import OneTaskMapView from '../views/oneTaskMapView';
 //Component
 import OneTaskMapComp from './OneTaskMapComponent';
+import MultipleTaskMapComp from './MultipleTaskMapComponent';
 
 export default class MapComponent extends Component {
 
@@ -17,8 +18,8 @@ export default class MapComponent extends Component {
 		this._setChosenBuildingLayer = this._setChosenBuildingLayer.bind(this);
 	}
 
-	_setChosenBuildingLayer(lay) {
-		this.props._setChosenBuildingGeom(lay);
+	_setChosenBuildingLayer(lay, id) {
+		this.props._setChosenBuildingGeom(lay, id);
 	}
 
 	render() {
@@ -30,6 +31,16 @@ export default class MapComponent extends Component {
 					_setChosenBuildingLayer={this._setChosenBuildingLayer}
 				/>
 			);
+		} else if (this.props.taskmode == 3) {
+			return (
+				<MultipleTaskMapComp
+					taskmode={this.props.taskmode}
+					taskElemConflPair={this.props.taskElemConflPair}
+					activeTaskObj1={this.props.activeTaskObj1}
+					activeTaskObj2={this.props.activeTaskObj2}
+					_setChosenBuildingLayer={this._setChosenBuildingLayer}
+				/>
+			)
 		}
 	}
 

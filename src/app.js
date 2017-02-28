@@ -22,7 +22,7 @@ export default class extends Component {
 		this.state = {
 			mode: 'home',
 			user: [],
-			taskid: 1,
+			taskid: 2,
 			taskmode: 0,
 			task: [],
 			elements: [],
@@ -30,7 +30,7 @@ export default class extends Component {
 			activeTaskObj1: null,
 			activeTaskObj2: null,
 			taskElemConflPair: null,
-			chosenBuildingGeom: null
+			chosenBuildingGeom: []
 		};
 
 		this.chosenGeomLayer={};
@@ -56,9 +56,9 @@ export default class extends Component {
 			this.setState({taskmode: elem.num_of_elements});
 		});
 	}
-	_setChosenBuildingGeom(layer) {
-		this.chosenGeomLayer[this.num]=layer.feature;
-		this.setState({chosenBuildingGeom: layer});
+	_setChosenBuildingGeom(layer, id) {
+		this.chosenGeomLayer[id]=layer.feature;
+		this.setState({chosenBuildingGeom: this.chosenGeomLayer});
 	}
 	_setChosenMetadata(obj) {
 		this.chosenMetadata[this.num]=obj;
@@ -81,12 +81,12 @@ export default class extends Component {
 				callback('done');
 			}.bind(this));
 		} else if (this.state.taskmode == 3) {
-			getallTaskElemConflElemPairs(base1.slice(1,3), false, function(taskPairs) {
+			getallTaskElemConflElemPairs(base1.slice(0,3), false, function(taskPairs) {
 				this.setState({taskElemConflPair: taskPairs});
-				callback('done');
+				this.setState({activeTaskObj1: base1.slice(0, 3)});
+				this.setState({activeTaskObj2: base2.slice(0, 3)});
 				this.num += 3;
-				this.setState({activeTaskObj1: base1.slice(1, 3)});
-				this.setState({activeTaskObj2: base2.slice(1, 3)});
+				callback('done');
 			}.bind(this));
 		} else{
 			//use all
@@ -101,11 +101,20 @@ export default class extends Component {
 	_getNextTask() {
 		console.log(this.num);
 		const base1 = this.state.elements.features;
+		const base2 = this.state.conflicts.features;
 		if (this.state.taskmode == 1) {
-			this.setState({chosenBuildingGeom: null});
+			this.setState({chosenBuildingGeom: []});
 			getallTaskElemConflElemPairs(base1[this.num], true, function(resp) {
 				this.setState({taskElemConflPair: resp});
 				this.num += 1;
+			}.bind(this));
+		} else if (this.state.taskmode == 3) {
+			this.setState({chosenBuildingGeom: []});
+			getallTaskElemConflElemPairs(base1.slice(this.num, this.num+2), false, function(resp) {
+				this.setState({taskElemConflPair: resp});
+				this.setState({activeTaskObj1: base1.slice(this.num, this.num+2)});
+				this.setState({activeTaskObj2: base2.slice(this.num, this.num+2)});
+				this.num += 3;
 			}.bind(this));
 		}
 
@@ -145,7 +154,7 @@ export default class extends Component {
 
 function getallTaskElemConflElemPairs(elements, onlyone, callback) {
 	var taskPairs = [];
-	var i=0;
+	var i=1;
 	if (onlyone) {
 		taskApi.getTaskElemAndConflictElem(elements.id, function(resp) {
 			taskPairs=resp;
@@ -154,7 +163,7 @@ function getallTaskElemConflElemPairs(elements, onlyone, callback) {
 	} else {
 		elements.map(elem => {
 			taskApi.getTaskElemAndConflictElem(elem.id, function(resp) {
-				taskPairs[i] = resp;
+				taskPairs[i]=resp;
 				i+=1;
 			});
 		});
