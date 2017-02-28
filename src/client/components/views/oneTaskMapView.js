@@ -33,10 +33,10 @@ class OneTaskMapView extends Component {
 						url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
 					/>
 					<LayersControl position='topright' collapsed={false}>
-						<LayersControl.Overlay name={this.props.taskElemConflPair.elem.properties.title} checked={true}>
+						<LayersControl.Overlay key={'lco_elem_'+this.props.taskElemConflPair.elem.id} name={this.props.taskElemConflPair.elem.properties.title} checked={true}>
 							{layer1}
 						</LayersControl.Overlay>
-						<LayersControl.Overlay name={this.props.taskElemConflPair.confl.properties.title} checked={true}>
+						<LayersControl.Overlay key={'lco_confl_'+this.props.taskElemConflPair.confl.id} name={this.props.taskElemConflPair.confl.properties.title} checked={true}>
 							{layer2}
 						</LayersControl.Overlay>
 					</LayersControl>

@@ -54,7 +54,7 @@ class TaskBoxComponent extends Component {
 			let chosenGeomLayer = this._infoClickedLayer();
 			shownTask =
 				<div className="task-div">
-					<h5>Which geometry to use?</h5>
+					<h4>1. Which geometry to use?</h4>
 					{chosenGeomLayer}
 				</div>;
 		} else if (this.state.taskmode == 'meta_task'){
@@ -73,9 +73,9 @@ class TaskBoxComponent extends Component {
 		let chosenGeomLayer;
 		let num = this.state.count;
 		var base = this.props;
-			chosenGeomLayer = <h6 id="chosenGeom">
-				Building {num} = {base.chosenBuildingGeom ? base.chosenBuildingGeom.feature.properties.title : 'not chosen'}
-			</h6>;
+			chosenGeomLayer = <h5 id="chosenGeom">
+				Building {num} : {base.chosenBuildingGeom ? base.chosenBuildingGeom.feature.properties.title : 'not chosen, click on the layer on the map you believe has the buildings most correct geometry'}
+			</h5>;
 		return chosenGeomLayer;
 	}
 
