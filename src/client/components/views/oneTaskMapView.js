@@ -5,26 +5,25 @@
 import React, {Component} from 'react';
 import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON, LayersControl} from 'react-leaflet'
 
-
 class OneTaskMapView extends Component {
 
 	oneTaskElemLayerGroup() {
 		return <LayerGroup>
-			<GeoJSON key={'1'+this.props.taskElemConflPair.elem.id} data={this.props.taskElemConflPair.elem} color="purple"
+			<GeoJSON key={'1'+this.props.taskElemConflPair.elem.id} data={this.props.taskElemConflPair.elem} color={this.props.colorPair[0]}
 							 onEachFeature={this.props.clickHandler1}/>
 		</LayerGroup>;
 	}
 	oneTaskConflLayerGroup() {
 		return <LayerGroup>
-			<GeoJSON key={'2'+this.props.taskElemConflPair.confl.id} data={this.props.taskElemConflPair.confl} color="orange"
+			<GeoJSON key={'2'+this.props.taskElemConflPair.confl.id} data={this.props.taskElemConflPair.confl} color={this.props.colorPair[1]}
 							 onEachFeature={this.props.clickHandler2}/>
 		</LayerGroup>;
 	}
 
 	render() {
 		var position = [this.props.mapOptions.lat, this.props.mapOptions.lng];
-		var layerElem = this.oneTaskElemLayerGroup();
-		var layerConfl = this.oneTaskConflLayerGroup();
+		var layer1 = this.oneTaskElemLayerGroup();
+		var layer2 = this.oneTaskConflLayerGroup();
 		return (
 			<div className="p-2 map-box">
 				<Map
@@ -33,12 +32,12 @@ class OneTaskMapView extends Component {
 						attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 						url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
 					/>
-					<LayersControl position='topright'>
-						<LayersControl.Overlay name="Overlay1" checked={true}>
-							{layerElem}
+					<LayersControl position='topright' collapsed={false}>
+						<LayersControl.Overlay name={this.props.taskElemConflPair.elem.properties.title} checked={true}>
+							{layer1}
 						</LayersControl.Overlay>
-						<LayersControl.Overlay name="Overlay2" checked={true}>
-							{layerConfl}
+						<LayersControl.Overlay name={this.props.taskElemConflPair.confl.properties.title} checked={true}>
+							{layer2}
 						</LayersControl.Overlay>
 					</LayersControl>
 				</Map>

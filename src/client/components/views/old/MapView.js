@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON, LayersControl} from 'react-leaflet'
 
-import markerIcon from '../assets/images/marker-icon.png';
-import shadowIcon from '../assets/images/marker-shadow.png';
+import markerIcon from '../../assets/images/marker-icon.png';
+import shadowIcon from '../../assets/images/marker-shadow.png';
 
 
 export default function(props){

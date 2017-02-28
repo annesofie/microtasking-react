@@ -10,7 +10,7 @@ import * as taskApi from './client/api/task-api';
 
 //Views
 import Home from './client/components/HeaderComponent';
-import TaskBoxView from './client/components/views/TaskBoxView';
+import TaskBoxComponent from './client/components/containers/TaskBoxComponent';
 import MapContainer from './client/components/containers/MapComponent';
 
 export default class extends Component {
@@ -34,12 +34,13 @@ export default class extends Component {
 		};
 
 		this.chosenGeomLayer={};
-
+		this.chosenMetadata={};
 		this.num=0;
 
 		this._handleModeChange = this._handleModeChange.bind(this);
 		this._getNextTask = this._getNextTask.bind(this);
 		this._setChosenBuildingGeom = this._setChosenBuildingGeom.bind(this);
+		this._setChosenMetadata = this._setChosenMetadata.bind(this);
 		this._handleTaskMode = this._handleTaskMode.bind(this);
 	}
 
@@ -55,25 +56,26 @@ export default class extends Component {
 			this.setState({taskmode: elem.num_of_elements});
 		});
 	}
-
-	_handleModeChange(mode) {
-		if(this.state.mode === 'home'){
-			this._handleTaskMode(function(str) {
-				console.log(str);
-				this.setState({mode: 'taskview'});
-			}.bind(this));
-		}
-	}
 	_setChosenBuildingGeom(layer) {
 		this.chosenGeomLayer[this.num]=layer.feature;
 		this.setState({chosenBuildingGeom: layer});
+	}
+	_setChosenMetadata(obj) {
+		this.chosenMetadata[this.num]=obj;
+		console.log(this.chosenMetadata);
+	}
+	_handleModeChange(mode) {
+		if(this.state.mode === 'home'){
+			this._handleTaskMode(function(str) {
+				this.setState({mode: 'taskview'});
+			}.bind(this));
+		}
 	}
 	_handleTaskMode(callback) {
 		const base1 = this.state.elements.features;
 		const base2 = this.state.conflicts.features;
 		if (this.state.taskmode == 1) {
 			getallTaskElemConflElemPairs(base1[this.num], true, function(resp) {
-				console.log(resp);
 				this.setState({taskElemConflPair: resp});
 				this.num += 1;
 				callback('done');
@@ -96,7 +98,6 @@ export default class extends Component {
 			}.bind(this));
 		}
 	}
-
 	_getNextTask() {
 		console.log(this.num);
 		const base1 = this.state.elements.features;
@@ -118,13 +119,12 @@ export default class extends Component {
 		} else if (this.state.mode === 'taskview') {
 			return (
 				<div className="d-flex">
-					<TaskBoxView task={this.state.task}
-											 taskmode={this.state.taskmode}
-											 taskElemConflPair={this.state.taskElemConflPair}
-											 chosenBuildingGeom={this.state.chosenBuildingGeom}
-											 _getNextTask={this._getNextTask}
-
-
+					<TaskBoxComponent task={this.state.task}
+														taskmode={this.state.taskmode}
+														taskElemConflPair={this.state.taskElemConflPair}
+														chosenBuildingGeom={this.state.chosenBuildingGeom}
+														_setChosenMetadata={this._setChosenMetadata}
+														_getNextTask={this._getNextTask}
 					/>
 					<div className="mapbox">
 						<MapContainer task={this.state.task}

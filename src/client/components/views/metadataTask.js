@@ -24,13 +24,21 @@ class metadataTask extends Component{
 				</thead>
 					<tbody>
 					<tr key="colelem">
-						<td key={0+base.elem.id}><input type="radio" name="meta_choice" value={base.elem.id}/>{base.elem.properties.title}</td>
+						<td key={0+base.elem.id}>
+							<input type="radio" name="meta_choice"
+										 value={base.elem.properties.title} onChange={this.props.onChange.bind(this, null)}/>
+							{base.elem.properties.title}
+						</td>
 						<td key={1+base.elem.id}>{base.elem.properties.info1}</td>
 						<td key={2+base.elem.id}>{base.elem.properties.info2}</td>
 						<td key={3+base.elem.id}>{base.elem.properties.info3}</td>
 					</tr>
 					<tr key="colconfl">
-						<td key={0+base.confl.id}><input type="radio" name="meta_choice" value={base.elem.id}/>{base.confl.properties.title}</td>
+						<td key={0+base.confl.id}>
+							<input type="radio" name="meta_choice"
+										 value={base.confl.properties.title} onChange={this.props.onChange.bind(this, null)}/>
+							{base.confl.properties.title}
+						</td>
 						<td key={1+base.confl.id}>{base.confl.properties.info1}</td>
 						<td key={2+base.confl.id}>{base.confl.properties.info2}</td>
 						<td key={3+base.confl.id}>{base.confl.properties.info3}</td>
@@ -54,7 +62,8 @@ class metadataTask extends Component{
 							<tr key={'colelem'+elem.elem.id}>
 								<td key={'0'+elem.elem.id+index}>
 									<input type="radio" name={'meta_choice'+index}
-												 value={elem.elem.id}/>{elem.elem.properties.title}</td>
+												 value={elem.elem.title} onChange={this.props.onChange.bind(this, index)} />
+									{elem.elem.properties.title}</td>
 								<td key={'1'+elem.elem.id+index}>{elem.elem.properties.info1}</td>
 								<td key={'2'+elem.elem.id+index}>{elem.elem.properties.info2}</td>
 								<td key={'3'+elem.elem.id+index}>{elem.elem.properties.info3}</td>
@@ -62,7 +71,8 @@ class metadataTask extends Component{
 							<tr key={'colconfl'+elem.confl.id}>
 								<td key={'0'+elem.confl.id+index}>
 									<input type="radio" name={'meta_choice'+index}
-												 value={elem.confl.id}/>{elem.confl.properties.title}</td>
+												 value={elem.confl.title} onChange={this.props.onChange.bind(this, index)}/>
+									{elem.confl.properties.title}</td>
 								<td key={'1'+elem.confl.id+index}>{elem.confl.properties.info1}</td>
 								<td key={'2'+elem.confl.id+index}>{elem.confl.properties.info2}</td>
 								<td key={'3'+elem.confl.id+index}>{elem.confl.properties.info3}</td>

@@ -8,7 +8,7 @@ import BoxLayout from './client/components/BoxLayout';
 import UserList from './client/components/UserList';
 import TaskComponent from './client/components/containers/TaskComponent';
 import TaskElementsComponent from './client/components/containers/TaskElementComponent';
-import MapLayout from './client/components/views/MapView';
+import MapLayout from './client/components/views/old/MapView';
 
 export default class App extends React.Component {
   render() {

@@ -4,9 +4,9 @@
 import React, { Component, PropTypes } from 'react';
 
 //Views
-import MetadataTask from './metadataTask';
+import MetadataTask from './../views/metadataTask';
 
-class TaskBoxView extends Component {
+class TaskBoxComponent extends Component {
 
 	constructor(props) {
 		super(props);
@@ -17,16 +17,24 @@ class TaskBoxView extends Component {
 			shownTask: null
 		};
 		this.change=0;
+		this.metadata={};
+
 		this._taskChange = this._taskChange.bind(this);
+		this.onMetadataChange = this.onMetadataChange.bind(this);
 	}
 
-	componentDidMount(){
-		//this.setState({shownTask: this._handleTaskChange()});
-		//console.log(this.state);
+	onMetadataChange(index, e) {
+			console.log(index);
+		if (index) {
+			this.metadata[index] = e.currentTarget.value;
+		} else {
+			this.metadata[0] = e.currentTarget.value;
+		}
 	}
 
 	_taskChange() {
 		if (this.change == 1) {
+			this.props._setChosenMetadata(this.metadata); //Set chosen metadata
 			//reset
 			this.setState({taskmode: 'geom_task'});
 			this.setState({nameBtn: 'next'});
@@ -55,6 +63,7 @@ class TaskBoxView extends Component {
 					activeTaskObj1={this.props.activeTaskObj1}
 					taskElemConflPair={this.props.taskElemConflPair}
 					taskmode={this.props.taskmode}
+					onChange={this.onMetadataChange}
 				/>;
 		}
 		return shownTask;
@@ -87,11 +96,11 @@ class TaskBoxView extends Component {
 	}
 }
 
-export default TaskBoxView;
+export default TaskBoxComponent;
 
-//TaskBoxView.propTypes = {
+//TaskBoxComponent.propTypes = {
 //	btnName: PropTypes.string
 //};
-//TaskBoxView.defaultProps = {
+//TaskBoxComponent.defaultProps = {
 //	btnName: 'next'
 //};
