@@ -23,6 +23,12 @@ export default class OneTaskMapComponent extends Component {
 		this._clickEventHandler2 = this._clickEventHandler2.bind(this);
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (this.props.taskElemConflPair.elem.id !== nextProps.taskElemConflPair.elem.id ){
+			console.log('ulike props');
+		}
+	}
+
 	_clickEventHandler1(feature, layer) {
 		layer.on('click', function(e) {
 			if (this.activelayer) {

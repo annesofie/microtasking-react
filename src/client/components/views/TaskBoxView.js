@@ -1,7 +1,7 @@
 /**
  * Created by AnneSofie on 23.02.2017.
  */
-import React, {Component} from 'react';
+import React, { Component, PropTypes } from 'react';
 
 //Views
 import MetadataTask from './metadataTask';
@@ -12,14 +12,32 @@ class TaskBoxView extends Component {
 		super(props);
 		this.state = {
 			taskmode: 'geom_task',
-			nameBtn: 'next'
+			nameBtn: 'next',
+			count: 1,
+			shownTask: null
 		};
+		this.change=0;
 		this._taskChange = this._taskChange.bind(this);
 	}
 
+	componentDidMount(){
+		//this.setState({shownTask: this._handleTaskChange()});
+		//console.log(this.state);
+	}
+
 	_taskChange() {
-		this.setState({taskmode: 'meta_task'});
-		this.setState({nameBtn: 'finish'});
+		if (this.change == 1) {
+			//reset
+			this.setState({taskmode: 'geom_task'});
+			this.setState({nameBtn: 'next'});
+			this.props._getNextTask();
+			this.change=0;
+		} else {
+			this.setState({taskmode: 'meta_task'});
+			this.setState({nameBtn: 'finish'});
+			this.setState({count: this.state.count+=1});
+			this.change=1;
+		}
 	}
 
 	_handleTaskChange() {
@@ -44,10 +62,11 @@ class TaskBoxView extends Component {
 
 	_infoClickedLayer() {
 		let chosenGeomLayer;
+		let num = this.state.count;
 		var base = this.props;
-		chosenGeomLayer = <h6 id="chosenGeom">
-			Building 1 = {base.B1 ? base.B1.feature.properties.title : 'not chosen'}
-		</h6>;
+			chosenGeomLayer = <h6 id="chosenGeom">
+				Building {num} = {base.chosenBuildingGeom ? base.chosenBuildingGeom.feature.properties.title : 'not chosen'}
+			</h6>;
 		return chosenGeomLayer;
 	}
 
@@ -69,11 +88,10 @@ class TaskBoxView extends Component {
 }
 
 export default TaskBoxView;
-//
-//<Table elem={this.props.taskelements.features}/>
-//<Table elem={this.props.conflictelements.features}/>
-//{this.props.taskelements.features.map(elem => {
-//	return (
-//		<p key={elem.id}><i>{elem.properties.element_name}</i></p>
-//	)
-//})}
+
+//TaskBoxView.propTypes = {
+//	btnName: PropTypes.string
+//};
+//TaskBoxView.defaultProps = {
+//	btnName: 'next'
+//};

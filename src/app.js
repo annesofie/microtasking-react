@@ -30,23 +30,16 @@ export default class extends Component {
 			activeTaskObj1: null,
 			activeTaskObj2: null,
 			taskElemConflPair: null,
-			B1: null,
-			B2: null,
-			B3: null
-			//chosenGeomLayer: {
-			//	B1: null,
-			//	B2: null,
-			//	B3: null
-			//}
+			chosenBuildingGeom: null
 		};
+
+		this.chosenGeomLayer={};
+
 		this.num=0;
+
 		this._handleModeChange = this._handleModeChange.bind(this);
 		this._getNextTask = this._getNextTask.bind(this);
-		//this._setChosenGeom = this._setChosenGeom.bind(this);
-		//this._setChosenBuildingLayer = this._setChosenBuildingLayer.bind(this);
-		this._setChosenGeomB1 = this._setChosenGeomB1.bind(this);
-		this._setChosenGeomB2 = this._setChosenGeomB2.bind(this);
-		this._setChosenGeomB3 = this._setChosenGeomB3.bind(this);
+		this._setChosenBuildingGeom = this._setChosenBuildingGeom.bind(this);
 		this._handleTaskMode = this._handleTaskMode.bind(this);
 	}
 
@@ -71,15 +64,9 @@ export default class extends Component {
 			}.bind(this));
 		}
 	}
-	_setChosenGeomB1(layer) {
-		this.setState({B1: layer});
-		console.log(this.state);
-	}
-	_setChosenGeomB2(layer) {
-		this.setState({B2: layer});
-	}
-	_setChosenGeomB3(layer) {
-		this.setState({B3: layer});
+	_setChosenBuildingGeom(layer) {
+		this.chosenGeomLayer[this.num]=layer.feature;
+		this.setState({chosenBuildingGeom: layer});
 	}
 	_handleTaskMode(callback) {
 		const base1 = this.state.elements.features;
@@ -89,8 +76,6 @@ export default class extends Component {
 				console.log(resp);
 				this.setState({taskElemConflPair: resp});
 				this.num += 1;
-				this.setState({activeTaskObj1: base1[this.num]});
-				this.setState({activeTaskObj2: base2[this.num]});
 				callback('done');
 			}.bind(this));
 		} else if (this.state.taskmode == 3) {
@@ -113,6 +98,15 @@ export default class extends Component {
 	}
 
 	_getNextTask() {
+		console.log(this.num);
+		const base1 = this.state.elements.features;
+		if (this.state.taskmode == 1) {
+			this.setState({chosenBuildingGeom: null});
+			getallTaskElemConflElemPairs(base1[this.num], true, function(resp) {
+				this.setState({taskElemConflPair: resp});
+				this.num += 1;
+			}.bind(this));
+		}
 
 	}
 
@@ -126,12 +120,10 @@ export default class extends Component {
 				<div className="d-flex">
 					<TaskBoxView task={this.state.task}
 											 taskmode={this.state.taskmode}
-											 taskelements={this.state.elements}
-											 conflictelements={this.state.conflicts}
-											 activeTaskObj1={this.state.activeTaskObj1}
-											 activeTaskObj2={this.state.activeTaskObj2}
 											 taskElemConflPair={this.state.taskElemConflPair}
-											 B1={this.state.B1}
+											 chosenBuildingGeom={this.state.chosenBuildingGeom}
+											 _getNextTask={this._getNextTask}
+
 
 					/>
 					<div className="mapbox">
@@ -142,7 +134,7 @@ export default class extends Component {
 													activeTaskObj1={this.state.activeTaskObj1}
 													activeTaskObj2={this.state.activeTaskObj2}
 													taskElemConflPair={this.state.taskElemConflPair}
-													_setChosenGeomB1={this._setChosenGeomB1}
+													_setChosenBuildingGeom={this._setChosenBuildingGeom}
 						/>
 					</div>
 				</div>

@@ -8,27 +8,15 @@ import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON, LayersControl} from
 
 class OneTaskMapView extends Component {
 
-	//constructor(props){
-	//	super(props);
-	//	console.log(props);
-	//	this.position = [props.mapOptions.lat, props.mapOptions.lng];
-	//	//this.laygroup = null;
-	//	//this.conflgroup = null;
-	//}
-
-	componentDidMount() {
-		//this.oneTaskLayerControl()
-	}
-
 	oneTaskElemLayerGroup() {
 		return <LayerGroup>
-			<GeoJSON key='1' data={this.props.taskElemConflPair.elem} color="purple"
+			<GeoJSON key={'1'+this.props.taskElemConflPair.elem.id} data={this.props.taskElemConflPair.elem} color="purple"
 							 onEachFeature={this.props.clickHandler1}/>
 		</LayerGroup>;
 	}
 	oneTaskConflLayerGroup() {
 		return <LayerGroup>
-			<GeoJSON key='2' data={this.props.taskElemConflPair.confl} color="orange"
+			<GeoJSON key={'2'+this.props.taskElemConflPair.confl.id} data={this.props.taskElemConflPair.confl} color="orange"
 							 onEachFeature={this.props.clickHandler2}/>
 		</LayerGroup>;
 	}
