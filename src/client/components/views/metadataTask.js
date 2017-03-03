@@ -62,7 +62,7 @@ class metadataTask extends Component{
 							<tr key={'colelem'+elem.elem.id}>
 								<td key={'0'+elem.elem.id+index}>
 									<input type="radio" name={'meta_choice'+index}
-												 value={elem.elem.title} onChange={this.props.onChange.bind(elem, index)} />
+												 value={elem.elem.properties.title} onChange={this.props.onChange.bind(this, index)} />
 									{elem.elem.properties.title}</td>
 								<td key={'1'+elem.elem.id+index}>{elem.elem.properties.info1}</td>
 								<td key={'2'+elem.elem.id+index}>{elem.elem.properties.info2}</td>
@@ -71,7 +71,7 @@ class metadataTask extends Component{
 							<tr key={'colconfl'+elem.confl.id}>
 								<td key={'0'+elem.confl.id+index}>
 									<input type="radio" name={'meta_choice'+index}
-												 value={elem.confl.title} onChange={this.props.onChange.bind(elem, index)}/>
+												 value={elem.confl.properties.title} onChange={this.props.onChange.bind(this, index)}/>
 									{elem.confl.properties.title}</td>
 								<td key={'1'+elem.confl.id+index}>{elem.confl.properties.info1}</td>
 								<td key={'2'+elem.confl.id+index}>{elem.confl.properties.info2}</td>
@@ -89,7 +89,7 @@ class metadataTask extends Component{
 		let tableInput = this.setInputInMetaTable();
 		return (
 			<div className="task-div">
-				<h5>Which metadata to use?</h5>
+				<h5>2. Which metadata to use?</h5>
 				{tableInput}
 			</div>
 		)

@@ -9,7 +9,8 @@ import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON} from 'react-leaflet
 import * as taskApi from './client/api/task-api';
 
 //Views
-import Home from './client/components/HeaderComponent';
+import Home from './client/components/containers/HeaderComponent';
+import Register from './client/components/containers/RegisterFormComponent';
 import TaskBoxComponent from './client/components/containers/TaskBoxComponent';
 import MapContainer from './client/components/containers/MapComponent';
 
@@ -22,7 +23,7 @@ export default class extends Component {
 		this.state = {
 			mode: 'home',
 			user: [],
-			taskid: 2,
+			taskid: Math.floor(Math.random() * ((idy-idx)+1) + idx),
 			taskmode: 0,
 			task: [],
 			elements: [],
@@ -36,12 +37,14 @@ export default class extends Component {
 		this.chosenGeomLayer={};
 		this.chosenMetadata={};
 		this.num=0;
+		this.numOfObjects = 5;
 
 		this._handleModeChange = this._handleModeChange.bind(this);
 		this._getNextTask = this._getNextTask.bind(this);
 		this._setChosenBuildingGeom = this._setChosenBuildingGeom.bind(this);
 		this._setChosenMetadata = this._setChosenMetadata.bind(this);
 		this._handleTaskMode = this._handleTaskMode.bind(this);
+		this._setParticipantId = this._setParticipantId.bind(this);
 	}
 
 	componentDidMount() {
@@ -58,14 +61,21 @@ export default class extends Component {
 	}
 	_setChosenBuildingGeom(layer, id) {
 		this.chosenGeomLayer[id]=layer.feature;
+		console.log(this.chosenGeomLayer);
 		this.setState({chosenBuildingGeom: this.chosenGeomLayer});
 	}
 	_setChosenMetadata(obj) {
 		this.chosenMetadata[this.num]=obj;
 		console.log(this.chosenMetadata);
 	}
-	_handleModeChange(mode) {
+	_setParticipantId(id) {
+		this.setState({user: id});
+		this._handleModeChange();
+	}
+	_handleModeChange() {
 		if(this.state.mode === 'home'){
+			this.setState({mode: 'register'});
+		} else if (this.state.mode === 'register') {
 			this._handleTaskMode(function(str) {
 				this.setState({mode: 'taskview'});
 			}.bind(this));
@@ -94,6 +104,7 @@ export default class extends Component {
 				this.setState({taskElemConflPair: taskPairs});
 				this.setState({activeTaskObj1: base1});
 				this.setState({activeTaskObj2: base2});
+				this.num += this.numOfObjects;
 				callback('done');
 			}.bind(this));
 		}
@@ -102,13 +113,13 @@ export default class extends Component {
 		console.log(this.num);
 		const base1 = this.state.elements.features;
 		const base2 = this.state.conflicts.features;
-		if (this.state.taskmode == 1) {
+		if (this.state.taskmode == 1 && this.num <= this.numOfObjects) {
 			this.setState({chosenBuildingGeom: []});
 			getallTaskElemConflElemPairs(base1[this.num], true, function(resp) {
 				this.setState({taskElemConflPair: resp});
 				this.num += 1;
 			}.bind(this));
-		} else if (this.state.taskmode == 3) {
+		} else if (this.state.taskmode == 3 && this.num <= this.numOfObjects) {
 			this.setState({chosenBuildingGeom: []});
 			getallTaskElemConflElemPairs(base1.slice(this.num, this.num+2), false, function(resp) {
 				this.setState({taskElemConflPair: resp});
@@ -116,6 +127,8 @@ export default class extends Component {
 				this.setState({activeTaskObj2: base2.slice(this.num, this.num+2)});
 				this.num += 3;
 			}.bind(this));
+		} else {
+			//Done send result
 		}
 
 	}
@@ -124,6 +137,10 @@ export default class extends Component {
 		if (this.state.mode === 'home') {
 			return (
 				<Home onClick={this._handleModeChange}/>
+			)
+		} else if (this.state.mode === 'register') {
+			return (
+				<Register _setParticipantId = {this._setParticipantId} />
 			)
 		} else if (this.state.mode === 'taskview') {
 			return (
@@ -163,6 +180,7 @@ function getallTaskElemConflElemPairs(elements, onlyone, callback) {
 	} else {
 		elements.map(elem => {
 			taskApi.getTaskElemAndConflictElem(elem.id, function(resp) {
+				//console.log(resp.confl.properties.is_fixed);
 				taskPairs[i]=resp;
 				i+=1;
 			});

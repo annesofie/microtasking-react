@@ -1,0 +1,58 @@
+
+#register-form {
+  background:#fff;
+  border: 1px solid #DFDCDC;
+  border-radius: 15px 15px 15px 15px;
+  display: inline-block;
+  margin-bottom: 30px;
+  margin-left: 20px;
+  margin-top: 10px;
+  padding: 25px 50px 10px;
+  width: 40vw;
+  font-family:Tahoma, Geneva, sans-serif;
+}
+
+#register-form .fieldgroup {
+  display: inline-block;
+  padding: 8px 10px;
+  width: 15vw;
+}
+
+#register-form .fieldgroup input{
+  margin: 10px 0;
+  height: 40px;
+  width:100%;
+  border:solid #cdcdcd 1px;
+  border-radius:3px;
+  padding-left:10px;
+}
+
+#register-form .submit {
+  padding: 10px;
+  height: 40px !important;
+  background:#00a2d1;
+  color:#fff;
+  font-weight:bolder;
+  border:solid #cdcdcd 1px;
+  border-radius:3px;
+}
+
+#register-form .fieldgroup label.error {
+  color: #FB3A3A;
+  display: inline-block;
+  font-weight:500;
+  padding: 0;
+  text-align: left;
+}
+
+/** Custom Select **/
+.custom-select-wrapper {
+  position: relative;
+  display: inline-block;
+  user-select: none;
+}
+.custom-select-wrapper select {
+  display: none;
+}
+
+

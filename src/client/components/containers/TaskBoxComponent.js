@@ -18,13 +18,13 @@ class TaskBoxComponent extends Component {
 		};
 		this.change=0;
 		this.metadata={};
-
+		this.index = 0;
 		this._taskChange = this._taskChange.bind(this);
 		this.onMetadataChange = this.onMetadataChange.bind(this);
 	}
 
 	onMetadataChange(index, e) {
-			console.log(index);
+		console.log(index);
 		if (index) {
 			console.log(e);
 			this.metadata[index] = e.currentTarget.value;

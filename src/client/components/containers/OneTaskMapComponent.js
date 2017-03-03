@@ -22,8 +22,6 @@ export default class OneTaskMapComponent extends Component {
 		this.colormap1 = ['#3fe5e5', '#43cd80', '#63137a', '#8e374d'];
 		this.colormap2 = ['#105576', '#2a7a13', '#63137a', '#e68e74'];
 		this.colorPair = [this.colormap1[x], this.colormap2[y]];
-		this.prewColor1 = null;
-		this.prewColor2 = null;
 		this.activelayer=null;
 		this._clickEventHandler1 = this._clickEventHandler1.bind(this);
 		this._clickEventHandler2 = this._clickEventHandler2.bind(this);
@@ -37,7 +35,6 @@ export default class OneTaskMapComponent extends Component {
 					weight: 4
 				});
 			}
-			//this.prewColor1 = this.activelayer.options.color;
 			e.target.setStyle({
 				color: 'blue',
 				weight: 5
@@ -47,7 +44,7 @@ export default class OneTaskMapComponent extends Component {
 		}.bind(this));
 	}
 
-	_clickEventHandler2(feature, layer) {
+	_clickEventHandler2(id, feature, layer) {
 		layer.on('click', function(e) {
 			if (this.activelayer) {
 				this.activelayer.setStyle({
@@ -55,13 +52,12 @@ export default class OneTaskMapComponent extends Component {
 					weight: 4
 				});
 			}
-			//this.prewColor2 = this.activelayer.options.color;
 			e.target.setStyle({
 				color: 'blue',
 				weight: 5
 			});
 			this.activelayer=e.target;
-			this.props._setChosenBuildingLayer(e.target);
+			this.props._setChosenBuildingLayer(e.target, id);
 		}.bind(this));
 	}
 

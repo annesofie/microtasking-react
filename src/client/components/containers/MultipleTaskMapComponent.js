@@ -6,7 +6,7 @@ import React, { Component } from 'react'
 import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON} from 'react-leaflet'
 
 //views
-import ThreeTaskMapView from '../views/threeTaskMapView'
+import ThreeTaskMapView from '../views/multipleTaskMapView'
 
 export default class OneTaskMapComponent extends Component {
 
@@ -29,7 +29,7 @@ export default class OneTaskMapComponent extends Component {
 
 	_clickEventHandler1(id, feature, layer) {
 		layer.on('click', function(e) {
-			if (this.activelayer) {
+			if (this.activelayer && this.activelayer.feature.id == feature.id) {
 				this.activelayer.setStyle({
 					color: this.colorPair[1],
 					weight: 4
@@ -46,7 +46,7 @@ export default class OneTaskMapComponent extends Component {
 
 	_clickEventHandler2(id, feature, layer) {
 		layer.on('click', function(e) {
-			if (this.activelayer) {
+			if (this.activelayer && this.activelayer.feature.id == feature.id) {
 				this.activelayer.setStyle({
 					color: this.colorPair[0],
 					weight: 4

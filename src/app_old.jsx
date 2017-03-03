@@ -1,7 +1,7 @@
 import React from 'react';
 import { browserHistory, Router, Route, Link, IndexRoute, hashHistory } from 'react-router'
 
-import Header from './client/components/HeaderComponent';
+import Header from './client/components/containers/HeaderComponent';
 import MainLayout from './client/components/MainLayout';
 import SearchLayout from './client/components/SearchLayout';
 import BoxLayout from './client/components/BoxLayout';

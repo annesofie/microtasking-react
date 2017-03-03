@@ -1,0 +1,22 @@
+<Label value="Age" position="before">
+					<Select name="age" values={this.ageGroup}/>
+				</Label>
+
+				<Label value="Nationality" position="before">
+					<TextInput  name="nationality" type="nationality"
+											placeholder="Enter your nationality" required />
+				</Label>
+
+				<Label value="Gender" position="before">
+					<Select name="gender" values={this.genderval}/>
+				</Label>
+
+				<Label value="Do you have experience of working with spatialdata?" position="before">
+					<Select name="experienced" values={this.values}/>
+				</Label>
+
+				<Label value="Have you heard of micro-tasking before?" position="before">
+					<Select name="microtasking" values={this.values}/>
+				</Label>
+
+				<button type="submit">Submit</button>

@@ -19,6 +19,8 @@ export default class MapComponent extends Component {
 	}
 
 	_setChosenBuildingLayer(lay, id) {
+		console.log(id);
+		console.log(lay);
 		this.props._setChosenBuildingGeom(lay, id);
 	}
 
@@ -31,7 +33,7 @@ export default class MapComponent extends Component {
 					_setChosenBuildingLayer={this._setChosenBuildingLayer}
 				/>
 			);
-		} else if (this.props.taskmode == 3) {
+		} else {
 			return (
 				<MultipleTaskMapComp
 					taskmode={this.props.taskmode}
