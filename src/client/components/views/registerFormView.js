@@ -11,7 +11,7 @@ class RegisterFormView extends Component {
 		super(props);
 
 		this.initialData = {
-			age: '',
+			age: 0,
 			gender: '',
 			nationality: '',
 			experienced: '',
@@ -24,15 +24,11 @@ class RegisterFormView extends Component {
 	}
 
 	saveAndContinue() {
-		var data = {
-			age: this.refs.age.value,
-			gender: this.refs.gender.value,
-			nationality: this.refs.nationality.value,
-			experienced: this.refs.experienced.value,
-			microtasking: this.refs.microtasking.value
-		};
-
-		this.props.handleRegisterSubmit(data);
+		console.log(this.initialData);
+		this.initialData.experienced == 'Yes' ? this.initialData.experienced=true :	this.initialData.experienced=false;
+		this.initialData.microtasking == 'Yes' ? this.initialData.microtasking=true :	this.initialData.microtasking=false;
+		this.initialData.age = this.refs.age.value;
+		this.props.handleRegisterSubmit(this.initialData);
 	}
 
 
@@ -40,7 +36,7 @@ class RegisterFormView extends Component {
 		const LabeledInput = (props) => (
 			<div className="pure-control-group">
 				<Label value={props.label} position="before">
-					<TextInput {...props}/>
+					<TextInput id="register-input" {...props}/>
 				</Label>
 			</div>
 		);
@@ -53,11 +49,13 @@ class RegisterFormView extends Component {
 				</Label>
 			</div>
 		);
-
 		return (
 			<Form className="pure-form pure-form-aligned" initialData={this.initialData} onSubmit={this.saveAndContinue}>
 				<fieldset>
-					<LabeledSelect label="Age" name="age" values={this.ageGroup} placeholder="dkjha" />
+					<div className="pure-control-group">
+						<label>Age</label>
+						<input id="register-input" type="number" ref="age" required/>
+					</div>
 					<LabeledInput label="Nationality" name="nationality" required/>
 					<LabeledSelect label="Gender" name="gender" values={this.genderval} />
 					<LabeledSelect label="Do you have experience of working with spatialdata?" name="experienced" values={this.values}/>
@@ -69,7 +67,10 @@ class RegisterFormView extends Component {
 				</fieldset>
 			</Form>
 		)
+
 	}
 }
+
+/*<LabeledSelect label="Age" name="age" values={this.ageGroup} placeholder="dkjha" />*/
 
 export default RegisterFormView;

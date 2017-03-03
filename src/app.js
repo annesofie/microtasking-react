@@ -23,7 +23,8 @@ export default class extends Component {
 		this.state = {
 			mode: 'home',
 			user: [],
-			taskid: Math.floor(Math.random() * ((idy-idx)+1) + idx),
+			taskorder: '',
+			taskid: '',
 			taskmode: 0,
 			task: [],
 			elements: [],
@@ -37,26 +38,34 @@ export default class extends Component {
 		this.chosenGeomLayer={};
 		this.chosenMetadata={};
 		this.num=0;
-		this.numOfObjects = 5;
+		this.numOfObjects = 5; //NB! HUSK å endre
+		this.taskNum = 0;
 
 		this._handleModeChange = this._handleModeChange.bind(this);
-		this._getNextTask = this._getNextTask.bind(this);
 		this._setChosenBuildingGeom = this._setChosenBuildingGeom.bind(this);
 		this._setChosenMetadata = this._setChosenMetadata.bind(this);
 		this._handleTaskMode = this._handleTaskMode.bind(this);
 		this._setParticipantId = this._setParticipantId.bind(this);
+		// this._getNextTaskElements = this._getNextTaskElements.bind(this);
+		this._getNextTask = this._getNextTask.bind(this);
 	}
 
 	componentDidMount() {
-		taskApi.getElementsInTask(this.state.taskid).then(elem => {
-			this.setState({elements: elem});
-		});
-		taskApi.getConflictsInTask(this.state.taskid).then(elem => {
-			this.setState({conflicts: elem});
-		});
-		taskApi.getTask(this.state.taskid).then(elem => {
-			this.setState({task: elem});
-			this.setState({taskmode: elem.num_of_elements});
+		taskApi.getTaskOrder().then(listorder => {
+			console.log(listorder);
+			this.setState({taskorder: listorder});
+			this.setState({taskid: listorder[0]});
+
+			taskApi.getElementsInTask(listorder[0]).then(elem => {
+				this.setState({elements: elem});
+			});
+			taskApi.getConflictsInTask(listorder[0]).then(elem => {
+				this.setState({conflicts: elem});
+			});
+			taskApi.getTask(listorder[0]).then(elem => {
+				this.setState({task: elem});
+				this.setState({taskmode: elem.num_of_elements});
+			});
 		});
 	}
 	_setChosenBuildingGeom(layer, id) {
@@ -76,61 +85,76 @@ export default class extends Component {
 		if(this.state.mode === 'home'){
 			this.setState({mode: 'register'});
 		} else if (this.state.mode === 'register') {
-			this._handleTaskMode(function(str) {
+			this._handleTaskMode(true, function(str) {
 				this.setState({mode: 'taskview'});
 			}.bind(this));
 		}
 	}
-	_handleTaskMode(callback) {
+	_handleTaskMode(isFirst, callback) {
 		const base1 = this.state.elements.features;
 		const base2 = this.state.conflicts.features;
-		if (this.state.taskmode == 1) {
+		if (this.state.taskmode == 1 && this.num < this.numOfObjects) {
 			getallTaskElemConflElemPairs(base1[this.num], true, function(resp) {
 				this.setState({taskElemConflPair: resp});
 				this.num += 1;
 				callback('done');
 			}.bind(this));
-		} else if (this.state.taskmode == 3) {
-			getallTaskElemConflElemPairs(base1.slice(0,3), false, function(taskPairs) {
+		} else if (this.state.taskmode == 3 && this.num < this.numOfObjects) {
+			getallTaskElemConflElemPairs(base1.slice(this.num, this.num+3), false, function(taskPairs) {
 				this.setState({taskElemConflPair: taskPairs});
-				this.setState({activeTaskObj1: base1.slice(0, 3)});
-				this.setState({activeTaskObj2: base2.slice(0, 3)});
+				this.setState({activeTaskObj1: base1.slice(this.num, this.num+3)});
+				this.setState({activeTaskObj2: base2.slice(this.num, this.num+3)});
 				this.num += 3;
 				callback('done');
 			}.bind(this));
-		} else{
+		} else if (isFirst && this.num < this.numOfObjects){
 			//use all
 			getallTaskElemConflElemPairs(base1, false, function(taskPairs) {
+				console.log(taskPairs);
 				this.setState({taskElemConflPair: taskPairs});
 				this.setState({activeTaskObj1: base1});
 				this.setState({activeTaskObj2: base2});
 				this.num += this.numOfObjects;
 				callback('done');
 			}.bind(this));
+		} else {
+			console.log('get next task');
+			//Get next task
+			this.taskNum += 1;
+			this._getNextTask();
 		}
 	}
+	// _getNextTaskElements() {
+	// 	console.log(this.num);
+	// 	const base1 = this.state.elements.features;
+	// 	const base2 = this.state.conflicts.features;
+	// 	if (this.state.taskmode == 1 && this.num <= this.numOfObjects) {
+	// 		this.setState({chosenBuildingGeom: []});
+	// 		getallTaskElemConflElemPairs(base1[this.num], true, function(resp) {
+	// 			this.setState({taskElemConflPair: resp});
+	// 			this.num += 1;
+	// 		}.bind(this));
+	// 	} else if (this.state.taskmode == 3 && this.num <= this.numOfObjects) {
+	// 		this.setState({chosenBuildingGeom: []});
+	// 		getallTaskElemConflElemPairs(base1.slice(this.num, this.num+2), false, function(resp) {
+	// 			this.setState({taskElemConflPair: resp});
+	// 			this.setState({activeTaskObj1: base1.slice(this.num, this.num+2)});
+	// 			this.setState({activeTaskObj2: base2.slice(this.num, this.num+2)});
+	// 			this.num += 3;
+	// 		}.bind(this));
+	// 	} else {
+	// 		//Done send result
+    //
+	// 	}
+	// }
 	_getNextTask() {
-		console.log(this.num);
-		const base1 = this.state.elements.features;
-		const base2 = this.state.conflicts.features;
-		if (this.state.taskmode == 1 && this.num <= this.numOfObjects) {
-			this.setState({chosenBuildingGeom: []});
-			getallTaskElemConflElemPairs(base1[this.num], true, function(resp) {
-				this.setState({taskElemConflPair: resp});
-				this.num += 1;
-			}.bind(this));
-		} else if (this.state.taskmode == 3 && this.num <= this.numOfObjects) {
-			this.setState({chosenBuildingGeom: []});
-			getallTaskElemConflElemPairs(base1.slice(this.num, this.num+2), false, function(resp) {
-				this.setState({taskElemConflPair: resp});
-				this.setState({activeTaskObj1: base1.slice(this.num, this.num+2)});
-				this.setState({activeTaskObj2: base2.slice(this.num, this.num+2)});
-				this.num += 3;
-			}.bind(this));
-		} else {
-			//Done send result
-		}
-
+		taskApi.getTask(this.state.taskorder[this.taskNum]).then(elem => {
+			this.setState({task: elem});
+			this.setState({taskmode: elem.num_of_elements});
+			this._handleTaskMode(false, function (resp) {
+				console.log(resp);
+			})
+		});
 	}
 
 	render() {
@@ -150,7 +174,7 @@ export default class extends Component {
 														taskElemConflPair={this.state.taskElemConflPair}
 														chosenBuildingGeom={this.state.chosenBuildingGeom}
 														_setChosenMetadata={this._setChosenMetadata}
-														_getNextTask={this._getNextTask}
+														_getNextTaskElements={this._handleTaskMode}
 					/>
 					<div className="mapbox">
 						<MapContainer task={this.state.task}

@@ -46,6 +46,7 @@ class metadataTask extends Component{
 					</tbody>
 				</table>;
 		} else {
+			console.log('multiple task pairs');
 			tableTaskPair =
 				this.props.taskElemConflPair.map((elem, index) => {
 					return (

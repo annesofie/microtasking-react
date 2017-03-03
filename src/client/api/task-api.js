@@ -18,6 +18,14 @@ export function saveParticipant(data) {
 	.catch(error => error)
 }
 
+export function getTaskOrder() {
+	return axios.get(apiURL+'tasks/order/')
+		.then(resp => resp.data)
+		.catch(function (error) {
+			console.log(error);
+		})
+}
+
 export function getTask(id) {
 	return axios.get(apiURL+'tasks/'+id+'/')
 		.then(response => response.data)

@@ -39,7 +39,9 @@ class TaskBoxComponent extends Component {
 			//reset
 			this.setState({taskmode: 'geom_task'});
 			this.setState({nameBtn: 'next'});
-			this.props._getNextTask();
+			this.props._getNextTaskElements(false, function (resp) {
+				console.log(resp);
+			});
 			this.change=0;
 		} else {
 			this.setState({taskmode: 'meta_task'});
