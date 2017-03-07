@@ -26,6 +26,7 @@ export default class extends Component {
 			taskorder: '',
 			taskid: '',
 			taskmode: 0,
+			map_taskmode: 0,
 			task: [],
 			elements: [],
 			conflicts: [],
@@ -65,6 +66,7 @@ export default class extends Component {
 			taskApi.getTask(listorder[0]).then(elem => {
 				this.setState({task: elem});
 				this.setState({taskmode: elem.num_of_elements});
+				this.setState({map_taskmode: elem.num_of_elements});
 			});
 		});
 	}
@@ -83,7 +85,10 @@ export default class extends Component {
 	}
 	_handleModeChange() {
 		if(this.state.mode === 'home'){
-			this.setState({mode: 'register'});
+			// this.setState({mode: 'register'});
+			this._handleTaskMode(true, function(str) {
+				this.setState({mode: 'taskview'});
+			}.bind(this));
 		} else if (this.state.mode === 'register') {
 			this._handleTaskMode(true, function(str) {
 				this.setState({mode: 'taskview'});
@@ -107,7 +112,7 @@ export default class extends Component {
 				this.num += 3;
 				callback('done');
 			}.bind(this));
-		} else if (isFirst && this.num < this.numOfObjects){
+		} else if (this.num < this.numOfObjects){
 			//use all
 			getallTaskElemConflElemPairs(base1, false, function(taskPairs) {
 				console.log(taskPairs);
@@ -120,38 +125,17 @@ export default class extends Component {
 		} else {
 			console.log('get next task');
 			//Get next task
-			this.taskNum += 1;
 			this._getNextTask();
 		}
 	}
-	// _getNextTaskElements() {
-	// 	console.log(this.num);
-	// 	const base1 = this.state.elements.features;
-	// 	const base2 = this.state.conflicts.features;
-	// 	if (this.state.taskmode == 1 && this.num <= this.numOfObjects) {
-	// 		this.setState({chosenBuildingGeom: []});
-	// 		getallTaskElemConflElemPairs(base1[this.num], true, function(resp) {
-	// 			this.setState({taskElemConflPair: resp});
-	// 			this.num += 1;
-	// 		}.bind(this));
-	// 	} else if (this.state.taskmode == 3 && this.num <= this.numOfObjects) {
-	// 		this.setState({chosenBuildingGeom: []});
-	// 		getallTaskElemConflElemPairs(base1.slice(this.num, this.num+2), false, function(resp) {
-	// 			this.setState({taskElemConflPair: resp});
-	// 			this.setState({activeTaskObj1: base1.slice(this.num, this.num+2)});
-	// 			this.setState({activeTaskObj2: base2.slice(this.num, this.num+2)});
-	// 			this.num += 3;
-	// 		}.bind(this));
-	// 	} else {
-	// 		//Done send result
-    //
-	// 	}
-	// }
 	_getNextTask() {
+		this.taskNum += 1;
+		console.log(this.state.taskorder[this.taskNum]);
 		taskApi.getTask(this.state.taskorder[this.taskNum]).then(elem => {
 			this.setState({task: elem});
 			this.setState({taskmode: elem.num_of_elements});
 			this._handleTaskMode(false, function (resp) {
+				this.setState({map_taskmode: this.state.taskmode});
 				console.log(resp);
 			})
 		});
@@ -161,24 +145,25 @@ export default class extends Component {
 		if (this.state.mode === 'home') {
 			return (
 				<Home onClick={this._handleModeChange}/>
-			)
-		} else if (this.state.mode === 'register') {
-			return (
-				<Register _setParticipantId = {this._setParticipantId} />
-			)
+			);
+		// } else if (this.state.mode === 'register') {
+		// 	return (
+		// 		<Register _setParticipantId = {this._setParticipantId} />
+		// 	)
 		} else if (this.state.mode === 'taskview') {
 			return (
 				<div className="d-flex">
 					<TaskBoxComponent task={this.state.task}
-														taskmode={this.state.taskmode}
+														taskmode={this.state.map_taskmode}
 														taskElemConflPair={this.state.taskElemConflPair}
+														activeTaskObj1={this.state.activeTaskObj1}
 														chosenBuildingGeom={this.state.chosenBuildingGeom}
 														_setChosenMetadata={this._setChosenMetadata}
 														_getNextTaskElements={this._handleTaskMode}
 					/>
 					<div className="mapbox">
 						<MapContainer task={this.state.task}
-													taskmode={this.state.taskmode}
+													taskmode={this.state.map_taskmode}
 													taskelements={this.state.elements}
 													conflictelements={this.state.conflicts}
 													activeTaskObj1={this.state.activeTaskObj1}

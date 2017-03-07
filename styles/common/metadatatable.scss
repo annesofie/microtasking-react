@@ -1,9 +1,9 @@
-$header_background_color: #d0d0d0;
+$header_background_color: rgba(156, 156, 156, 0.95);
 $header_text_color: #FDFDFD;
-$alternate_row_background_color: #DDD;
+$alternate_row_background_color: #cfcfcf;
 
 $table_width: 100%;
-$table_body_height: 300px;
+$table_body_height: 10vh;
 $column_one_width: 15vw;
 $column_two_width: 15vw;
 $column_three_width: 15vw;
@@ -38,9 +38,12 @@ $column_four_width: 15vw;
     overflow: auto;
     width: 100%;
     height: $table_body_height;
-    tr:nth-child(even) {
+    tr {
       background-color: $alternate_row_background_color;
     }
+    //tr:nth-child(even) {
+    //  background-color: $alternate_row_background_color;
+    //}
   }
 }
 

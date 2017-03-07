@@ -4,13 +4,14 @@
   padding-right: 5%;
 }
 .task-box {
-  background-color: rgba(250, 250, 230, 0.7);
+  background-color: rgba(55, 58, 56, 0.8);
   //background-image: url("../src/client/components/assets/RectangleView.png");
   //background-repeat: no-repeat;
   //background-position: center;
-  height: 70vh;
+  height: 80vh;
   width: 60vw;
   text-align: center;
+  color: #f8ffe0;
 }
 .react-bs-table-container {
   margin-left: 20%;
@@ -18,7 +19,7 @@
   height: 80%;
 }
 .map-box .leaflet-container {
-  height: 69vh;
+  height: 75vh;
   width: 30vw;
   margin: 0 auto;
   position: relative;
@@ -35,5 +36,5 @@
   height: 10vh;
 }
 #chosenGeom {
-  color: #646464;
+  color: #bac1a6;
 }

@@ -65,7 +65,6 @@ class TaskBoxComponent extends Component {
 		} else if (this.state.taskmode == 'meta_task'){
 			shownTask =
 				<MetadataTask
-					activeTaskObj1={this.props.activeTaskObj1}
 					taskElemConflPair={this.props.taskElemConflPair}
 					taskmode={this.props.taskmode}
 					onChange={this.onMetadataChange}
@@ -76,8 +75,9 @@ class TaskBoxComponent extends Component {
 	_infoClickedLayer() {
 		let chosenGeomLayer = [];
 		let num = this.state.count;
-		var base = this.props;
-		for (var i = 1; i <= this.props.taskmode; i++) {
+		let base = this.props;
+		console.log(this.props.activeTaskObj1);
+		for (let i = 1; i <= this.props.taskmode; i++) {
 			chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
 				Building {i} : {base.chosenBuildingGeom[i] ? 'You chose ' + base.chosenBuildingGeom[i].properties.title : 'not chosen, click on a layer on the map'}
 			</h5>

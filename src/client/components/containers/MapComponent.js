@@ -34,6 +34,7 @@ export default class MapComponent extends Component {
 				/>
 			);
 		} else {
+			console.log(this.props.taskmode);
 			return (
 				<MultipleTaskMapComp
 					taskmode={this.props.taskmode}
