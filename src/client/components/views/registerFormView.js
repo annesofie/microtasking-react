@@ -28,7 +28,7 @@ class RegisterFormView extends Component {
 		this.initialData.experienced == 'Yes' ? this.initialData.experienced=true :	this.initialData.experienced=false;
 		this.initialData.microtasking == 'Yes' ? this.initialData.microtasking=true :	this.initialData.microtasking=false;
 		this.initialData.age = this.refs.age.value;
-		this.props.handleRegisterSubmit(this.initialData);
+		this.props.handleRegisterSubmit(this.initialData, true);
 	}
 
 

@@ -1,17 +1,17 @@
 .task-map-box {
-  padding-top: 7%;
+  padding-top: 8%;
   padding-left: 5%;
   padding-right: 5%;
 }
 .task-box {
-  background-color: rgba(55, 58, 56, 0.8);
+  background-color: rgba(87, 188, 144, 0.8);
   //background-image: url("../src/client/components/assets/RectangleView.png");
   //background-repeat: no-repeat;
   //background-position: center;
   height: 80vh;
   width: 60vw;
   text-align: center;
-  color: #f8ffe0;
+  color: #292929;
 }
 .react-bs-table-container {
   margin-left: 20%;
@@ -36,5 +36,5 @@
   height: 10vh;
 }
 #chosenGeom {
-  color: #bac1a6;
+  color: #292929;
 }

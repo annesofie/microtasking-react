@@ -7,7 +7,8 @@ import * as taskApi from '../../../client/api/task-api';
 
 
 //View
-import RegisterFormView from '../views/registerFormView'
+import RegisterFormView from '../views/registerFormView';
+import AfterEachTaskView from '../views/afterEachTaskSurvey';
 
 export default class RegisterFormComponent extends Component {
 
@@ -26,28 +27,46 @@ export default class RegisterFormComponent extends Component {
 		this.handleRegisterSubmit = this.handleRegisterSubmit.bind(this);
 	}
 
-	handleRegisterSubmit(data) {
+	handleRegisterSubmit(data, isRegistration) {
 		this.fieldValues = Object.assign({}, this.fieldValues, data);
-		taskApi.saveParticipant(this.fieldValues).then(resp => {
-			console.log(resp);
-			var id = resp.data.id;
-			this.props._setParticipantId(id);
-		})
+		if (isRegistration) {
+			taskApi.saveParticipant(this.fieldValues).then(resp => {
+				console.log(resp);
+				const id = resp.data.id;
+				this.props._setParticipantId(id);
+			})
+		} else if (!isRegistration){
+			console.log('handle register form');
+			this.props.handleModeChange();
+		}
+
 	}
 
 	render() {
-		return (
-			<div className="container-fluid">
-				<div className="d-flex flex-column">
-					<h4>Registration</h4>
-					<RegisterFormView
-						handleSubmit={this.handleSubmit}
-						handleRegisterSubmit={this.handleRegisterSubmit}
-						fieldValues={this.fieldValues}
-					/>
+		if (this.props.mode == 'register') {
+			return (
+				<div className="container-fluid">
+					<div className="d-flex flex-column">
+						<h4>Registration</h4>
+						<RegisterFormView
+							handleRegisterSubmit={this.handleRegisterSubmit}
+							fieldValues={this.fieldValues}
+						/>
+					</div>
 				</div>
-			</div>
-		)
+			)
+		} else if (this.props.mode == 'survey') {
+			return (
+				<div className="container-fluid">
+					<div className="d-flex flex-column">
+						<h4>Registration</h4>
+						<AfterEachTaskView
+							handleRegisterSubmit={this.handleRegisterSubmit}
+						/>
+					</div>
+				</div>
+			)
+		}
 	}
 
 }

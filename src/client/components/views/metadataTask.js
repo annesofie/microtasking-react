@@ -49,7 +49,6 @@ class metadataTask extends Component{
 			console.log('multiple task pairs');
 			tableTaskPair =
 				this.props.taskElemConflPair.map((elem, index) => {
-					console.log(index);
 					return (
 						<table key={'table'+elem+index} className="fixed_headers">
 							<thead>
