@@ -24,9 +24,7 @@ class TaskBoxComponent extends Component {
 	}
 
 	onMetadataChange(index, e) {
-		console.log(index);
 		if (index) {
-			console.log(e);
 			this.metadata[index] = e.currentTarget.value;
 		} else {
 			this.metadata[0] = e.currentTarget.value;
@@ -37,16 +35,20 @@ class TaskBoxComponent extends Component {
 		if (this.change == 1) {
 			this.props._setChosenMetadata(this.metadata); //Set chosen metadata
 			//reset
-			this.setState({taskmode: 'geom_task'});
-			this.setState({nameBtn: 'next'});
+			this.setState({
+				taskmode: 'geom_task',
+				nameBtn: 'next'
+			});
 			this.props._getNextTaskElements(false, function (resp) {
 				console.log(resp);
 			});
 			this.change=0;
 		} else {
-			this.setState({taskmode: 'meta_task'});
-			this.setState({nameBtn: 'finish'});
-			this.setState({count: this.state.count+=1});
+			this.setState({
+				taskmode: 'meta_task',
+				nameBtn: 'finish',
+				count: this.state.count+=1
+			});
 			this.change=1;
 		}
 	}
@@ -75,7 +77,10 @@ class TaskBoxComponent extends Component {
 	_infoClickedLayer() {
 		let chosenGeomLayer = [];
 		let base = this.props;
-		// console.log(this.props.activeTaskObj1);
+		console.log(this.props.taskElemConflPair);
+		if (this.change == 1) {
+
+		}
 		for (let i = 1; i <= this.props.taskmode; i++) {
 			chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
 				Building {i} : {base.chosenBuildingGeom[i] ? 'You chose ' + base.chosenBuildingGeom[i].properties.title : 'not chosen, click on a layer on the map'}

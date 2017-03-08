@@ -90,7 +90,10 @@ export default class extends Component {
 			this.setState({mode: 'survey'});
 		} else if (this.state.mode === 'survey') {
 			this._getNextTask(function() {
-				this.setState({mode: 'taskview'});
+				this.setState({
+					chosenBuildingGeom: [],
+					mode: 'taskview'
+				});
 			}.bind(this));
 		}
 	}
@@ -120,7 +123,6 @@ export default class extends Component {
 			//use all
 			console.log('taskmode = ' + this.taskmode);
 			getallTaskElemConflElemPairs(base1, false, function(taskPairs) {
-				console.log(taskPairs);
 				this.setState({
 					activeTaskObj1: base1,
 					activeTaskObj2: base2,
@@ -129,12 +131,8 @@ export default class extends Component {
 				this.num += this.numOfObjects;
 				callback('done');
 			}.bind(this));
-		} else if (!isFirst){
-			//Task is finish
-			console.log('get next task');
+		} else if (!isFirst){  //Task is finish
 			this._handleModeChange();
-			//Get next task
-			// this._getNextTask();
 		}
 	}
 	_getNextTask(callback) {
