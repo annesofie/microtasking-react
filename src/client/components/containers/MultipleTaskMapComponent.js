@@ -6,7 +6,7 @@ import React, { Component } from 'react'
 import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON} from 'react-leaflet'
 
 //views
-import ThreeTaskMapView from '../views/multipleTaskMapView'
+import MultipleTaskMapView from '../views/multipleTaskMapView'
 
 export default class OneTaskMapComponent extends Component {
 
@@ -63,9 +63,9 @@ export default class OneTaskMapComponent extends Component {
 
 	render() {
 		return(
-			<ThreeTaskMapView
+			<MultipleTaskMapView
 				mapOptions={this.mapOptions}
-				taskmode={this.props.taskmode}
+				taskmode={this.props.elementsInTask}
 				taskElemConflPair={this.props.taskElemConflPair}
 				activeTaskObj1={this.props.activeTaskObj1}
 				activeTaskObj2={this.props.activeTaskObj2}

@@ -1,11 +1,11 @@
 $text-color: #595959;
 $view-box: #c6c6c6;
 
-body {
+.start-view {
 	background-image: url("../src/client/components/assets/triangleGlobeM.png");
 	background-repeat: no-repeat;
 	width: 100vw;
-	height: 50%;
+	height: 100vh;
 }
 
 #header {
@@ -69,3 +69,4 @@ body {
 input[type=text] {
     width: 15vw !important;
 }
+

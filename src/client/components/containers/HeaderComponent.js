@@ -5,6 +5,7 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router'
 
+
 class HeaderComponent extends Component {
 	constructor(props) {
 		super(props);
@@ -12,8 +13,8 @@ class HeaderComponent extends Component {
 
 	render() {
 		return (
-			<div id="header" className="container-fluid">
-				<div className="">
+			<div id="header" className="start-view">
+				<div className="d-flex flex-row justify-content-center">
 					<h1 className="header-text">Welcome to Micro tasking Survey</h1>
 				</div>
 				<div className="d-flex flex-row justify-content-center">

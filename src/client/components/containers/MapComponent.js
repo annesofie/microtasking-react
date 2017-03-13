@@ -23,23 +23,23 @@ export default class MapComponent extends Component {
 	}
 
 	render() {
-		if (this.props.taskmode == 1){
+		if (this.props.elementsInTask == 1){
 			return (
-				<OneTaskMapComp
-					taskmode={this.props.taskmode}
-					taskElemConflPair={this.props.taskElemConflPair}
-					_setChosenBuildingLayer={this._setChosenBuildingLayer}
-				/>
+					<OneTaskMapComp
+						taskmode={this.props.elementsInTask}
+						taskElemConflPair={this.props.taskElemConflPair}
+						_setChosenBuildingLayer={this._setChosenBuildingLayer}
+					/>
 			);
 		} else {
 			return (
-				<MultipleTaskMapComp
-					taskmode={this.props.taskmode}
-					taskElemConflPair={this.props.taskElemConflPair}
-					activeTaskObj1={this.props.activeTaskObj1}
-					activeTaskObj2={this.props.activeTaskObj2}
-					_setChosenBuildingLayer={this._setChosenBuildingLayer}
-				/>
+					<MultipleTaskMapComp
+						taskmode={this.props.elementsInTask}
+						taskElemConflPair={this.props.taskElemConflPair}
+						activeTaskObj1={this.props.activeTaskObj1}
+						activeTaskObj2={this.props.activeTaskObj2}
+						_setChosenBuildingLayer={this._setChosenBuildingLayer}
+					/>
 			)
 		}
 	}

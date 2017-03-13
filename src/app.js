@@ -9,6 +9,8 @@ import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON} from 'react-leaflet
 import * as taskApi from './client/api/task-api';
 
 //Views
+import Progressbar from './client/components/views/progressbarView';
+import TimerComponent from './client/components/containers/TimerComponent';
 import Home from './client/components/containers/HeaderComponent';
 import Register from './client/components/containers/RegisterFormComponent';
 import TaskBoxComponent from './client/components/containers/TaskBoxComponent';
@@ -29,6 +31,9 @@ export default class extends Component {
 			activeTaskObj1: null,
 			activeTaskObj2: null,
 			taskElemConflPair: null,
+			hidemap: false,
+			title: 'Welcome',
+			percent: 0,
 			chosenBuildingGeom: []
 		};
 
@@ -36,16 +41,20 @@ export default class extends Component {
 		this.conflicts;
 		this.chosenGeomLayer={};
 		this.chosenMetadata={};
-		this.num=0;
-		this.numOfObjects = 5; //NB! HUSK å endre
-		this.taskNum = 0;
-		this.taskmode = 0;
+		this.taskTimer=0;
+		this.num=0;  // Number in the task sequence (+1 i elementsInTask 1, +3 in elementsInTask 2, + numOfObjects in elementsInTask 3)
+		this.numOfObjects = 5; // ---- TODO! HUSK å endre, totalt antall task elements i DBen
+		this.taskMode = 0; // Taskmode number: 0, 1, 2
+		this.elementsInTask = 0; // Number of elements in task
 
 		this._handleModeChange = this._handleModeChange.bind(this);
+		this._setParticipantId = this._setParticipantId.bind(this);
 		this._setChosenBuildingGeom = this._setChosenBuildingGeom.bind(this);
 		this._setChosenMetadata = this._setChosenMetadata.bind(this);
+		this._setTaskTimer = this._setTaskTimer.bind(this);
 		this._handleTaskMode = this._handleTaskMode.bind(this);
-		this._setParticipantId = this._setParticipantId.bind(this);
+		this._changeHideMapState = this._changeHideMapState.bind(this);
+		this._changeProgressTitle = this._changeProgressTitle.bind(this);
 		// this._getNextTaskElements = this._getNextTaskElements.bind(this);
 		this._getNextTask = this._getNextTask.bind(this);
 	}
@@ -63,10 +72,14 @@ export default class extends Component {
 			});
 			taskApi.getTask(listorder[0]).then(elem => {
 				this.setState({task: elem});
-				this.taskmode = elem.num_of_elements;
+				this.elementsInTask = elem.num_of_elements;
 				this.setState({map_taskmode: elem.num_of_elements});
 			});
 		});
+	}
+	_setParticipantId(id) {
+		this.setState({user: id});
+		this._handleModeChange();
 	}
 	_setChosenBuildingGeom(layer, id) {
 		this.chosenGeomLayer[id]=layer.feature;
@@ -74,11 +87,13 @@ export default class extends Component {
 	}
 	_setChosenMetadata(obj) {
 		this.chosenMetadata[this.num]=obj;
-		console.log(this.chosenMetadata);
 	}
-	_setParticipantId(id) {
-		this.setState({user: id});
-		this._handleModeChange();
+	_setTaskTimer(time) {
+		console.log(time);
+		this.taskTimer = time;
+	}
+	_changeHideMapState(bool) {
+		this.setState({hidemap: bool});
 	}
 	_handleModeChange() {
 		if(this.state.mode === 'home'){
@@ -88,6 +103,7 @@ export default class extends Component {
 			}.bind(this));
 		} else if (this.state.mode === 'taskview') {
 			this.setState({mode: 'survey'});
+
 		} else if (this.state.mode === 'survey') {
 			this._getNextTask(function() {
 				this.setState({
@@ -100,15 +116,16 @@ export default class extends Component {
 	_handleTaskMode(isFirst, callback) {
 		const base1 = this.elements.features;
 		const base2 = this.conflicts.features;
-		if (this.taskmode == 1 && this.num < this.numOfObjects) {
-			console.log('taskmode = ' + this.taskmode);
+		this._changeProgressTitle();
+		if (this.elementsInTask == 1 && this.num < this.numOfObjects) {
+			console.log('elementsInTask = ' + this.elementsInTask);
 			getallTaskElemConflElemPairs(base1[this.num], true, function(resp) {
 				this.setState({taskElemConflPair: resp});
 				this.num += 1;
 				callback('done');
 			}.bind(this));
-		} else if (this.taskmode == 3 && this.num < this.numOfObjects) {
-			console.log('taskmode = ' + this.taskmode);
+		} else if (this.elementsInTask == 3 && this.num < this.numOfObjects) {
+			console.log('elementsInTask = ' + this.elementsInTask);
 			getallTaskElemConflElemPairs(base1.slice(this.num, this.num+3), false, function(taskPairs) {
 				this.setState(
 					{
@@ -121,7 +138,7 @@ export default class extends Component {
 			}.bind(this));
 		} else if (this.num < this.numOfObjects){
 			//use all
-			console.log('taskmode = ' + this.taskmode);
+			console.log('elementsInTask = ' + this.elementsInTask);
 			getallTaskElemConflElemPairs(base1, false, function(taskPairs) {
 				this.setState({
 					activeTaskObj1: base1,
@@ -136,25 +153,36 @@ export default class extends Component {
 		}
 	}
 	_getNextTask(callback) {
-		this.taskNum += 1;
-		console.log(this.taskNum);
+		this.taskMode += 1;
+		this._changeProgressTitle();
+		console.log(this.taskMode);
 		console.log(this.state.taskorder);
 		this.num = 0; //reset
-		taskApi.getTask(this.state.taskorder[this.taskNum]).then(elem => {
+
+		taskApi.getTask(this.state.taskorder[this.taskMode]).then(elem => {
 			this.setState({task: elem});
-			this.taskmode = elem.num_of_elements;
-			this.setState({map_taskmode: this.taskmode});
+			this.elementsInTask = elem.num_of_elements;
+			this.setState({map_taskmode: this.elementsInTask});
 			this._handleTaskMode(false, function (resp) {
 				callback(resp);
 			});
-			// callback('getnexttask done');
+		});
+	}
+	_changeProgressTitle() {
+		//Register
+		const progressTitle = ['Task 1', 'Task 2', 'Task3'];
+		this.setState({
+			title: progressTitle[this.taskMode],
+			percent: this.state.percent+10
 		});
 	}
 
 	render() {
 		if (this.state.mode === 'home') {
 			return (
-				<Home onClick={this._handleModeChange}/>
+				<div className="container-fluid">
+					<Home onClick={this._handleModeChange}/>
+				</div>
 			);
 		// } else if (this.state.mode === 'register') {
 		// 	return (
@@ -162,30 +190,52 @@ export default class extends Component {
 		// 	)
 		} else if (this.state.mode === 'taskview') {
 			return (
-				<div className="d-flex">
-					<TaskBoxComponent task={this.state.task}
-														taskmode={this.state.map_taskmode}
-														taskElemConflPair={this.state.taskElemConflPair}
-														activeTaskObj1={this.state.activeTaskObj1}
-														chosenBuildingGeom={this.state.chosenBuildingGeom}
-														_setChosenMetadata={this._setChosenMetadata}
-														_getNextTaskElements={this._handleTaskMode}
-					/>
-					<div className="mapbox">
-						<MapContainer taskmode={this.state.map_taskmode}
-													activeTaskObj1={this.state.activeTaskObj1}
-													activeTaskObj2={this.state.activeTaskObj2}
-													taskElemConflPair={this.state.taskElemConflPair}
-													_setChosenBuildingGeom={this._setChosenBuildingGeom}
+				<div className="container-fluid">
+					<div className="d-flex justify-content-end">
+						<TimerComponent
+								_setTaskTimer={this._setTaskTimer}
 						/>
+						<Progressbar
+							title={this.state.title}
+							percent={this.state.percent}
+						/>
+					</div>
+					<div className="d-flex task-map-box">
+						<TaskBoxComponent task={this.state.task}
+															thisRoundTaskNumber={this.num}
+															elementsInTask={this.state.map_taskmode}
+															hidemap={this.state.hidemap}
+															taskElemConflPair={this.state.taskElemConflPair}
+															activeTaskObj1={this.state.activeTaskObj1}
+															chosenBuildingGeom={this.state.chosenBuildingGeom}
+															_setChosenMetadata={this._setChosenMetadata}
+															_getNextTaskElements={this._handleTaskMode}
+															_changeHideMapState={this._changeHideMapState}
+						/>
+						<div className="p-2 mapbox" style={{display: this.state.hidemap ? 'none' : 'block' }}>
+							<MapContainer taskmode={this.state.map_taskmode}
+														activeTaskObj1={this.state.activeTaskObj1}
+														activeTaskObj2={this.state.activeTaskObj2}
+														taskElemConflPair={this.state.taskElemConflPair}
+														_setChosenBuildingGeom={this._setChosenBuildingGeom}
+							/>
+						</div>
 					</div>
 				</div>
 			)
 		} else if (this.state.mode == 'survey') {
 			return (
+				<div className="container-fluid ">
+					<div className="d-flex justify-content-end">
+						<Progressbar
+							title={this.state.title}
+							percent={this.state.percent}
+						/>
+					</div>
 					<Register mode={this.state.mode}
 										handleModeChange={this._handleModeChange}
 					/>
+				</div>
 				)
 		}
 	}

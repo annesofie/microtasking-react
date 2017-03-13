@@ -17,14 +17,14 @@ export default function(props){
 	var laygroup;
 	var conflgroup;
 	var layersControlOverlay;
-	if (props.taskmode == 1){
+	if (props.elementsInTask == 1){
 		laygroup = <LayerGroup>
 			<GeoJSON key={props.activeTaskObj1.id} data={props.activeTaskObj1} color="purple" onEachFeature={props.clickHandler1}/>
 		</LayerGroup>;
 		conflgroup = <LayerGroup>
 			<GeoJSON key={props.activeTaskObj2.id} data={props.activeTaskObj2} color="orange" onEachFeature={props.clickHandler2}/>
 		</LayerGroup>
-	//} else if (props.taskmode == 3) {
+	//} else if (props.elementsInTask == 3) {
 	//	layersControlOverlay = <LayersControl key="ksjdhaskj" position='topright'>{props.taskElemConflPair.map(elem => {
 	//		return <LayersControl.Overlay key={'LCO'+elem.elem.properties.title} name={elem.elem.properties.title} checked={true}>
 	//			<LayerGroup key={'lg'+elem.elem.properties.title}>

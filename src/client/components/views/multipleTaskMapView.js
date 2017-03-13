@@ -69,7 +69,7 @@ class ThreeTaskMapView extends Component {
 		var layercontroloverlay1 = this.renderLayerControlOverlayElem();
 		var layercontroloverlay2 = this.renderLayerControlOverlayConfl();
 		return (
-			<div className="p-2 map-box">
+			<div className="map-box">
 				<Map
 					center={position} zoom={this.props.mapOptions.zoom}>
 					<TileLayer

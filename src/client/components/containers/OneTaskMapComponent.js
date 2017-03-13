@@ -65,7 +65,7 @@ export default class OneTaskMapComponent extends Component {
 		return(
 			<OneTaskMapView
 				mapOptions={this.mapOptions}
-				taskmode={this.props.taskmode}
+				taskmode={this.props.elementsInTask}
 				taskElemConflPair={this.props.taskElemConflPair}
 				clickHandler1={this._clickEventHandler1}
 				clickHandler2={this._clickEventHandler2}

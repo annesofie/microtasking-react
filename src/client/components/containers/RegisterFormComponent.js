@@ -58,8 +58,8 @@ export default class RegisterFormComponent extends Component {
 		} else if (this.props.mode == 'survey') {
 			return (
 				<div className="container-fluid">
-					<div className="d-flex flex-column">
-						<h4>Registration</h4>
+					<div className="d-flex justify-content-center">
+						<h4>Survey</h4>
 						<AfterEachTaskView
 							handleRegisterSubmit={this.handleRegisterSubmit}
 						/>

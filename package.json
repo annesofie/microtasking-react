@@ -19,6 +19,7 @@
   "homepage": "https://annesofie.github.io/microtasking-react",
   "dependencies": {
     "axios": "^0.15.3",
+    "bootstrap": "^4.0.0-alpha.6",
     "bootstrap-select": "^1.12.2",
     "leaflet": "^1.0.3",
     "lodash": "^4.17.4",
