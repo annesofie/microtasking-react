@@ -36,7 +36,6 @@ class TimerComponent  extends Component {
 
 		// This function is called every 50 ms. It updates the
 		// elapsed counter. Calling setState causes the component to be re-rendered
-		console.log(this.state.elapsed);
 		this.setState({elapsed: new Date() - this.start});
 	}
 

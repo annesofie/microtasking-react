@@ -17,10 +17,8 @@ import TaskBoxComponent from './client/components/containers/TaskBoxComponent';
 import MapContainer from './client/components/containers/MapComponent';
 
 export default class extends Component {
-//Math.floor(Math.random() * ((idy-idx)+1) + idx)
+
 	constructor() {
-		var idx = 1;
-		var idy = 3;
 		super();
 		this.state = {
 			mode: 'home',
@@ -28,12 +26,13 @@ export default class extends Component {
 			taskorder: '',
 			map_taskmode: 0,
 			task: [],
+			currentTaskNum: 0,
 			activeTaskObj1: null,
 			activeTaskObj2: null,
 			taskElemConflPair: null,
 			hidemap: false,
 			title: 'Welcome',
-			percent: 0,
+			percent: 0,  //Progress
 			chosenBuildingGeom: []
 		};
 
@@ -120,8 +119,11 @@ export default class extends Component {
 		if (this.elementsInTask == 1 && this.num < this.numOfObjects) {
 			console.log('elementsInTask = ' + this.elementsInTask);
 			getallTaskElemConflElemPairs(base1[this.num], true, function(resp) {
-				this.setState({taskElemConflPair: resp});
 				this.num += 1;
+				this.setState({
+					taskElemConflPair: resp,
+					currentTaskNum: this.num
+				});
 				callback('done');
 			}.bind(this));
 		} else if (this.elementsInTask == 3 && this.num < this.numOfObjects) {
@@ -131,7 +133,8 @@ export default class extends Component {
 					{
 						activeTaskObj1: base1.slice(this.num, this.num+3),
 						activeTaskObj2: base2.slice(this.num, this.num+3),
-						taskElemConflPair: taskPairs
+						taskElemConflPair: taskPairs,
+						currentTaskNum: this.num+=3
 					});
 				this.num += 3;
 				callback('done');
@@ -140,12 +143,13 @@ export default class extends Component {
 			//use all
 			console.log('elementsInTask = ' + this.elementsInTask);
 			getallTaskElemConflElemPairs(base1, false, function(taskPairs) {
+				this.num += this.numOfObjects;
 				this.setState({
 					activeTaskObj1: base1,
 					activeTaskObj2: base2,
-					taskElemConflPair: taskPairs
+					taskElemConflPair: taskPairs,
+					currentTaskNum: this.num
 				});
-				this.num += this.numOfObjects;
 				callback('done');
 			}.bind(this));
 		} else if (!isFirst){  //Task is finish
@@ -158,7 +162,7 @@ export default class extends Component {
 		console.log(this.taskMode);
 		console.log(this.state.taskorder);
 		this.num = 0; //reset
-
+		this.setState({currentTaskNum: this.num});
 		taskApi.getTask(this.state.taskorder[this.taskMode]).then(elem => {
 			this.setState({task: elem});
 			this.elementsInTask = elem.num_of_elements;
@@ -202,7 +206,7 @@ export default class extends Component {
 					</div>
 					<div className="d-flex task-map-box">
 						<TaskBoxComponent task={this.state.task}
-															thisRoundTaskNumber={this.num}
+															currentTaskNum={this.state.currentTaskNum}
 															elementsInTask={this.state.map_taskmode}
 															hidemap={this.state.hidemap}
 															taskElemConflPair={this.state.taskElemConflPair}
@@ -213,7 +217,7 @@ export default class extends Component {
 															_changeHideMapState={this._changeHideMapState}
 						/>
 						<div className="p-2 mapbox" style={{display: this.state.hidemap ? 'none' : 'block' }}>
-							<MapContainer taskmode={this.state.map_taskmode}
+							<MapContainer elementsInTask={this.state.map_taskmode}
 														activeTaskObj1={this.state.activeTaskObj1}
 														activeTaskObj2={this.state.activeTaskObj2}
 														taskElemConflPair={this.state.taskElemConflPair}
@@ -246,6 +250,7 @@ function getallTaskElemConflElemPairs(elements, onlyone, callback) {
 	let i=1;
 	if (onlyone) {
 		taskApi.getTaskElemAndConflictElem(elements.id, function(resp) {
+			console.log(resp);
 			taskPairs=resp;
 			callback(taskPairs);
 		})

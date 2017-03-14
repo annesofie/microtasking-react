@@ -15,7 +15,7 @@ export default class OneTaskMapComponent extends Component {
 		this.mapOptions = {
 			lat: 63.4239779,
 			lng: 10.4499185,
-			zoom: 17
+			zoom: 16
 		};
 		var x = Math.floor(Math.random() * ((4-1)+1));
 		var y = Math.floor(Math.random() * ((4-1)+1));
@@ -65,7 +65,6 @@ export default class OneTaskMapComponent extends Component {
 		return(
 			<OneTaskMapView
 				mapOptions={this.mapOptions}
-				taskmode={this.props.elementsInTask}
 				taskElemConflPair={this.props.taskElemConflPair}
 				clickHandler1={this._clickEventHandler1}
 				clickHandler2={this._clickEventHandler2}

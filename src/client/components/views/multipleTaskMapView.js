@@ -5,7 +5,7 @@
 import React, {Component} from 'react';
 import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON, LayersControl} from 'react-leaflet'
 
-class ThreeTaskMapView extends Component {
+class MultipleMapView extends Component {
 
 	constructor(props) {
 		super(props);
@@ -88,4 +88,4 @@ class ThreeTaskMapView extends Component {
 	}
 }
 
-export default ThreeTaskMapView;
+export default MultipleMapView;

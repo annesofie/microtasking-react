@@ -19,6 +19,7 @@ export default class MapComponent extends Component {
 	}
 
 	_setChosenBuildingLayer(lay, id) {
+		console.log(id);
 		this.props._setChosenBuildingGeom(lay, id);
 	}
 
@@ -26,7 +27,6 @@ export default class MapComponent extends Component {
 		if (this.props.elementsInTask == 1){
 			return (
 					<OneTaskMapComp
-						taskmode={this.props.elementsInTask}
 						taskElemConflPair={this.props.taskElemConflPair}
 						_setChosenBuildingLayer={this._setChosenBuildingLayer}
 					/>
@@ -34,7 +34,6 @@ export default class MapComponent extends Component {
 		} else {
 			return (
 					<MultipleTaskMapComp
-						taskmode={this.props.elementsInTask}
 						taskElemConflPair={this.props.taskElemConflPair}
 						activeTaskObj1={this.props.activeTaskObj1}
 						activeTaskObj2={this.props.activeTaskObj2}
@@ -46,4 +45,3 @@ export default class MapComponent extends Component {
 
 }
 
-//{...this.state}

@@ -81,17 +81,28 @@ class TaskBoxComponent extends Component {
 	_infoClickedLayer() {
 		let chosenGeomLayer = [];
 		let base = this.props;
-		console.log(this.props.taskElemConflPair);
-		if (this.change == 1) {
-
-		}
-		for (let i = 1; i <= this.props.elementsInTask; i++) {
-			chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
-				Building {i} : {base.chosenBuildingGeom[i] ? 'You chose ' + base.chosenBuildingGeom[i].properties.title : 'not chosen, click on a layer on the map'}
-			</h5>
+		if (base.elementsInTask == base.currentTaskNum) {
+			for (let i = 1; i <= base.currentTaskNum; i++) {
+				chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
+					Building {i} : {base.chosenBuildingGeom[i] ? 'You chose ' + base.chosenBuildingGeom[i].properties.title : 'not chosen, click on a layer on the map'}
+				</h5>
+			}
+		} else {
+			if (base.elementsInTask == 1) {
+				chosenGeomLayer[0] = <h5 key={'geom'+base.currentTaskNum} id="chosenGeom">
+					Building {base.currentTaskNum} : {base.chosenBuildingGeom[base.currentTaskNum] ? 'You chose ' + base.chosenBuildingGeom[base.currentTaskNum].properties.title : 'not chosen, click on the correct building layer on the map'}
+				</h5>
+			} else {
+				for (let i = this.props.elementsInTask; i <= this.props.currentTaskNum; i++) {
+					chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
+						Building {i} : {base.chosenBuildingGeom[i] ? 'You chose ' + base.chosenBuildingGeom[i].properties.title : 'not chosen, click on the correct building layer on the map'}
+					</h5>
+				}
+			}
 		}
 		return chosenGeomLayer;
 	}
+
 	render() {
 		let shownTask = this._handleTaskChange();
 		return (
