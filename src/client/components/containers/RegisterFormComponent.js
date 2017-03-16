@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import * as taskApi from '../../../client/api/task-api';
+import * as resultApi from '../../../client/api/result-api';
 
 
 //View
@@ -17,7 +18,7 @@ export default class RegisterFormComponent extends Component {
 		this.state = {
 			value: null
 		};
-		this.fieldValues = {
+		this.participantValues = {
 			age: 0,
 			gender: 'not selected',
 			nationality: 'need input',
@@ -28,16 +29,17 @@ export default class RegisterFormComponent extends Component {
 	}
 
 	handleRegisterSubmit(data, isRegistration) {
-		this.fieldValues = Object.assign({}, this.fieldValues, data);
+		this.participantValues = Object.assign({}, this.participantValues, data);
 		if (isRegistration) {
-			taskApi.saveParticipant(this.fieldValues).then(resp => {
-				console.log(resp);
-				const id = resp.data.id;
-				this.props._setParticipantId(id);
+			taskApi.saveParticipant(this.participantValues).then(resp => {
+				const participant = resp.data;
+				this.props._setParticipantId(participant);
 			})
 		} else if (!isRegistration){
-			console.log('handle register form');
-			this.props.handleModeChange();
+			resultApi.saveTaskSurvey(data).then(resp => {
+				console.log(resp);
+				this.props._handleModeChange();
+			})
 		}
 
 	}
@@ -46,23 +48,29 @@ export default class RegisterFormComponent extends Component {
 		if (this.props.mode == 'register') {
 			return (
 				<div className="container-fluid">
-					<div className="d-flex flex-column">
+					<div className="d-flex flex-row justify-content-center">
 						<h4>Registration</h4>
 						<RegisterFormView
 							handleRegisterSubmit={this.handleRegisterSubmit}
-							fieldValues={this.fieldValues}
+							fieldValues={this.participantValues}
 						/>
 					</div>
 				</div>
 			)
 		} else if (this.props.mode == 'survey') {
 			return (
-				<div className="container-fluid">
-					<div className="d-flex justify-content-center">
-						<h4>Survey</h4>
-						<AfterEachTaskView
-							handleRegisterSubmit={this.handleRegisterSubmit}
-						/>
+				<div className="">
+					<div className="">
+						<div className="d-flex flex-row justify-content-center">
+							<h4>Survey</h4>
+						</div>
+						<div className="d-flex flex-row justify-content-center">
+							<AfterEachTaskView
+								participant={this.props.participant}
+								task={this.props.task}
+								handleRegisterSubmit={this.handleRegisterSubmit}
+							/>
+						</div>
 					</div>
 				</div>
 			)

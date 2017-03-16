@@ -9,8 +9,6 @@ class MultipleMapView extends Component {
 
 	constructor(props) {
 		super(props);
-		this.num1=0;
-		this.num2=0;
 
 		this.getLayergroupConfl = this.getLayergroupConfl.bind(this);
 		this.getLayergroupElem = this.getLayergroupElem.bind(this);
@@ -30,15 +28,17 @@ class MultipleMapView extends Component {
 	}
 	getLayergroupElem() {
 		var elemList=[];
-		this.props.activeTaskObj1.map((elem, index) => {
-			elemList[index] = this.oneTaskElemLayerGroup(elem);
+		var base = this.props.activeTaskElements;
+		Object.keys(base).map((elem, index) => {
+			elemList[index] = this.oneTaskElemLayerGroup(base[index][0]);
 		});
 		return elemList;
 	}
 	getLayergroupConfl() {
 		var conflList=[];
-		this.props.activeTaskObj2.map((confl, index) => {
-			conflList[index] = this.oneTaskConflLayerGroup(confl);
+		var base = this.props.activeTaskElements;
+		Object.keys(base).map((elem, index) => {
+			conflList[index] = this.oneTaskConflLayerGroup(base[index][1]);
 		});
 		return conflList;
 	}
@@ -46,7 +46,7 @@ class MultipleMapView extends Component {
 		var layerelem = this.getLayergroupElem();
 		var layerControlOverlayList = [];
 		layerelem.map((elem, index) => {
-			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_elem_'+this.props.activeTaskObj1[index].id} name={this.props.activeTaskObj1[index].properties.title} checked={true}>
+			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_elem_'+this.props.activeTaskElements[index][0].id} name={this.props.activeTaskElements[index][0].properties.title + ' 1'} checked={true}>
 				{layerelem[index]}
 			</LayersControl.Overlay>;
 		});
@@ -56,16 +56,18 @@ class MultipleMapView extends Component {
 		var layerconfl = this.getLayergroupConfl();
 		var layerControlOverlayList = [];
 		layerconfl.map((elem, index) => {
-			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_confl_'+this.props.activeTaskObj2[index].id} name={this.props.activeTaskObj2[index].properties.title} checked={true}>
+			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_confl_'+this.props.activeTaskElements[index][1].id} name={this.props.activeTaskElements[index][1].properties.title + ' 2'} checked={true}>
 				{layerconfl[index]}
 			</LayersControl.Overlay>;
 		});
 		return layerControlOverlayList;
 	}
 
-
 	render() {
 		var position = [this.props.mapOptions.lat, this.props.mapOptions.lng];
+		var ortomap = 'https://waapi.webatlas.no/maptiles/tiles/webatlas-orto-newup/wa_grid/{z}/{x}/{y}.jpeg?APITOKEN=';
+		var tileapikey = '2564333f-3201-4cee-adaf-d3beaf650208';
+		var mapboxtile = 'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0aGlsZG8iLCJhIjoiY2lrdHZvMHdsMDAxMHdvbTR0MWZkY3FtaCJ9.u4bFYLBtEGNv4Qaa8Uaqzw';
 		var layercontroloverlay1 = this.renderLayerControlOverlayElem();
 		var layercontroloverlay2 = this.renderLayerControlOverlayConfl();
 		return (
@@ -73,8 +75,8 @@ class MultipleMapView extends Component {
 				<Map
 					center={position} zoom={this.props.mapOptions.zoom}>
 					<TileLayer
-						attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-						url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+						url={ortomap+tileapikey}
+						maxZoom={20}
 					/>
 					{layercontroloverlay1.map((elem, index) => {
 						return <LayersControl key={index} position='topright' collapsed={false}>

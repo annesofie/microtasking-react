@@ -50,26 +50,42 @@ export function getConflictsInTask(taskid) {
 		});
 }
 
-export function getTaskElemAndConflictElem(taskelemid, onFinishCallback) {
-	var taskPair = {
-		'elem': [],
-		'confl': []
-	};
-	axios.all([getTaskElement(taskelemid), getTaskElementConflict(taskelemid)])
-		.then(axios.spread(function (taskelem, confelem) {
-			taskPair.elem = taskelem.data;
-			taskPair.confl = confelem.data;
-			onFinishCallback(taskPair);
-		}))
-		.catch(function(error) {
-			console.log(error);
-		});
-}
 
-function getTaskElement(taskelemid) {
-	return axios.get(apiURL+'task/'+taskelemid+'/');
-}
 
-function getTaskElementConflict(taskelemid) {
-	return axios.get(apiURL+'task/'+taskelemid+'/conflict/');
-}
+//
+//export function getTaskElemAndConflictElem(taskelemid, onFinishCallback) { //TODO: add taskelem and conflelem in an random order
+//	var taskPair = {
+//		'elem': [],
+//		'confl': []
+//	};
+//	var building = {};
+//	axios.all([getTaskElement(taskelemid), getTaskElementConflict(taskelemid)])
+//		.then(axios.spread(function (taskelem, confelem) {
+//			taskPair.elem = taskelem.data;
+//			taskPair.confl = confelem.data;
+//			building = randPlaceElem(taskelem.data, confelem.data);
+//			console.log(building);
+//			onFinishCallback(taskPair, randPlaceElem(taskelem.data, confelem.data));
+//		}))
+//		.catch(function(error) {
+//			console.log(error);
+//		});
+//}
+
+//function randPlaceElem(list1, list2) {
+//	var x = Math.round(Math.random());
+//	var y = (x === 0 ? 1 : 0);
+//	console.log(x + ' , ' + y);
+//	var geom = {};
+//	geom[x] = list1;
+//	geom[y] = list2;
+//	return geom;
+//}
+
+//function getTaskElement(taskelemid) {
+//	return axios.get(apiURL+'task/'+taskelemid+'/');
+//}
+//
+//function getTaskElementConflict(taskelemid) {
+//	return axios.get(apiURL+'task/'+taskelemid+'/conflict/');
+//}

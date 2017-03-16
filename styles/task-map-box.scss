@@ -13,6 +13,7 @@
   color: #292929;
   overflow: scroll;
   margin-top: 0.5rem;
+  width: 100%;
 }
 .leaflet-container {
   height: 80vh;
@@ -38,8 +39,6 @@
 th, td {
   text-align: center;
 }
-
-.margin-right {margin-right: 2%;}
 
 .progressDIV {
   width: 30%;

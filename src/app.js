@@ -19,25 +19,32 @@ import MapContainer from './client/components/containers/MapComponent';
 export default class extends Component {
 
 	constructor() {
+
 		super();
+
+		this.viewState = {
+			HOMEVIEW: 'home',
+			REGISTERVIEW: 'register',
+			TASKDESCRIPTIONVIEW: 'taskdescription',
+			TASKVIEW: 'taskview',
+			SURVEYVIEW: 'survey'
+		};
+
 		this.state = {
-			mode: 'home',
-			user: [],
+			mode: this.viewState.HOMEVIEW,
+			participant: [],
 			taskorder: '',
 			map_taskmode: 0,
 			task: [],
 			currentTaskNum: 0,
-			activeTaskObj1: null,
-			activeTaskObj2: null,
-			taskElemConflPair: null,
+			randomOrderTaskElements: [],
+			activeTaskElements: [],
 			hidemap: false,
 			title: 'Welcome',
 			percent: 0,  //Progress
 			chosenBuildingGeom: []
 		};
 
-		this.elements;
-		this.conflicts;
 		this.chosenGeomLayer={};
 		this.chosenMetadata={};
 		this.taskTimer=0;
@@ -63,21 +70,21 @@ export default class extends Component {
 			console.log(listorder);
 			this.setState({taskorder: listorder});
 
-			taskApi.getElementsInTask(listorder[0]).then(elem => {
-				this.elements = elem;
-			});
-			taskApi.getConflictsInTask(listorder[0]).then(elem => {
-				this.conflicts = elem;
-			});
+			getAllElements(listorder[0], function(resp) {
+				this.setState({randomOrderTaskElements: resp});
+			}.bind(this));
+
 			taskApi.getTask(listorder[0]).then(elem => {
 				this.setState({task: elem});
 				this.elementsInTask = elem.num_of_elements;
 				this.setState({map_taskmode: elem.num_of_elements});
 			});
+
 		});
 	}
-	_setParticipantId(id) {
-		this.setState({user: id});
+
+	_setParticipantId(participant) {
+		this.setState({participant: participant});
 		this._handleModeChange();
 	}
 	_setChosenBuildingGeom(layer, id) {
@@ -95,63 +102,52 @@ export default class extends Component {
 		this.setState({hidemap: bool});
 	}
 	_handleModeChange() {
-		if(this.state.mode === 'home'){
-			// this.setState({mode: 'register'});
+		if(this.state.mode === this.viewState.HOMEVIEW){
+			 //this.setState({mode: this.viewState.REGISTERVIEW});
 			this._handleTaskMode(true, function(str) {
-				this.setState({mode: 'taskview'});
+				this.setState({mode: this.viewState.TASKVIEW});
 			}.bind(this));
-		} else if (this.state.mode === 'taskview') {
-			this.setState({mode: 'survey'});
-
-		} else if (this.state.mode === 'survey') {
+		} else if(this.state.mode == this.viewState.REGISTERVIEW) {
+			this._handleTaskMode(true, function(str) {
+				this.setState({mode: this.viewState.TASKVIEW});
+			}.bind(this));
+		} else if (this.state.mode === this.viewState.TASKVIEW) {
+			this.setState({mode: this.viewState.SURVEYVIEW});
+		} else if (this.state.mode === this.viewState.SURVEYVIEW) {
+			console.log('survey view');
 			this._getNextTask(function() {
 				this.setState({
 					chosenBuildingGeom: [],
-					mode: 'taskview'
+					mode: this.viewState.TASKVIEW
 				});
 			}.bind(this));
 		}
 	}
 	_handleTaskMode(isFirst, callback) {
-		const base1 = this.elements.features;
-		const base2 = this.conflicts.features;
+		const base = this.state.randomOrderTaskElements;
 		this._changeProgressTitle();
 		if (this.elementsInTask == 1 && this.num < this.numOfObjects) {
-			console.log('elementsInTask = ' + this.elementsInTask);
-			getallTaskElemConflElemPairs(base1[this.num], true, function(resp) {
-				this.num += 1;
 				this.setState({
-					taskElemConflPair: resp,
-					currentTaskNum: this.num
+					activeTaskElements: base[this.num],
+					currentTaskNum: this.num+1
 				});
+				this.num += 1;
 				callback('done');
-			}.bind(this));
 		} else if (this.elementsInTask == 3 && this.num < this.numOfObjects) {
-			console.log('elementsInTask = ' + this.elementsInTask);
-			getallTaskElemConflElemPairs(base1.slice(this.num, this.num+3), false, function(taskPairs) {
-				this.setState(
-					{
-						activeTaskObj1: base1.slice(this.num, this.num+3),
-						activeTaskObj2: base2.slice(this.num, this.num+3),
-						taskElemConflPair: taskPairs,
-						currentTaskNum: this.num+=3
-					});
+				this.setState({
+					activeTaskElements: base.slice(this.num, this.num+3),
+					currentTaskNum: this.num+3
+				});
 				this.num += 3;
 				callback('done');
-			}.bind(this));
 		} else if (this.num < this.numOfObjects){
-			//use all
-			console.log('elementsInTask = ' + this.elementsInTask);
-			getallTaskElemConflElemPairs(base1, false, function(taskPairs) {
+				//use all
 				this.num += this.numOfObjects;
 				this.setState({
-					activeTaskObj1: base1,
-					activeTaskObj2: base2,
-					taskElemConflPair: taskPairs,
+					activeTaskElements: base,
 					currentTaskNum: this.num
 				});
 				callback('done');
-			}.bind(this));
 		} else if (!isFirst){  //Task is finish
 			this._handleModeChange();
 		}
@@ -182,17 +178,28 @@ export default class extends Component {
 	}
 
 	render() {
-		if (this.state.mode === 'home') {
+		if (this.state.mode === this.viewState.HOMEVIEW) {
 			return (
 				<div className="container-fluid">
 					<Home onClick={this._handleModeChange}/>
 				</div>
 			);
-		// } else if (this.state.mode === 'register') {
-		// 	return (
-		// 		<Register _setParticipantId = {this._setParticipantId} />
-		// 	)
-		} else if (this.state.mode === 'taskview') {
+		} else if (this.state.mode === this.viewState.REGISTERVIEW) {
+		 	return (
+				<div className="container-fluid ">
+					<div className="d-flex justify-content-end">
+						<Progressbar
+							title={this.state.title}
+							percent={this.state.percent}
+						/>
+					</div>
+					<Register
+						mode={this.state.mode}
+						_setParticipantId = {this._setParticipantId}
+					/>
+				</div>
+		 	)
+		} else if (this.state.mode === this.viewState.TASKVIEW) {
 			return (
 				<div className="container-fluid">
 					<div className="d-flex justify-content-end">
@@ -209,25 +216,22 @@ export default class extends Component {
 															currentTaskNum={this.state.currentTaskNum}
 															elementsInTask={this.state.map_taskmode}
 															hidemap={this.state.hidemap}
-															taskElemConflPair={this.state.taskElemConflPair}
-															activeTaskObj1={this.state.activeTaskObj1}
+															activeTaskElements={this.state.activeTaskElements}
 															chosenBuildingGeom={this.state.chosenBuildingGeom}
 															_setChosenMetadata={this._setChosenMetadata}
 															_getNextTaskElements={this._handleTaskMode}
 															_changeHideMapState={this._changeHideMapState}
 						/>
 						<div className="p-2 mapbox" style={{display: this.state.hidemap ? 'none' : 'block' }}>
-							<MapContainer elementsInTask={this.state.map_taskmode}
-														activeTaskObj1={this.state.activeTaskObj1}
-														activeTaskObj2={this.state.activeTaskObj2}
-														taskElemConflPair={this.state.taskElemConflPair}
-														_setChosenBuildingGeom={this._setChosenBuildingGeom}
+								<MapContainer elementsInTask={this.state.map_taskmode}
+															activeTaskElements={this.state.activeTaskElements}
+															_setChosenBuildingGeom={this._setChosenBuildingGeom}
 							/>
 						</div>
 					</div>
 				</div>
 			)
-		} else if (this.state.mode == 'survey') {
+		} else if (this.state.mode == this.viewState.SURVEYVIEW) {
 			return (
 				<div className="container-fluid ">
 					<div className="d-flex justify-content-end">
@@ -237,7 +241,9 @@ export default class extends Component {
 						/>
 					</div>
 					<Register mode={this.state.mode}
-										handleModeChange={this._handleModeChange}
+										participant={this.state.participant}
+										task={this.state.task}
+										_handleModeChange={this._handleModeChange}
 					/>
 				</div>
 				)
@@ -245,23 +251,44 @@ export default class extends Component {
 	}
 }
 
-function getallTaskElemConflElemPairs(elements, onlyone, callback) {
-	let taskPairs = [];
-	let i=1;
-	if (onlyone) {
-		taskApi.getTaskElemAndConflictElem(elements.id, function(resp) {
-			console.log(resp);
-			taskPairs=resp;
-			callback(taskPairs);
-		})
-	} else {
-		elements.map(elem => {
-			taskApi.getTaskElemAndConflictElem(elem.id, function(resp) {
-				//console.log(resp.confl.properties.is_fixed);
-				taskPairs[i]=resp;
-				i+=1;
+function getAllElements(taskid, callback) {
+	taskApi.getElementsInTask(taskid).then(elem1 => {
+		taskApi.getConflictsInTask(taskid).then(elem2 => {
+			randPlaceElem(elem1, elem2, function(resp) {
+				callback(resp);
 			});
 		});
-		callback(taskPairs);
-	}
+	});
 }
+function randPlaceElem(list1, list2, callback) {
+	var building = [];
+	for (var i = 0; i < list1.features.length; i++) {
+		var x = Math.round(Math.random());
+		var y = (x === 0 ? 1 : 0);
+		var geom = {};
+		geom[x] = list1.features[i];
+		geom[y] = list2.features[i];
+		building[i] = geom;
+	}
+	callback(building);
+}
+
+//function getallTaskElemConflElemPairs(elements, onlyone, callback) {
+//	let taskPairs = [];
+//	let i=0;
+//	if (onlyone) {
+//		taskApi.getTaskElemAndConflictElem(elements.id, function(resp) {
+//			taskPairs=resp;
+//			callback(taskPairs);
+//		})
+//	} else {
+//		elements.map(elem => {
+//			taskApi.getTaskElemAndConflictElem(elem.id, function(resp) {
+//				taskPairs[i]=resp;
+//				i+=1;
+//			});
+//		});
+//		callback(taskPairs);
+//	}
+//}
+

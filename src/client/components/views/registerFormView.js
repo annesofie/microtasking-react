@@ -17,14 +17,13 @@ class RegisterFormView extends Component {
 			experienced: '',
 			microtasking: ''
 		};
-		this.values = [null, 'Yes', 'No'];
-		this.genderval = [null, 'Female', 'Male'];
-		this.ageGroup = [undefined, '15-25', '36-45', '46-55', '56-65', '66-75', '76-100'];
+		this.values = ['Select', 'Yes', 'No'];
+		this.genderval = ['Select', 'Female', 'Male'];
+		this.ageGroup = ['Select', '15-25', '36-45', '46-55', '56-65', '66-75', '76-100'];
 		this.saveAndContinue = this.saveAndContinue.bind(this);
 	}
 
 	saveAndContinue() {
-		console.log(this.initialData);
 		this.initialData.experienced == 'Yes' ? this.initialData.experienced=true :	this.initialData.experienced=false;
 		this.initialData.microtasking == 'Yes' ? this.initialData.microtasking=true :	this.initialData.microtasking=false;
 		this.initialData.age = this.refs.age.value;

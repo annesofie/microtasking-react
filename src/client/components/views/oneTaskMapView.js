@@ -8,20 +8,27 @@ import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON, LayersControl} from
 class OneTaskMapView extends Component {
 
 	oneTaskElemLayerGroup() {
+		var base = this.props.activeTaskElements;
 		return <LayerGroup>
-			<GeoJSON key={'1'+this.props.taskElemConflPair.elem.id} data={this.props.taskElemConflPair.elem} color={this.props.colorPair[0]}
-							 onEachFeature={this.props.clickHandler1.bind(this, this.props.taskElemConflPair.elem.id)}/>
+			<GeoJSON key={'1'+base[0].id} data={base[0]} color={this.props.colorPair[0]}
+							 onEachFeature={this.props.clickHandler1.bind(this, base[0].id)}/>
 		</LayerGroup>;
 	}
 	oneTaskConflLayerGroup() {
+		var base = this.props.activeTaskElements;
 		return <LayerGroup>
-			<GeoJSON key={'2'+this.props.taskElemConflPair.confl.id} data={this.props.taskElemConflPair.confl} color={this.props.colorPair[1]}
-							 onEachFeature={this.props.clickHandler2.bind(this, this.props.taskElemConflPair.confl.id)}/>
+			<GeoJSON key={'2'+base[1].id} data={base[1]} color={this.props.colorPair[1]}
+							 onEachFeature={this.props.clickHandler2.bind(this, base[1].id)}/>
 		</LayerGroup>;
 	}
 
 	render() {
 		var position = [this.props.mapOptions.lat, this.props.mapOptions.lng];
+		var ortomap = 'https://waapi.webatlas.no/maptiles/tiles/webatlas-orto-newup/wa_grid/{z}/{x}/{y}.jpeg?APITOKEN=';
+		var tileapikey = '2564333f-3201-4cee-adaf-d3beaf650208';
+		var mapboxtile = 'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0aGlsZG8iLCJhIjoiY2lrdHZvMHdsMDAxMHdvbTR0MWZkY3FtaCJ9.u4bFYLBtEGNv4Qaa8Uaqzw';
+
+		var base = this.props.activeTaskElements;
 		var layer1 = this.oneTaskElemLayerGroup();
 		var layer2 = this.oneTaskConflLayerGroup();
 		return (
@@ -29,14 +36,14 @@ class OneTaskMapView extends Component {
 				<Map
 					center={position} zoom={this.props.mapOptions.zoom}>
 					<TileLayer
-						attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-						url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+						url={ortomap+tileapikey}
+						maxZoom={20}
 					/>
 					<LayersControl position='topright' collapsed={false}>
-						<LayersControl.Overlay key={'lco_elem_'+this.props.taskElemConflPair.elem.id} name={this.props.taskElemConflPair.elem.properties.title} checked={true}>
+						<LayersControl.Overlay key={'lco_elem_'+base[0].id} name={base[0].properties.title + ' 1'} checked={true}>
 							{layer1}
 						</LayersControl.Overlay>
-						<LayersControl.Overlay key={'lco_confl_'+this.props.taskElemConflPair.confl.id} name={this.props.taskElemConflPair.confl.properties.title} checked={true}>
+						<LayersControl.Overlay key={'lco_confl_'+base[0].id} name={base[0].properties.title + ' 2'} checked={true}>
 							{layer2}
 						</LayersControl.Overlay>
 					</LayersControl>

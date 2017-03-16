@@ -71,7 +71,7 @@ class TaskBoxComponent extends Component {
 		} else if (this.state.taskType == 'meta_task'){
 			shownTask =
 				<MetadataTask
-					taskElemConflPair={this.props.taskElemConflPair}
+					activeTaskElements={this.props.activeTaskElements}
 					elementsInTask={this.props.elementsInTask}
 					onChange={this.onMetadataChange}
 				/>;
@@ -93,7 +93,7 @@ class TaskBoxComponent extends Component {
 					Building {base.currentTaskNum} : {base.chosenBuildingGeom[base.currentTaskNum] ? 'You chose ' + base.chosenBuildingGeom[base.currentTaskNum].properties.title : 'not chosen, click on the correct building layer on the map'}
 				</h5>
 			} else {
-				for (let i = this.props.elementsInTask; i <= this.props.currentTaskNum; i++) {
+				for (let i = this.props.elementsInTask+1; i < this.props.currentTaskNum; i++) {
 					chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
 						Building {i} : {base.chosenBuildingGeom[i] ? 'You chose ' + base.chosenBuildingGeom[i].properties.title : 'not chosen, click on the correct building layer on the map'}
 					</h5>
@@ -105,10 +105,11 @@ class TaskBoxComponent extends Component {
 
 	render() {
 		let shownTask = this._handleTaskChange();
+		let desc = !this.change ? this.props.task.description_geom : this.props.task.description_meta;
 		return (
 				<div className="p-2 task-box">
 					<h4>{this.props.task.title}</h4>
-					<p>{this.props.task.description}</p>
+					<p>{desc}</p>
 					{shownTask}
 					<div className="d-flex justify-content-end">
 						<button className="btn-sm btn-outline-secondary choose-btn" onClick={this._taskChange}>

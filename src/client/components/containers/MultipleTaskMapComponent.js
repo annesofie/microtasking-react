@@ -66,8 +66,7 @@ export default class OneTaskMapComponent extends Component {
 			<MultipleTaskMapView
 				mapOptions={this.mapOptions}
 				taskElemConflPair={this.props.taskElemConflPair}
-				activeTaskObj1={this.props.activeTaskObj1}
-				activeTaskObj2={this.props.activeTaskObj2}
+				activeTaskElements={this.props.activeTaskElements}
 				clickHandler1={this._clickEventHandler1}
 				clickHandler2={this._clickEventHandler2}
 				colorPair={this.colorPair}
