@@ -31,6 +31,8 @@ class TaskBoxComponent extends Component {
 		} else {
 			this.metadata[0] = e.currentTarget.value;
 		}
+		console.log('metadata press');
+		this.props._changeEnableBtnState();
 	}
 
 	_taskChange() {
@@ -81,6 +83,7 @@ class TaskBoxComponent extends Component {
 	_infoClickedLayer() {
 		let chosenGeomLayer = [];
 		let base = this.props;
+		console.log(base.chosenBuildingGeom);
 		if (base.elementsInTask == base.currentTaskNum) {
 			for (let i = 1; i <= base.currentTaskNum; i++) {
 				chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
@@ -112,7 +115,7 @@ class TaskBoxComponent extends Component {
 					<p>{desc}</p>
 					{shownTask}
 					<div className="d-flex justify-content-end">
-						<button className="btn-sm btn-outline-secondary choose-btn" onClick={this._taskChange}>
+						<button className="btn-sm btn-outline-secondary choose-btn" onClick={this._taskChange} disabled={!this.props.enableBtn}>
 							{this.state.nameBtn}
 						</button>
 					</div>

@@ -40,10 +40,10 @@ class OneTaskMapView extends Component {
 						maxZoom={20}
 					/>
 					<LayersControl position='topright' collapsed={false}>
-						<LayersControl.Overlay key={'lco_elem_'+base[0].id} name={base[0].properties.title + ' 1'} checked={true}>
+						<LayersControl.Overlay key={'lco_elem_'+base[0].id} name={base[0].properties.title} checked={true}>
 							{layer1}
 						</LayersControl.Overlay>
-						<LayersControl.Overlay key={'lco_confl_'+base[0].id} name={base[0].properties.title + ' 2'} checked={true}>
+						<LayersControl.Overlay key={'lco_confl_'+base[0].id} name={base[1].properties.title} checked={true}>
 							{layer2}
 						</LayersControl.Overlay>
 					</LayersControl>

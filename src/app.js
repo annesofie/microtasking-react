@@ -42,16 +42,18 @@ export default class extends Component {
 			hidemap: false,
 			title: 'Welcome',
 			percent: 0,  //Progress
-			chosenBuildingGeom: []
+			chosenBuildingGeom: [],
+			enableBtn: false
 		};
 
-		this.chosenGeomLayer={};
+		this.chosenGeomLayer=[];
 		this.chosenMetadata={};
 		this.taskTimer=0;
 		this.num=0;  // Number in the task sequence (+1 i elementsInTask 1, +3 in elementsInTask 2, + numOfObjects in elementsInTask 3)
 		this.numOfObjects = 5; // ---- TODO! HUSK å endre, totalt antall task elements i DBen
 		this.taskMode = 0; // Taskmode number: 0, 1, 2
 		this.elementsInTask = 0; // Number of elements in task
+		this.numOfChosenElem = 0; // Counts how many elements the user has pressed (need to press all to get to the next task)
 
 		this._handleModeChange = this._handleModeChange.bind(this);
 		this._setParticipantId = this._setParticipantId.bind(this);
@@ -61,6 +63,7 @@ export default class extends Component {
 		this._handleTaskMode = this._handleTaskMode.bind(this);
 		this._changeHideMapState = this._changeHideMapState.bind(this);
 		this._changeProgressTitle = this._changeProgressTitle.bind(this);
+		this._changeEnableBtnState = this._changeEnableBtnState.bind(this);
 		// this._getNextTaskElements = this._getNextTaskElements.bind(this);
 		this._getNextTask = this._getNextTask.bind(this);
 	}
@@ -90,6 +93,7 @@ export default class extends Component {
 	_setChosenBuildingGeom(layer, id) {
 		this.chosenGeomLayer[id]=layer.feature;
 		this.setState({chosenBuildingGeom: this.chosenGeomLayer});
+		this._changeEnableBtnState();
 	}
 	_setChosenMetadata(obj) {
 		this.chosenMetadata[this.num]=obj;
@@ -99,7 +103,18 @@ export default class extends Component {
 		this.taskTimer = time;
 	}
 	_changeHideMapState(bool) {
-		this.setState({hidemap: bool});
+		this.numOfChosenElem = 0;
+		this.setState({
+			hidemap: bool,
+			enableBtn: false
+		});
+	}
+	_changeEnableBtnState() {
+		this.numOfChosenElem +=1;
+		if (this.numOfChosenElem == this.elementsInTask){
+			this.setState({
+						enableBtn: true});
+		}
 	}
 	_handleModeChange() {
 		if(this.state.mode === this.viewState.HOMEVIEW){
@@ -157,12 +172,23 @@ export default class extends Component {
 		this._changeProgressTitle();
 		console.log(this.taskMode);
 		console.log(this.state.taskorder);
-		this.num = 0; //reset
-		this.setState({currentTaskNum: this.num});
+
+		//Reset
+		this.num = 0;
+		this.numOfChosenElem = 0;
+		this.chosenGeomLayer = [];
+		this.setState({
+			currentTaskNum: this.num,
+			enableBtn: false,
+			enableNextMetaBtn: false
+		});
+
 		taskApi.getTask(this.state.taskorder[this.taskMode]).then(elem => {
-			this.setState({task: elem});
 			this.elementsInTask = elem.num_of_elements;
-			this.setState({map_taskmode: this.elementsInTask});
+			this.setState({
+				task: elem,
+				map_taskmode: this.elementsInTask
+			});
 			this._handleTaskMode(false, function (resp) {
 				callback(resp);
 			});
@@ -218,9 +244,12 @@ export default class extends Component {
 															hidemap={this.state.hidemap}
 															activeTaskElements={this.state.activeTaskElements}
 															chosenBuildingGeom={this.state.chosenBuildingGeom}
+															enableBtn={this.state.enableBtn}
+															//enableNextMetaBtn={this.state.enableNextMetaBtn}
 															_setChosenMetadata={this._setChosenMetadata}
 															_getNextTaskElements={this._handleTaskMode}
 															_changeHideMapState={this._changeHideMapState}
+															_changeEnableBtnState={this._changeEnableBtnState}
 						/>
 						<div className="p-2 mapbox" style={{display: this.state.hidemap ? 'none' : 'block' }}>
 								<MapContainer elementsInTask={this.state.map_taskmode}
@@ -266,6 +295,8 @@ function randPlaceElem(list1, list2, callback) {
 		var x = Math.round(Math.random());
 		var y = (x === 0 ? 1 : 0);
 		var geom = {};
+		list1.features[i].properties.title = list1.features[i].properties.title + ' ' + (x+1).toString();
+		list2.features[i].properties.title = list2.features[i].properties.title + ' ' + (y+1).toString();
 		geom[x] = list1.features[i];
 		geom[y] = list2.features[i];
 		building[i] = geom;

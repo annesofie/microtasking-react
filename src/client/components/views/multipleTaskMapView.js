@@ -46,7 +46,7 @@ class MultipleMapView extends Component {
 		var layerelem = this.getLayergroupElem();
 		var layerControlOverlayList = [];
 		layerelem.map((elem, index) => {
-			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_elem_'+this.props.activeTaskElements[index][0].id} name={this.props.activeTaskElements[index][0].properties.title + ' 1'} checked={true}>
+			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_elem_'+this.props.activeTaskElements[index][0].id} name={this.props.activeTaskElements[index][0].properties.title} checked={true}>
 				{layerelem[index]}
 			</LayersControl.Overlay>;
 		});
@@ -56,7 +56,7 @@ class MultipleMapView extends Component {
 		var layerconfl = this.getLayergroupConfl();
 		var layerControlOverlayList = [];
 		layerconfl.map((elem, index) => {
-			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_confl_'+this.props.activeTaskElements[index][1].id} name={this.props.activeTaskElements[index][1].properties.title + ' 2'} checked={true}>
+			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_confl_'+this.props.activeTaskElements[index][1].id} name={this.props.activeTaskElements[index][1].properties.title} checked={true}>
 				{layerconfl[index]}
 			</LayersControl.Overlay>;
 		});
