@@ -14,6 +14,7 @@ class TimerComponent  extends Component {
 		this.state = {
 			elapsed: 0
 		};
+		// console.log(this.state);
 		this.start = Date.now();
 		this._tick = this._tick.bind(this);
 
@@ -26,6 +27,7 @@ class TimerComponent  extends Component {
 	}
 
 	componentWillUnmount () {
+		console.log('will unmount');
 		// This method is called immediately before the component is removed
 		// from the page and destroyed. We can clear the interval here:
 		this.props._setTaskTimer(this.state.elapsed);
@@ -50,7 +52,7 @@ class TimerComponent  extends Component {
 		// Although we return an entire <p> element, react will smartly update
 		// only the changed parts, which contain the seconds variable.
 
-		return <p>Task elapsed time <b>{seconds} seconds</b> ago.</p>;
+		return <p><b>{seconds} seconds</b></p>;
 	}
 }
 

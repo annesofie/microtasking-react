@@ -5,6 +5,7 @@ import React, { Component, PropTypes } from 'react';
 
 //Views
 import MetadataTask from './../views/metadataTask';
+import TimerComponent from './TimerComponent';
 
 class TaskBoxComponent extends Component {
 
@@ -19,19 +20,15 @@ class TaskBoxComponent extends Component {
 		};
 
 		this.change=false; //Change taskType
-		this.metadata={};
+		this.metadata=[];
 
 		this._taskChange = this._taskChange.bind(this);
 		this.onMetadataChange = this.onMetadataChange.bind(this);
+		this._handleTaskTimer = this._handleTaskTimer.bind(this);
 	}
 
-	onMetadataChange(index, e) {
-		if (index) {
-			this.metadata[index] = e.currentTarget.value;
-		} else {
-			this.metadata[0] = e.currentTarget.value;
-		}
-		console.log('metadata press');
+	onMetadataChange(elem, index, e) {
+		this.metadata[e.currentTarget.value] = elem;
 		this.props._changeEnableBtnState();
 	}
 
@@ -59,6 +56,12 @@ class TaskBoxComponent extends Component {
 		}
 	}
 
+	_handleTaskTimer(taskType, time) {
+		console.log(taskType);
+		console.log(time);
+		this.props._setTaskTimer(time);
+	}
+
 	_handleTaskChange() {
 		let shownTask;
 		if (this.state.taskType == 'geom_task') {
@@ -72,20 +75,22 @@ class TaskBoxComponent extends Component {
 				</div>;
 		} else if (this.state.taskType == 'meta_task'){
 			shownTask =
-				<MetadataTask
-					activeTaskElements={this.props.activeTaskElements}
-					elementsInTask={this.props.elementsInTask}
-					onChange={this.onMetadataChange}
-				/>;
+				<div>
+					<MetadataTask
+						activeTaskElements={this.props.activeTaskElements}
+						elementsInTask={this.props.elementsInTask}
+						onChange={this.onMetadataChange}
+					/>
+				</div>;
 		}
 		return shownTask;
 	}
 	_infoClickedLayer() {
 		let chosenGeomLayer = [];
 		let base = this.props;
-		console.log(base.chosenBuildingGeom);
+
 		if (base.elementsInTask == base.currentTaskNum) {
-			for (let i = 1; i <= base.currentTaskNum; i++) {
+			for (let i = 1; i <= base.elementsInTask; i++) {
 				chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
 					Building {i} : {base.chosenBuildingGeom[i] ? 'You chose ' + base.chosenBuildingGeom[i].properties.title : 'not chosen, click on a layer on the map'}
 				</h5>
@@ -113,6 +118,9 @@ class TaskBoxComponent extends Component {
 				<div className="p-2 task-box">
 					<h4>{this.props.task.title}</h4>
 					<p>{desc}</p>
+					{/*<TimerComponent*/}
+						{/*_setTaskTimer={this._handleTaskTimer.bind(this, 'meta')}*/}
+					{/*/>*/}
 					{shownTask}
 					<div className="d-flex justify-content-end">
 						<button className="btn-sm btn-outline-secondary choose-btn" onClick={this._taskChange} disabled={!this.props.enableBtn}>

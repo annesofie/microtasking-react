@@ -17,3 +17,22 @@ export function saveTaskSurvey(data) {
 		.then(response => response)
 		.catch(error => error)
 }
+
+export function saveTaskResult(data) {
+
+	return axios.post(apiURL+'taskresult/', {
+		taskorder: data.taskorder, //JSON
+		geomtasktime: data.time.geomTime, //int
+		metatasktime: data.time.metaTime, //int
+		totaltime: data.time.totalTime, //int. blank true
+		correctgeom: data.chosenGeomLayer.correct, //int, blank true
+		correctmetadata: data.chosenMetadata.correct, //int, blank true
+		selectedgeomlayers: data.chosenGeomLayer, //JSON, blank true
+		selectedmetalayers: data.chosenMetadata, //JSON, blank true
+		participant: data.participant, //Foreign key, id
+		task: data.task //Foreign key, id
+	})
+		.then(response => response)
+		.catch(error => error)
+
+}

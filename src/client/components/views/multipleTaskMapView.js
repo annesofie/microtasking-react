@@ -27,24 +27,24 @@ class MultipleMapView extends Component {
 		</LayerGroup>;
 	}
 	getLayergroupElem() {
-		var elemList=[];
-		var base = this.props.activeTaskElements;
+		let elemList=[];
+		const base = this.props.activeTaskElements;
 		Object.keys(base).map((elem, index) => {
 			elemList[index] = this.oneTaskElemLayerGroup(base[index][0]);
 		});
 		return elemList;
 	}
 	getLayergroupConfl() {
-		var conflList=[];
-		var base = this.props.activeTaskElements;
+		let conflList=[];
+		const base = this.props.activeTaskElements;
 		Object.keys(base).map((elem, index) => {
 			conflList[index] = this.oneTaskConflLayerGroup(base[index][1]);
 		});
 		return conflList;
 	}
 	renderLayerControlOverlayElem() {
-		var layerelem = this.getLayergroupElem();
-		var layerControlOverlayList = [];
+		const layerelem = this.getLayergroupElem();
+		let layerControlOverlayList = [];
 		layerelem.map((elem, index) => {
 			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_elem_'+this.props.activeTaskElements[index][0].id} name={this.props.activeTaskElements[index][0].properties.title} checked={true}>
 				{layerelem[index]}
@@ -53,8 +53,8 @@ class MultipleMapView extends Component {
 		return layerControlOverlayList;
 	}
 	renderLayerControlOverlayConfl() {
-		var layerconfl = this.getLayergroupConfl();
-		var layerControlOverlayList = [];
+		const layerconfl = this.getLayergroupConfl();
+		let layerControlOverlayList = [];
 		layerconfl.map((elem, index) => {
 			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_confl_'+this.props.activeTaskElements[index][1].id} name={this.props.activeTaskElements[index][1].properties.title} checked={true}>
 				{layerconfl[index]}
@@ -64,12 +64,12 @@ class MultipleMapView extends Component {
 	}
 
 	render() {
-		var position = [this.props.mapOptions.lat, this.props.mapOptions.lng];
-		var ortomap = 'https://waapi.webatlas.no/maptiles/tiles/webatlas-orto-newup/wa_grid/{z}/{x}/{y}.jpeg?APITOKEN=';
-		var tileapikey = '2564333f-3201-4cee-adaf-d3beaf650208';
-		var mapboxtile = 'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0aGlsZG8iLCJhIjoiY2lrdHZvMHdsMDAxMHdvbTR0MWZkY3FtaCJ9.u4bFYLBtEGNv4Qaa8Uaqzw';
-		var layercontroloverlay1 = this.renderLayerControlOverlayElem();
-		var layercontroloverlay2 = this.renderLayerControlOverlayConfl();
+		const position = [this.props.mapOptions.lat, this.props.mapOptions.lng];
+		const ortomap = 'https://waapi.webatlas.no/maptiles/tiles/webatlas-orto-newup/wa_grid/{z}/{x}/{y}.jpeg?APITOKEN=';
+		const tileapikey = '2564333f-3201-4cee-adaf-d3beaf650208';
+		const mapboxtile = 'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0aGlsZG8iLCJhIjoiY2lrdHZvMHdsMDAxMHdvbTR0MWZkY3FtaCJ9.u4bFYLBtEGNv4Qaa8Uaqzw';
+		const layercontroloverlay1 = this.renderLayerControlOverlayElem();
+		const layercontroloverlay2 = this.renderLayerControlOverlayConfl();
 		return (
 			<div className="map-box">
 				<Map
