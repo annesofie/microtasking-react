@@ -5,7 +5,6 @@ import React, { Component, PropTypes } from 'react';
 
 //Views
 import MetadataTask from './../views/metadataTask';
-import TimerComponent from './TimerComponent';
 
 class TaskBoxComponent extends Component {
 
@@ -24,7 +23,6 @@ class TaskBoxComponent extends Component {
 
 		this._taskChange = this._taskChange.bind(this);
 		this.onMetadataChange = this.onMetadataChange.bind(this);
-		this._handleTaskTimer = this._handleTaskTimer.bind(this);
 	}
 
 	onMetadataChange(elem, index, e) {
@@ -54,12 +52,6 @@ class TaskBoxComponent extends Component {
 			this.props._changeHideMapState(true);
 			this.change=true;
 		}
-	}
-
-	_handleTaskTimer(taskType, time) {
-		console.log(taskType);
-		console.log(time);
-		this.props._setTaskTimer(time);
 	}
 
 	_handleTaskChange() {
@@ -118,9 +110,6 @@ class TaskBoxComponent extends Component {
 				<div className="p-2 task-box">
 					<h4>{this.props.task.title}</h4>
 					<p>{desc}</p>
-					{/*<TimerComponent*/}
-						{/*_setTaskTimer={this._handleTaskTimer.bind(this, 'meta')}*/}
-					{/*/>*/}
 					{shownTask}
 					<div className="d-flex justify-content-end">
 						<button className="btn-sm btn-outline-secondary choose-btn" onClick={this._taskChange} disabled={!this.props.enableBtn}>

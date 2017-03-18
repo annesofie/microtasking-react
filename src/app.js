@@ -9,7 +9,6 @@ import * as resultApi from './client/api/result-api';
 
 //Views
 import Progressbar from './client/components/views/progressbarView';
-import TimerComponent from './client/components/containers/TimerComponent';
 import Home from './client/components/containers/HeaderComponent';
 import Register from './client/components/containers/RegisterFormComponent';
 import TaskBoxComponent from './client/components/containers/TaskBoxComponent';
@@ -60,7 +59,6 @@ export default class extends Component {
 		this._setChosenBuildingGeom = this._setChosenBuildingGeom.bind(this);
 		this._setChosenMetadata = this._setChosenMetadata.bind(this);
 		this._timeElapsed = this._timeElapsed.bind(this);
-		this._setTaskTimer = this._setTaskTimer.bind(this);
 		this._handleTaskMode = this._handleTaskMode.bind(this);
 		this._changeHideMapState = this._changeHideMapState.bind(this);
 		this._changeProgressTitle = this._changeProgressTitle.bind(this);
@@ -100,10 +98,7 @@ export default class extends Component {
 		console.log(obj);
 		this.chosenMetadata = obj;
 	}
-	_setTaskTimer(time) {
-		console.log(time);
-		this.taskTimer = time;
-	}
+
 	_changeHideMapState(bool) {
 		clearInterval(this.interval);
 		this.numOfChosenElem = 0;
@@ -254,9 +249,6 @@ export default class extends Component {
 			return (
 				<div className="container-fluid">
 					<div className="d-flex justify-content-end">
-						<TimerComponent
-								_setTaskTimer={this._setTaskTimer}
-						/>
 						<Progressbar
 							title={this.state.title}
 							percent={this.state.percent}
@@ -275,7 +267,6 @@ export default class extends Component {
 															_getNextTaskElements={this._handleTaskMode}
 															_changeHideMapState={this._changeHideMapState}
 															_changeEnableBtnState={this._changeEnableBtnState}
-															_setTaskTimer={this._setTaskTimer}
 						/>
 						<div className="p-2 mapbox" style={{display: this.state.hidemap ? 'none' : 'block' }}>
 								<MapContainer elementsInTask={this.state.map_taskmode}
