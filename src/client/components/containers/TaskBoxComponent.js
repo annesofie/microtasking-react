@@ -8,13 +8,19 @@ import MetadataTask from './../views/metadataTask';
 
 class TaskBoxComponent extends Component {
 
+
 	constructor(props) {
 		super(props);
 
+		this.task = {
+			INFOTASK: 0,
+			GEOMTASK: 1,
+			METATASK: 2
+		};
+
 		this.state = {
-			taskType: 'geom_task',
-			nameBtn: 'next',
-			count: 1,
+			taskType: (this.props.task.id == 4 ? this.task.INFOTASK : this.task.GEOMTASK),
+			btnName: 'next',
 			shownTask: null
 		};
 
@@ -31,32 +37,33 @@ class TaskBoxComponent extends Component {
 	}
 
 	_taskChange() {
-		if (this.change) {
+		if (this.state.taskType == this.task.METATASK) {
 			this.props._setChosenMetadata(this.metadata); //Set chosen metadata
 			//reset
 			this.setState({
-				taskType: 'geom_task',
-				nameBtn: 'next'
+				taskType: this.task.GEOMTASK,
+				btnName: 'next'
 			});
 			this.props._changeHideMapState(false);
 			this.props._getNextTaskElements(false, function (resp) {
 				console.log(resp);
 			});
 			this.change=false;
-		} else {
+		} else if(this.state.taskType == this.task.GEOMTASK) {
 			this.setState({
-				taskType: 'meta_task',
-				nameBtn: 'finish',
-				count: this.state.count+=1
+				taskType: this.task.METATASK,
+				btnName: 'finish'
 			});
 			this.props._changeHideMapState(true);
 			this.change=true;
+		} else if (this.state.taskType == this.task.INFOTASK) {
+			this.setState({taskType: this.task.GEOMTASK})
 		}
 	}
 
 	_handleTaskChange() {
 		let shownTask;
-		if (this.state.taskType == 'geom_task') {
+		if (this.state.taskType == this.task.GEOMTASK) {
 			let chosenGeomLayer = this._infoClickedLayer();
 			shownTask =
 				<div className="task-div">
@@ -65,7 +72,7 @@ class TaskBoxComponent extends Component {
 						return elem;
 					})}
 				</div>;
-		} else if (this.state.taskType == 'meta_task'){
+		} else if (this.state.taskType == this.task.METATASK){
 			shownTask =
 				<div className="meta-tables-inline">
 					<MetadataTask
@@ -74,13 +81,20 @@ class TaskBoxComponent extends Component {
 						onChange={this.onMetadataChange}
 					/>
 				</div>;
+		} else if (this.state.taskType == this.task.INFOTASK) {
+			shownTask = (
+				<div>
+					<p>{this.props.task.description_geom}</p>
+					<p>{this.props.task.description_meta}</p>
+				</div>
+				)
 		}
 		return shownTask;
 	}
 	_infoClickedLayer() {
 		let chosenGeomLayer = [];
 		let base = this.props;
-
+		console.log(base.chosenBuildingGeom);
 		if (base.elementsInTask == base.currentTaskNum) {
 			for (let i = 1; i <= base.elementsInTask; i++) {
 				chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
@@ -105,15 +119,15 @@ class TaskBoxComponent extends Component {
 
 	render() {
 		let shownTask = this._handleTaskChange();
-		let desc = !this.change ? this.props.task.description_geom : this.props.task.description_meta;
+		// let desc = !this.change ? this.props.task.description_geom : this.props.task.description_meta;
 		return (
 				<div className="p-2 task-box">
 					<h4>{this.props.task.title}</h4>
-					<p>{desc}</p>
+					{/*<p>{desc}</p>*/}
 					{shownTask}
 					<div className="d-flex justify-content-end">
 						<button className="btn-sm btn-outline-secondary choose-btn" onClick={this._taskChange} disabled={!this.props.enableBtn}>
-							{this.state.nameBtn}
+							{this.state.btnName}
 						</button>
 					</div>
 				</div>

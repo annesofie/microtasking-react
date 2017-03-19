@@ -35,7 +35,6 @@ export default class extends Component {
 			map_taskmode: 0,
 			task: [],
 			currentTaskNum: 0,
-			randomOrderTaskElements: [],
 			activeTaskElements: [],
 			hidemap: false,
 			title: 'Welcome',
@@ -44,13 +43,14 @@ export default class extends Component {
 			enableBtn: false
 		};
 
+		this.randomOrderTaskElements = [];
 		this.chosenGeomLayer=[];
 		this.chosenMetadata=[];
 		this.timeResult= {};
 		this.interval=0;
 		this.num=0;  // Number in the task sequence (+1 i elementsInTask 1, +3 in elementsInTask 2, + numOfObjects in elementsInTask 3)
 		this.numOfObjects = 5; // ---- TODO! HUSK å endre, totalt antall task elements i DBen
-		this.taskMode = 0; // Taskmode number: 0, 1, 2
+		this.taskMode = 0; // Taskmode number: 0, 1, 2, 3
 		this.elementsInTask = 0; // Number of elements in task
 		this.numOfChosenElem = 0; // Counts how many elements the user has pressed (need to press all to get to the next task)
 
@@ -73,7 +73,7 @@ export default class extends Component {
 			this.setState({taskorder: listorder});
 
 			getAllElements(listorder[0], function(resp) {
-				this.setState({randomOrderTaskElements: resp});
+				this.randomOrderTaskElements = resp;
 			}.bind(this));
 
 			taskApi.getTask(listorder[0]).then(elem => {
@@ -90,6 +90,7 @@ export default class extends Component {
 		this._handleModeChange();
 	}
 	_setChosenBuildingGeom(layer, id) {
+		console.log(layer);
 		this.chosenGeomLayer[id]=layer.feature;
 		this.setState({chosenBuildingGeom: this.chosenGeomLayer});
 		this._changeEnableBtnState();
@@ -116,33 +117,40 @@ export default class extends Component {
 		}
 	}
 	_handleModeChange() {
-		if(this.state.mode === this.viewState.HOMEVIEW){
-			 //this.setState({mode: this.viewState.REGISTERVIEW});
-			this._handleTaskMode(true, function(str) {
-				this.setState({mode: this.viewState.TASKVIEW});
-				this.interval = setInterval(this._timeElapsed, 1000);
-			}.bind(this));
-		} else if(this.state.mode == this.viewState.REGISTERVIEW) {
-			this._handleTaskMode(true, function(str) {
-				this.setState({mode: this.viewState.TASKVIEW});
-				// this.interval = setInterval(this._timeElapsed, 1000);
-				// console.log(this.interval);
-			}.bind(this));
-		} else if (this.state.mode === this.viewState.TASKVIEW) {
-			const base = this.timeResult;
-			base['totalTime']=base['geomTime']+base['metaTime'];
-			console.log(this.timeResult);
-			saveTaskResult(this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task);
-			this.setState({mode: this.viewState.SURVEYVIEW});
-			clearInterval(this.interval);
-		} else if (this.state.mode === this.viewState.SURVEYVIEW) {
-			this._getNextTask(function() {
-				this.setState({
-					chosenBuildingGeom: [],
-					mode: this.viewState.TASKVIEW
-				});
-				this.interval = setInterval(this._timeElapsed, 1000);
-			}.bind(this));
+		switch (this.state.mode) {
+			case this.viewState.HOMEVIEW:
+				//this.setState({mode: this.viewState.REGISTERVIEW});
+				this._handleTaskMode(true, function(str) {
+					this.setState({mode: this.viewState.TASKVIEW});
+					this.interval = setInterval(this._timeElapsed, 1000);
+				}.bind(this));
+				break;
+			case this.viewState.REGISTERVIEW:
+				this._handleTaskMode(true, function(str) {
+					this.setState({mode: this.viewState.TASKVIEW});
+					// this.interval = setInterval(this._timeElapsed, 1000);
+					// console.log(this.interval);
+				}.bind(this));
+				break;
+			case this.viewState.TASKVIEW:
+				if (this.state.task.id !== 4) {
+					const base = this.timeResult;
+					base['totalTime']=base['geomTime']+base['metaTime'];
+					console.log(this.timeResult);
+					saveTaskResult(this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task);
+				}
+				this.setState({mode: this.viewState.SURVEYVIEW});
+				clearInterval(this.interval);
+				break;
+			case this.viewState.SURVEYVIEW:
+				this._getNextTask(function() {
+					this.setState({
+						chosenBuildingGeom: [],
+						mode: this.viewState.TASKVIEW
+					});
+					this.interval = setInterval(this._timeElapsed, 1000);
+				}.bind(this));
+				break;
 		}
 	}
 	_timeElapsed() {
@@ -156,13 +164,27 @@ export default class extends Component {
 		}
 	}
 	_handleTaskMode(isFirst, callback) {
-		const base = this.state.randomOrderTaskElements;
+		const base = this.randomOrderTaskElements;
 		this._changeProgressTitle();
-		if (this.elementsInTask == 1 && this.num < this.numOfObjects) {
+		console.log(this.state.task.has_reward);
+		console.log(this.num);
+		if (this.state.task.has_reward && this.num < this.numOfObjects) {
+			//Test task
 			reshuffleTaskElements(true, base[this.num], function(resp) {
 				this.setState({
 					activeTaskElements: resp,
-					currentTaskNum: this.num+1
+					currentTaskNum: this.num + 1,
+					enableBtn: true
+				});
+				this.num = this.numOfObjects;
+				callback('done');
+			}.bind(this))
+		} else if (this.elementsInTask == 1 && this.num < this.numOfObjects) {
+			reshuffleTaskElements(true, base[this.num], function(resp) {
+				this.setState({
+					activeTaskElements: resp,
+					currentTaskNum: this.num+1,
+					enableBtn: false
 				});
 				this.num += 1;
 				callback('done');
@@ -171,7 +193,8 @@ export default class extends Component {
 			reshuffleTaskElements(false, base.slice(this.num, this.num+3), function (resp) {
 				this.setState({
 					activeTaskElements: resp,
-					currentTaskNum: this.num+3
+					currentTaskNum: this.num+3,
+					enableBtn: false
 				});
 				this.num += 3;
 				callback('done');
@@ -182,7 +205,8 @@ export default class extends Component {
 				this.num = this.numOfObjects;
 				this.setState({
 					activeTaskElements: resp,
-					currentTaskNum: this.num
+					currentTaskNum: this.num,
+					enableBtn: false
 				});
 				callback('done');
 			}.bind(this))
@@ -216,7 +240,7 @@ export default class extends Component {
 		});
 	}
 	_changeProgressTitle() {
-		const progressTitle = ['Task 1', 'Task 2', 'Task3'];
+		const progressTitle = ['Test', 'Task 1', 'Task 2', 'Task3'];
 		this.setState({
 			title: progressTitle[this.taskMode],
 			percent: this.state.percent+10
