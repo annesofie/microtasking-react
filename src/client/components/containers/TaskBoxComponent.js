@@ -67,7 +67,7 @@ class TaskBoxComponent extends Component {
 				</div>;
 		} else if (this.state.taskType == 'meta_task'){
 			shownTask =
-				<div>
+				<div className="meta-tables-inline">
 					<MetadataTask
 						activeTaskElements={this.props.activeTaskElements}
 						elementsInTask={this.props.elementsInTask}
