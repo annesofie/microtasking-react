@@ -97,13 +97,12 @@ export default class extends Component {
 		this._handleModeChange(this.viewState.SURVEYVIEW);
 	}
 	_setChosenBuildingGeom(layer, id) {
-		console.log(layer);
 		this.chosenGeomLayer[layer.feature.properties.building_nr]=layer.feature;
 		this.setState({chosenBuildingGeom: this.chosenGeomLayer});
 		this._changeEnableBtnState();
 	}
 	_setChosenMetadata(obj) {
-		console.log(obj);
+		//console.log(obj);
 		this.chosenMetadata = obj;
 	}
 
@@ -124,27 +123,26 @@ export default class extends Component {
 		}
 	}
 	_handleModeChange() {
-		console.log(this.state.mode);
+		//console.log(this.state.mode);
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				//this.setState({mode: this.viewState.REGISTERVIEW});
-				this._handleTaskMode(true, function(str) {
-					this.setState({mode: this.viewState.TASKVIEW});
-					this.interval = setInterval(this._timeElapsed, 1000);
-				}.bind(this));
+				this.setState({mode: this.viewState.REGISTERVIEW});
+				//this._handleTaskMode(true, function(str) {
+				//	this.setState({mode: this.viewState.TASKVIEW});
+				//	this.interval = setInterval(this._timeElapsed, 1000);
+				//}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
 					this.setState({mode: this.viewState.TASKVIEW});
-					// this.interval = setInterval(this._timeElapsed, 1000);
-					// console.log(this.interval);
+					this.interval = setInterval(this._timeElapsed, 1000);
 				}.bind(this));
 				break;
 			case this.viewState.TASKVIEW:
 				if (this.state.task.id !== this.testTaskId) {
 					const base = this.timeResult;
 					base['totalTime']=base['geomTime']+base['metaTime'];
-					console.log(this.timeResult);
+					//console.log(this.timeResult);
 				}
 				clearInterval(this.interval);
 				this.setState({mode: this.viewState.SURVEYVIEW});
@@ -187,7 +185,6 @@ export default class extends Component {
 			callback('done');
 		} else if (this.elementsInTask == 1 && this.num < this.numOfObjects) {
 			this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
-				console.log(resp);
 				this.setState({
 					activeTaskElements: resp[this.num],
 					currentTaskNum: this.num+1
@@ -335,10 +332,8 @@ export default class extends Component {
 }
 //style={{display: this.state.hidemap ? 'none' : 'block' }}
 function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task) {
-	console.log(geomlay[1]);
 	let result = {};
 	Object.keys(geomlay).map((elem, index) => {
-		console.log(geomlay[elem]);
 		geomlay['correct'] = (geomlay['correct']==undefined ? 0 : geomlay['correct']);
 		metalay['correct'] = (metalay['correct']==undefined ? 0 : metalay['correct']);
 		if (geomlay[elem].properties.is_imported) {
@@ -353,10 +348,8 @@ function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task)
 	result['time'] = timeres;
 	result['taskorder'] = taskorder;
 	// result['participant'] = participant.id;
-	result['participant'] = 1;
+	result['participant'] = participant.id;
 	result['task'] = task.id;
-
-	console.log(result);
 
 	resultApi.saveTaskResult(result).then(resp => {
 		console.log(resp);

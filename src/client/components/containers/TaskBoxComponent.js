@@ -46,7 +46,7 @@ class TaskBoxComponent extends Component {
 				});
 				this.props._changeHideMapState(false);
 				this.props._getNextTaskElements(false, function (resp) {
-					console.log(resp);
+					//console.log(resp);
 				});
 				this.change=false;
 				break;
@@ -143,8 +143,6 @@ class TaskBoxComponent extends Component {
 				</h5>
 			} else {
 				for (let i = 0; i < this.props.elementsInTask; i++) {
-					console.log(this.props.elementsInTask);
-					console.log(this.props.activeTaskElements[i][2]);
 					let buildingNr = this.props.activeTaskElements[i][2];
 					chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
 						Building {buildingNr} : {base.chosenBuildingGeom[buildingNr] ? 'You chose ' + base.chosenBuildingGeom[buildingNr].properties.title : 'not chosen'}

@@ -39,7 +39,6 @@ export default class RegisterFormComponent extends Component {
 			this.props.task.id == this.props.testTaskId ?
 				this.props._handleModeChange() :
 				resultApi.saveTaskSurvey(data).then(resp => {
-					console.log(resp);
 					this.props._handleModeChange();
 				})
 		}

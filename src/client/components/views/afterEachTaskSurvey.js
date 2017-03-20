@@ -13,13 +13,13 @@ class AfterEachTaskSurvey extends Component {
 		this.state = {
 			canSubmit: false
 		};
-		console.log(this.props);
+
 		this.initialData = {
 			difficulty: '',
 			besteffort: '',
 			interupted: '',
 			comment: '',
-			participant: 1,
+			participant: this.props.participant.id,
 			task: this.props.task.id
 		};
 		this.values = ['Select', 'Yes', 'No'];
@@ -35,7 +35,6 @@ class AfterEachTaskSurvey extends Component {
 		this.initialData.difficulty = this.checkInput(this.initialData.difficulty);
 		this.initialData.interupted = this.checkInput(this.initialData.interupted);
 		this.initialData.comment = this.refs.comment.value;
-		console.log(this.initialData);
 		//this.initialData.besteffort == 'Yes' ? this.initialData.besteffort=true :	this.initialData.besteffort=false;
 		//this.initialData.interupted == 'No' ? this.initialData.interupted=false :	this.initialData.interupted=true;
 		this.props.handleRegisterSubmit(this.initialData, false);
