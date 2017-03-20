@@ -37,10 +37,10 @@ export default class RegisterFormComponent extends Component {
 			})
 		} else if (!isRegistration){
 			this.props.task.id == this.props.testTaskId ?
-				this.props._handleModeChange(this.props.viewState.SURVEYVIEW) :
+				this.props._handleModeChange() :
 				resultApi.saveTaskSurvey(data).then(resp => {
 					console.log(resp);
-					this.props._handleModeChange(this.props.viewState.SURVEYVIEW);
+					this.props._handleModeChange();
 				})
 		}
 

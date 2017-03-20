@@ -124,9 +124,9 @@ export default class extends Component {
 						enableBtn: true});
 		}
 	}
-	_handleModeChange(mode) {
-		console.log(mode);
-		switch (mode) {
+	_handleModeChange() {
+		console.log(this.state.mode);
+		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
 				//this.setState({mode: this.viewState.REGISTERVIEW});
 				this._handleTaskMode(true, function(str) {
@@ -152,6 +152,7 @@ export default class extends Component {
 				break;
 			case this.viewState.SURVEYVIEW:
 				if (this.state.task.id !== this.testTaskId) {
+					console.log('save task result');
 					saveTaskResult(this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task);
 				}
 				this._getNextTask(function(resp) {
@@ -187,6 +188,7 @@ export default class extends Component {
 			callback('done');
 		} else if (this.elementsInTask == 1 && this.num < this.numOfObjects) {
 			this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
+				console.log(resp);
 				this.setState({
 					activeTaskElements: resp[this.num],
 					currentTaskNum: this.num+1
@@ -214,8 +216,8 @@ export default class extends Component {
 				callback('done');
 			}.bind(this));
 		} else if (!isFirst){
-			console.log('task finish, go to survey view');
-			this._handleModeChange(this.viewState.TASKVIEW);
+			//console.log('task finish, go to survey view');
+			this._handleModeChange(); //Go to Survey view
 		}
 	}
 	_getNextTask(callback) {
