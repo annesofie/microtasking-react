@@ -80,6 +80,7 @@ class metadataTask extends Component{
 		return (
 			<div className="">
 				<h5>2. Which metadata to use?</h5>
+				<p><i>Choose the most informative meta-data layer by clicking the radio button.</i></p>
 				{tableInput}
 			</div>
 		)

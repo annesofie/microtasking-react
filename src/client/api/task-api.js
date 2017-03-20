@@ -27,6 +27,7 @@ export function getTaskOrder() {
 }
 
 export function getTask(id) {
+	console.log(id);
 	return axios.get(apiURL+'tasks/'+id+'/')
 		.then(response => response.data)
 		.catch(function(error) {

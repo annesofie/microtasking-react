@@ -36,13 +36,14 @@ export default class extends Component {
 			task: [],
 			currentTaskNum: 0,
 			activeTaskElements: [],
-			hidemap: false,
+			hidemap: true,
 			title: 'Welcome',
 			percent: 0,  //Progress
 			chosenBuildingGeom: [],
 			enableBtn: false
 		};
 
+		this.testTaskId = 4;
 		this.randomOrderTaskElements = [];
 		this.chosenGeomLayer=[];
 		this.chosenMetadata=[];
@@ -64,30 +65,37 @@ export default class extends Component {
 		this._changeProgressTitle = this._changeProgressTitle.bind(this);
 		this._changeEnableBtnState = this._changeEnableBtnState.bind(this);
 		// this._getNextTaskElements = this._getNextTaskElements.bind(this);
+		this._getTaskElements = this._getTaskElements.bind(this);
 		this._getNextTask = this._getNextTask.bind(this);
 	}
 
 	componentDidMount() {
 		taskApi.getTaskOrder().then(listorder => {
-			console.log(listorder);
+			listorder.unshift(this.testTaskId);
 			this.setState({taskorder: listorder});
-
-			getAllElements(listorder[0], function(resp) {
-				this.randomOrderTaskElements = resp;
-			}.bind(this));
-
-			taskApi.getTask(listorder[0]).then(elem => {
+			this._getTaskElements(this.testTaskId, function(resp) {
+				//console.log(resp);
+			});
+			taskApi.getTask(this.testTaskId).then(elem => {
+				console.log(this.state.taskorder);
 				this.setState({task: elem});
 				this.elementsInTask = elem.num_of_elements;
 				this.setState({map_taskmode: elem.num_of_elements});
 			});
-
 		});
+	}
+
+	_getTaskElements(id, callback) {
+		getAllElements(id, function(resp) {
+			this.randomOrderTaskElements = resp;
+			//this.setState({activeTaskElements: resp});
+			callback(resp);
+		}.bind(this));
 	}
 
 	_setParticipantId(participant) {
 		this.setState({participant: participant});
-		this._handleModeChange();
+		this._handleModeChange(this.viewState.SURVEYVIEW);
 	}
 	_setChosenBuildingGeom(layer, id) {
 		console.log(layer);
@@ -116,8 +124,9 @@ export default class extends Component {
 						enableBtn: true});
 		}
 	}
-	_handleModeChange() {
-		switch (this.state.mode) {
+	_handleModeChange(mode) {
+		console.log(mode);
+		switch (mode) {
 			case this.viewState.HOMEVIEW:
 				//this.setState({mode: this.viewState.REGISTERVIEW});
 				this._handleTaskMode(true, function(str) {
@@ -133,17 +142,19 @@ export default class extends Component {
 				}.bind(this));
 				break;
 			case this.viewState.TASKVIEW:
-				if (this.state.task.id !== 4) {
+				if (this.state.task.id !== this.testTaskId) {
 					const base = this.timeResult;
 					base['totalTime']=base['geomTime']+base['metaTime'];
 					console.log(this.timeResult);
-					saveTaskResult(this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task);
 				}
-				this.setState({mode: this.viewState.SURVEYVIEW});
 				clearInterval(this.interval);
+				this.setState({mode: this.viewState.SURVEYVIEW});
 				break;
 			case this.viewState.SURVEYVIEW:
-				this._getNextTask(function() {
+				if (this.state.task.id !== this.testTaskId) {
+					saveTaskResult(this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task);
+				}
+				this._getNextTask(function(resp) {
 					this.setState({
 						chosenBuildingGeom: [],
 						mode: this.viewState.TASKVIEW
@@ -166,52 +177,45 @@ export default class extends Component {
 	_handleTaskMode(isFirst, callback) {
 		const base = this.randomOrderTaskElements;
 		this._changeProgressTitle();
-		console.log(this.state.task.has_reward);
-		console.log(this.num);
-		if (this.state.task.has_reward && this.num < this.numOfObjects) {
-			//Test task
-			reshuffleTaskElements(true, base[this.num], function(resp) {
-				this.setState({
-					activeTaskElements: resp,
-					currentTaskNum: this.num + 1,
-					enableBtn: true
-				});
-				this.num = this.numOfObjects;
-				callback('done');
-			}.bind(this))
+		if (this.state.task.id == this.testTaskId && this.num < this.numOfObjects) {
+			this.setState({
+				activeTaskElements: base[0],
+				currentTaskNum: 6,
+				enableBtn: true
+			});
+			this.num = this.numOfObjects;
+			callback('done');
 		} else if (this.elementsInTask == 1 && this.num < this.numOfObjects) {
-			reshuffleTaskElements(true, base[this.num], function(resp) {
+			this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
 				this.setState({
-					activeTaskElements: resp,
-					currentTaskNum: this.num+1,
-					enableBtn: false
+					activeTaskElements: resp[this.num],
+					currentTaskNum: this.num+1
 				});
 				this.num += 1;
 				callback('done');
 			}.bind(this))
 		} else if (this.elementsInTask == 3 && this.num < this.numOfObjects) {
-			reshuffleTaskElements(false, base.slice(this.num, this.num+3), function (resp) {
+			this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
 				this.setState({
-					activeTaskElements: resp,
-					currentTaskNum: this.num+3,
-					enableBtn: false
+					activeTaskElements: resp.slice(this.num, this.num+3),
+					currentTaskNum: this.num + 3
 				});
 				this.num += 3;
 				callback('done');
-			}.bind(this))
+			}.bind(this));
 		} else if (this.num < this.numOfObjects){
 				//use all
-			reshuffleTaskElements(false, base, function (resp) {
+			this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
 				this.num = this.numOfObjects;
 				this.setState({
 					activeTaskElements: resp,
-					currentTaskNum: this.num,
-					enableBtn: false
+					currentTaskNum: this.num
 				});
 				callback('done');
-			}.bind(this))
+			}.bind(this));
 		} else if (!isFirst){
-			this._handleModeChange();
+			console.log('task finish, go to survey view');
+			this._handleModeChange(this.viewState.TASKVIEW);
 		}
 	}
 	_getNextTask(callback) {
@@ -230,13 +234,14 @@ export default class extends Component {
 
 		taskApi.getTask(this.state.taskorder[this.taskMode]).then(elem => {
 			this.elementsInTask = elem.num_of_elements;
-			this.setState({
-				task: elem,
-				map_taskmode: this.elementsInTask
-			});
+			this.setState({task: elem});
 			this._handleTaskMode(false, function (resp) {
+				this.setState({
+					map_taskmode: this.elementsInTask
+				});
 				callback(resp);
-			});
+			}.bind(this));
+			//callback('hey');
 		});
 	}
 	_changeProgressTitle() {
@@ -251,7 +256,9 @@ export default class extends Component {
 		if (this.state.mode === this.viewState.HOMEVIEW) {
 			return (
 				<div className="container-fluid">
-					<Home onClick={this._handleModeChange}/>
+					<Home onClick={this._handleModeChange}
+								viewState={this.viewState}
+					/>
 				</div>
 			);
 		} else if (this.state.mode === this.viewState.REGISTERVIEW) {
@@ -280,6 +287,7 @@ export default class extends Component {
 					</div>
 					<div className="d-flex task-map-box">
 						<TaskBoxComponent task={this.state.task}
+															testTaskId={this.testTaskId}
 															currentTaskNum={this.state.currentTaskNum}
 															elementsInTask={this.state.map_taskmode}
 															hidemap={this.state.hidemap}
@@ -292,18 +300,19 @@ export default class extends Component {
 															_changeHideMapState={this._changeHideMapState}
 															_changeEnableBtnState={this._changeEnableBtnState}
 						/>
-						<div className="p-2 mapbox" style={{display: this.state.hidemap ? 'none' : 'block' }}>
-								<MapContainer elementsInTask={this.state.map_taskmode}
-															activeTaskElements={this.state.activeTaskElements}
-															_setChosenBuildingGeom={this._setChosenBuildingGeom}
-							/>
-						</div>
+							{!this.state.hidemap &&
+								<div className="p-2 mapbox" >
+										<MapContainer elementsInTask={this.state.map_taskmode}
+																	activeTaskElements={this.state.activeTaskElements}
+																	_setChosenBuildingGeom={this._setChosenBuildingGeom}
+									/>
+								</div> }
 					</div>
 				</div>
 			)
 		} else if (this.state.mode == this.viewState.SURVEYVIEW) {
 			return (
-				<div className="container-fluid ">
+				<div className="container-fluid survey-background">
 					<div className="d-flex justify-content-end">
 						<Progressbar
 							title={this.state.title}
@@ -313,6 +322,8 @@ export default class extends Component {
 					<Register mode={this.state.mode}
 										participant={this.state.participant}
 										task={this.state.task}
+										testTaskId={this.testTaskId}
+										viewState={this.viewState}
 										_handleModeChange={this._handleModeChange}
 					/>
 				</div>
@@ -320,7 +331,7 @@ export default class extends Component {
 		}
 	}
 }
-
+//style={{display: this.state.hidemap ? 'none' : 'block' }}
 function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task) {
 
 	let result = {};
@@ -334,7 +345,6 @@ function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task)
 			metalay['correct']++;
 		}
 	});
-
 	result['chosenGeomLayer'] = geomlay;
 	result['chosenMetadata'] = metalay;
 	result['time'] = timeres;
@@ -342,8 +352,6 @@ function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task)
 	// result['participant'] = participant.id;
 	result['participant'] = 1;
 	result['task'] = task.id;
-
-	console.log(result);
 
 	resultApi.saveTaskResult(result).then(resp => {
 		console.log(resp);
@@ -360,14 +368,15 @@ function getAllElements(taskid, callback) {
 		});
 	});
 }
+
 function randPlaceElem(list1, list2, callback) {
 	let building = [];
 	for (let i = 0; i < list1.features.length; i++) {
 		const x = Math.round(Math.random());
 		const y = (x === 0 ? 1 : 0);
 		let geom = {};
-		list1.features[i].properties.title = list1.features[i].properties.title + ': ' + (x+1).toString();
-		list2.features[i].properties.title = list2.features[i].properties.title + ': ' + (y+1).toString();
+		list1.features[i].properties.title = list1.features[i].properties.title + ': ' + (x + 1).toString();
+		list2.features[i].properties.title = list2.features[i].properties.title + ': ' + (y + 1).toString();
 		geom[x] = list1.features[i];
 		geom[y] = list2.features[i];
 		building[i] = geom;
@@ -375,37 +384,39 @@ function randPlaceElem(list1, list2, callback) {
 	callback(building);
 }
 
-function reshuffleTaskElements(isFirst, list, callback) {
-	let building = [];
-	const x = Math.round(Math.random());
-	const y = (x === 0 ? 1 : 0);
 
-	if (isFirst) {
-		const elem1 = list[0];
-		const elem2 = list[1];
-		elem1.properties.title = elem1.properties.title.split(':')[0] + ': ' + (x+1).toString();
-		elem2.properties.title = elem2.properties.title.split(':')[0] + ': ' + (y+1).toString();
-
-		let geom = {};
-		geom[x] = elem1;
-		geom[y] = elem2;
-		building=geom;
-
-	} else {
-		for (let i=0; i < list.length; i++) {
-			const elem1 = list[i][0];
-			const elem2 = list[i][1];
-			elem1.properties.title = elem1.properties.title.split(':')[0] + ': ' + (x+1).toString();
-			elem2.properties.title = elem2.properties.title.split(':')[0] + ': ' + (y+1).toString();
-
-			let geom = {};
-			geom[x] = elem1;
-			geom[y] = elem2;
-			building[i]=geom;
-		}
-	}
-	callback(building);
-}
+//function reshuffleTaskElements(isFirst, list, callback) {
+//	console.log(list);
+//	let building = [];
+//	const x = Math.round(Math.random());
+//	const y = (x === 0 ? 1 : 0);
+//
+//	if (isFirst) {
+//		const elem1 = list[0];
+//		const elem2 = list[1];
+//		elem1.properties.title = elem1.properties.title.split(':')[0] + ': ' + (x+1).toString();
+//		elem2.properties.title = elem2.properties.title.split(':')[0] + ': ' + (y+1).toString();
+//
+//		let geom = {};
+//		geom[x] = elem1;
+//		geom[y] = elem2;
+//		building=geom;
+//
+//	} else {
+//		for (let i=0; i < list.length; i++) {
+//			const elem1 = list[i][0];
+//			const elem2 = list[i][1];
+//			elem1.properties.title = elem1.properties.title.split(':')[0] + ': ' + (x+1).toString();
+//			elem2.properties.title = elem2.properties.title.split(':')[0] + ': ' + (y+1).toString();
+//
+//			let geom = {};
+//			geom[x] = elem1;
+//			geom[y] = elem2;
+//			building[i]=geom;
+//		}
+//	}
+//	callback(building);
+//}
 
 //function getallTaskElemConflElemPairs(elements, onlyone, callback) {
 //	let taskPairs = [];

@@ -15,7 +15,7 @@ export default class OneTaskMapComponent extends Component {
 		this.mapOptions = {
 			lat: 63.4239779,
 			lng: 10.4499185,
-			zoom: 16
+			zoom: 17
 		};
 		const x = Math.floor(Math.random() * ((4-1)+1));
 		const y = Math.floor(Math.random() * ((4-1)+1));

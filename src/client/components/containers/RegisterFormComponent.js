@@ -36,10 +36,12 @@ export default class RegisterFormComponent extends Component {
 				this.props._setParticipantId(participant);
 			})
 		} else if (!isRegistration){
-			resultApi.saveTaskSurvey(data).then(resp => {
-				console.log(resp);
-				this.props._handleModeChange();
-			})
+			this.props.task.id == this.props.testTaskId ?
+				this.props._handleModeChange(this.props.viewState.SURVEYVIEW) :
+				resultApi.saveTaskSurvey(data).then(resp => {
+					console.log(resp);
+					this.props._handleModeChange(this.props.viewState.SURVEYVIEW);
+				})
 		}
 
 	}
@@ -58,22 +60,28 @@ export default class RegisterFormComponent extends Component {
 				</div>
 			)
 		} else if (this.props.mode == 'survey') {
-			return (
-				<div className="">
-					<div className="">
-						<div className="d-flex flex-row justify-content-center">
-							<h4>Survey</h4>
-						</div>
-						<div className="d-flex flex-row justify-content-center">
-							<AfterEachTaskView
-								participant={this.props.participant}
-								task={this.props.task}
-								handleRegisterSubmit={this.handleRegisterSubmit}
-							/>
-						</div>
+				return (
+					<div className="padding-survey">
+							<div className="d-flex flex-row justify-content-center">
+								<h4>Survey</h4>
+							</div>
+							<div className="d-flex flex-row justify-content-center">
+								{(this.props.task.id == this.props.testTaskId) ?
+								<p className="survey-info-testtask"><hr/><i>After each task there will be a survey. The survey is shown under. Select one option at every question and write any comments if you have. The test task is now finish, press the button to get started on the tasks.</i><hr/></p>:
+								<p className="survey-info-testtask"><hr/><i>Select one option at every question, then submit to start the next task</i><hr/></p>
+								}
+								<hr/>
+							</div>
+							<div className="d-flex flex-row justify-content-center">
+								<AfterEachTaskView
+									participant={this.props.participant}
+									task={this.props.task}
+									testTaskId={this.props.testTaskId}
+									handleRegisterSubmit={this.handleRegisterSubmit}
+								/>
+							</div>
 					</div>
-				</div>
-			)
+				);
 		}
 	}
 

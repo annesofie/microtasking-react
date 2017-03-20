@@ -19,13 +19,14 @@ class AfterEachTaskSurvey extends Component {
 			besteffort: '',
 			interupted: '',
 			comment: '',
-			participant: this.props.participant.id,
+			participant: 1,
 			task: this.props.task.id
 		};
 		this.values = ['Select', 'Yes', 'No'];
 		this.difficulty = ['Select', 'Hard', 'Medium', 'Easy'];
 		this.saveAndContinue = this.saveAndContinue.bind(this);
 		this.checkInput = this.checkInput.bind(this);
+		this.startTaskView = this.startTaskView.bind(this);
 		//this.checkValidation = this.checkValidation.bind(this);
 	}
 
@@ -38,6 +39,10 @@ class AfterEachTaskSurvey extends Component {
 		//this.initialData.besteffort == 'Yes' ? this.initialData.besteffort=true :	this.initialData.besteffort=false;
 		//this.initialData.interupted == 'No' ? this.initialData.interupted=false :	this.initialData.interupted=true;
 		this.props.handleRegisterSubmit(this.initialData, false);
+	}
+
+	startTaskView() {
+		this.props.handleRegisterSubmit(this.initialData, false, true);
 	}
 
 	checkInput(answer) {
@@ -68,29 +73,53 @@ class AfterEachTaskSurvey extends Component {
 				</Label>
 			</div>
 		);
-		return (
-			<Form className="pure-form pure-form-aligned margin-top" initialData={this.initialData} onSubmit={this.saveAndContinue}>
-				<fieldset>
+		//if (this.props.task.id = this.props.testTaskId) {
+        //
+		//	return (
+		//		<div className="">
+		//			<div className="">
+		//				<div className="d-flex flex-row justify-content-center">
+		//					<h4>Survey</h4>
+		//				</div>
+		//				<div className="d-flex justify-content-center">
+		//					<h3>Let's start</h3>
+		//					<p>Hope you got enough training!</p>
+		//					<button onClick={this.startTaskView}>Start</button>
+		//				</div>
+		//			</div>
+		//		</div>
+		//	)
+        //
+		//} else {
 
-					<LabeledSelect key="difficulty" label="How difficult was this task?" name="difficulty" values={this.difficulty} />
-					<LabeledSelect key="besteffort" label="Did you try your best?" name="besteffort" values={this.values}/>
-					<LabeledSelect key="interupted" label="Where you interupted during this task?" name="interupted" values={this.values}/>
+			return (
+				<Form className="pure-form pure-form-aligned margin-top" initialData={this.initialData} onSubmit={this.saveAndContinue}>
+					<fieldset>
 
-					<Label>Other comments?
-						<textarea name="comment" ref="comment" id="comment-textarea" cols="30" rows="10"/>
-					</Label>
+						<LabeledSelect key="difficulty" label="How difficult was this task?" name="difficulty" values={this.difficulty} />
+						<LabeledSelect key="besteffort" label="Did you try your best?" name="besteffort" values={this.values}/>
+						<LabeledSelect key="interupted" label="Where you interupted during this task?" name="interupted" values={this.values}/>
 
-					<div className="pure-controls">
-						<button className="pure-button pure-button-primary" type="submit">Submit</button>
-					</div>
+						<Label>Other comments?
+							<textarea name="comment" ref="comment" id="comment-textarea" cols="30" rows="10"/>
+						</Label>
 
-				</fieldset>
-			</Form>
-		)
+						<div className="pure-controls">
+							<button className="pure-button pure-button-primary" type="submit">
+								{this.props.task.id == this.props.testTaskId ?
+									'Start tasks':
+									'Submit'
+								}
+								</button>
+						</div>
 
+					</fieldset>
+				</Form>
+			)
 	}
 }
-
+//{(this.props.task.id == this.props.testTaskId) ?
+//	<button className="pure-button pure-button-primary" type="submit">Start tasks</button> : }
 //<TextInput className="margin-left margin-top comment-box-size" key="comment" label="Other comments?" name="comment"/>
 
 

@@ -23,3 +23,16 @@
 input[type=text] {
   width: 15vw !important;
 }
+.survey-background {
+  background-image: url("../src/client/components/assets/triangleGlobeM.png");
+  background-repeat: no-repeat;
+  background-size: 44%;
+  width: 100vw;
+  height: 100vh;
+
+}
+
+.padding-survey {
+  padding-top: 4%;
+  padding-left: 2%;
+}

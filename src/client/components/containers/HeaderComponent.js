@@ -9,6 +9,12 @@ import {Link} from 'react-router'
 class HeaderComponent extends Component {
 	constructor(props) {
 		super(props);
+
+		this.startSurvey = this.startSurvey.bind(this);
+	}
+
+	startSurvey() {
+		this.props.onClick(this.props.viewState.HOMEVIEW)
 	}
 
 	render() {
@@ -21,7 +27,7 @@ class HeaderComponent extends Component {
 					<h3>Optimizing the micro-tasking workflow</h3>
 				</div>
 				<div id="start-survey-btn-div" className="d-flex flex-row justify-content-center">
-					<button type="button" className="btn btn-outline-secondary start-survey" onClick={this.props.onClick}>Start Survey</button>
+					<button type="button" className="btn btn-outline-secondary start-survey" onClick={this.startSurvey}>Start Survey</button>
 				</div>
 		</div>
 		)
