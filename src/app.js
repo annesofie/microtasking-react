@@ -262,7 +262,7 @@ export default class extends Component {
 			);
 		} else if (this.state.mode === this.viewState.REGISTERVIEW) {
 		 	return (
-				<div className="container-fluid ">
+				<div className="container-fluid survey-background">
 					<div className="d-flex justify-content-end">
 						<Progressbar
 							title={this.state.title}

@@ -3,7 +3,7 @@
  */
 import axios from 'axios';
 
-const apiURL = 'http://34.252.179.235/result/';
+const apiURL = '//34.252.179.235/result/';
 
 export function saveTaskSurvey(data) {
 	return axios.post(apiURL+'tasksurvey/', {

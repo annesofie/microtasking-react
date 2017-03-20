@@ -4,7 +4,7 @@
 
 import axios from 'axios';
 
-const apiURL = 'http://34.252.179.235/api/';
+const apiURL = '//34.252.179.235/api/';
 
 export function saveParticipant(data) {
 	return axios.post(apiURL+'participant/', {
