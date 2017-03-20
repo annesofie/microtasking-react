@@ -126,21 +126,28 @@ class TaskBoxComponent extends Component {
 	_infoClickedLayer() {
 		let chosenGeomLayer = [];
 		let base = this.props;
+		//console.log(this.props.activeTaskElements);
 		if (base.elementsInTask == base.currentTaskNum) {
-			for (let i = 1; i <= base.elementsInTask; i++) {
+			for (let i = 0; i < base.elementsInTask; i++) {
+				//console.log(this.props.activeTaskElements[i][2]);
+				let buildingNr = this.props.activeTaskElements[i][2];
 				chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
-					Building {i} : {base.chosenBuildingGeom[i] ? 'You chose ' + base.chosenBuildingGeom[i].properties.title : 'not chosen'}
+					Building {buildingNr} : {base.chosenBuildingGeom[buildingNr] ? 'You chose ' + base.chosenBuildingGeom[buildingNr].properties.title : 'not chosen'}
 				</h5>
 			}
 		} else {
 			if (base.elementsInTask == 1) {
+				//console.log(this.props.activeTaskElements[2]);
 				chosenGeomLayer[0] = <h5 key={'geom'+base.currentTaskNum} id="chosenGeom">
-					Building {base.currentTaskNum} : {base.chosenBuildingGeom[base.currentTaskNum] ? 'You chose ' + base.chosenBuildingGeom[base.currentTaskNum].properties.title : 'not chosen'}
+					Building {this.props.activeTaskElements[2]} : {base.chosenBuildingGeom[this.props.activeTaskElements[2]] ? 'You chose ' + base.chosenBuildingGeom[this.props.activeTaskElements[2]].properties.title : 'not chosen'}
 				</h5>
 			} else {
-				for (let i = this.props.elementsInTask+1; i < this.props.currentTaskNum; i++) {
+				for (let i = 0; i < this.props.elementsInTask; i++) {
+					console.log(this.props.elementsInTask);
+					console.log(this.props.activeTaskElements[i][2]);
+					let buildingNr = this.props.activeTaskElements[i][2];
 					chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
-						Building {i} : {base.chosenBuildingGeom[i] ? 'You chose ' + base.chosenBuildingGeom[i].properties.title : 'not chosen'}
+						Building {buildingNr} : {base.chosenBuildingGeom[buildingNr] ? 'You chose ' + base.chosenBuildingGeom[buildingNr].properties.title : 'not chosen'}
 					</h5>
 				}
 			}
@@ -167,10 +174,3 @@ class TaskBoxComponent extends Component {
 }
 
 export default TaskBoxComponent;
-
-//TaskBoxComponent.propTypes = {
-//	btnName: PropTypes.string
-//};
-//TaskBoxComponent.defaultProps = {
-//	btnName: 'next'
-//};

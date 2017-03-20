@@ -50,7 +50,7 @@ export default class extends Component {
 		this.timeResult= {};
 		this.interval=0;
 		this.num=0;  // Number in the task sequence (+1 i elementsInTask 1, +3 in elementsInTask 2, + numOfObjects in elementsInTask 3)
-		this.numOfObjects = 5; // ---- TODO! HUSK å endre, totalt antall task elements i DBen
+		this.numOfObjects = 6; // ---- TODO! HUSK å endre, totalt antall task elements i DBen
 		this.taskMode = 0; // Taskmode number: 0, 1, 2, 3
 		this.elementsInTask = 0; // Number of elements in task
 		this.numOfChosenElem = 0; // Counts how many elements the user has pressed (need to press all to get to the next task)
@@ -64,8 +64,7 @@ export default class extends Component {
 		this._changeHideMapState = this._changeHideMapState.bind(this);
 		this._changeProgressTitle = this._changeProgressTitle.bind(this);
 		this._changeEnableBtnState = this._changeEnableBtnState.bind(this);
-		// this._getNextTaskElements = this._getNextTaskElements.bind(this);
-		this._getTaskElements = this._getTaskElements.bind(this);
+ 		this._getTaskElements = this._getTaskElements.bind(this);
 		this._getNextTask = this._getNextTask.bind(this);
 	}
 
@@ -99,7 +98,7 @@ export default class extends Component {
 	}
 	_setChosenBuildingGeom(layer, id) {
 		console.log(layer);
-		this.chosenGeomLayer[id]=layer.feature;
+		this.chosenGeomLayer[layer.feature.properties.building_nr]=layer.feature;
 		this.setState({chosenBuildingGeom: this.chosenGeomLayer});
 		this._changeEnableBtnState();
 	}
@@ -197,6 +196,7 @@ export default class extends Component {
 				callback('done');
 			}.bind(this))
 		} else if (this.elementsInTask == 3 && this.num < this.numOfObjects) {
+			//this.chosenGeomLayer=[]; //Reset
 			this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
 				this.setState({
 					activeTaskElements: resp.slice(this.num, this.num+3),
@@ -335,15 +335,16 @@ export default class extends Component {
 }
 //style={{display: this.state.hidemap ? 'none' : 'block' }}
 function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task) {
-
+	console.log(geomlay[1]);
 	let result = {};
 	Object.keys(geomlay).map((elem, index) => {
+		console.log(geomlay[elem]);
 		geomlay['correct'] = (geomlay['correct']==undefined ? 0 : geomlay['correct']);
 		metalay['correct'] = (metalay['correct']==undefined ? 0 : metalay['correct']);
-		if (geomlay[index+1].properties.is_imported) {
+		if (geomlay[elem].properties.is_imported) {
 			geomlay['correct']++;
 		}
-		if (metalay[index+1].properties.is_imported) {
+		if (metalay[elem].properties.is_imported) {
 			metalay['correct']++;
 		}
 	});
@@ -354,6 +355,8 @@ function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task)
 	// result['participant'] = participant.id;
 	result['participant'] = 1;
 	result['task'] = task.id;
+
+	console.log(result);
 
 	resultApi.saveTaskResult(result).then(resp => {
 		console.log(resp);
@@ -381,6 +384,7 @@ function randPlaceElem(list1, list2, callback) {
 		list2.features[i].properties.title = list2.features[i].properties.title + ': ' + (y + 1).toString();
 		geom[x] = list1.features[i];
 		geom[y] = list2.features[i];
+		geom[2] = list1.features[i].properties.building_nr;
 		building[i] = geom;
 	}
 	callback(building);
