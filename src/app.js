@@ -152,13 +152,17 @@ export default class extends Component {
 					console.log('save task result');
 					saveTaskResult(this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task);
 				}
-				this._getNextTask(function(resp) {
-					this.setState({
-						chosenBuildingGeom: [],
-						mode: this.viewState.TASKVIEW
-					});
-					this.interval = setInterval(this._timeElapsed, 1000);
-				}.bind(this));
+				if(this.taskMode == 3) {
+					this.setState({mode: this.viewState.HOMEVIEW});
+				} else {
+					this._getNextTask(function(resp) {
+						this.setState({
+							chosenBuildingGeom: [],
+							mode: this.viewState.TASKVIEW
+						});
+						this.interval = setInterval(this._timeElapsed, 1000);
+					}.bind(this));
+				}
 				break;
 		}
 	}
@@ -256,6 +260,7 @@ export default class extends Component {
 			return (
 				<div className="container-fluid">
 					<Home onClick={this._handleModeChange}
+								taskMode={this.taskMode}
 								viewState={this.viewState}
 					/>
 				</div>

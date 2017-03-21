@@ -127,7 +127,8 @@ class TaskBoxComponent extends Component {
 		let chosenGeomLayer = [];
 		let base = this.props;
 		//console.log(this.props.activeTaskElements);
-		if (base.elementsInTask == base.currentTaskNum) {
+		console.log(base.currentTaskNum);
+		if (base.elementsInTask == base.currentTaskNum && base.elementsInTask !== 1) {
 			for (let i = 0; i < base.elementsInTask; i++) {
 				//console.log(this.props.activeTaskElements[i][2]);
 				let buildingNr = this.props.activeTaskElements[i][2];
