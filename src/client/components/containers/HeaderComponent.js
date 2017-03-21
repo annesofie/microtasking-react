@@ -12,7 +12,7 @@ class HeaderComponent extends Component {
 	}
 
 	render() {
-		if (this.props.taskmode == 3) {
+		if (this.props.taskMode == 3) {
 
 			return (
 				<div id="header" className="start-view">
