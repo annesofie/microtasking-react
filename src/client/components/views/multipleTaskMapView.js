@@ -77,7 +77,7 @@ class MultipleMapView extends Component {
 				<Map
 					center={position} zoom={this.props.mapOptions.zoom}>
 					<TileLayer
-						url={ortomap+tileapikey}
+						url={mapboxtile}
 						maxZoom={20}
 					/>
 					{layercontroloverlay1.map((elem, index) => {

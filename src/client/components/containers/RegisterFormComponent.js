@@ -66,8 +66,8 @@ export default class RegisterFormComponent extends Component {
 							</div>
 							<div className="d-flex flex-row justify-content-center">
 								{(this.props.task.id == this.props.testTaskId) ?
-								<p className="survey-info-testtask"><hr/><i>After each task there will be a survey. The survey is shown under. Select one option at every question and write any comments if you have. The test task is now finish, press the button to get started on the tasks.</i><hr/></p>:
-								<p className="survey-info-testtask"><hr/><i>Select one option at every question, then submit to start the next task</i><hr/></p>
+								<div><hr/><p className="survey-info-testtask"><i>After each task there will be a survey. The survey is shown under. Select one option at every question and write any comments if you have. The test task is now finish, press the button to get started on the tasks.</i></p><hr/></div>:
+								<div><hr/><p className="survey-info-testtask"><i>Select one option at every question, then submit to start the next task</i></p><hr/></div>
 								}
 								<hr/>
 							</div>

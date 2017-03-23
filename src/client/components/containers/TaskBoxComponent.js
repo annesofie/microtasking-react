@@ -5,6 +5,7 @@ import React, { Component, PropTypes } from 'react';
 
 //Views
 import MetadataTask from './../views/metadataTask';
+import RegisteredAnswerView from './../views/registeredAnswerView';
 
 class TaskBoxComponent extends Component {
 
@@ -15,25 +16,57 @@ class TaskBoxComponent extends Component {
 		this.task = {
 			INFOTASK: 0,
 			GEOMTASK: 1,
-			METATASK: 2
+			METATASK: 2,
+			REGISTEREDANSWER: 3
 		};
+		this.checkedVariables={
+			0: [],
+			1: [],
+			count: 0,
+			tooMany: false
+		};
+		for (let i=0; i < this.props.elementsInTask; i++) {
+			this.checkedVariables[0][i] = false;
+			this.checkedVariables[1][i] = false;
+		}
 
 		this.state = {
 			taskType: (this.props.task.id == this.props.testTaskId ? this.task.INFOTASK : this.task.GEOMTASK),
 			btnName: 'next',
-			shownTask: null
+			shownTask: null,
+			checkedMeta: this.checkedVariables
 		};
 
 		this.change=false; //Change taskType
 		this.metadata=[];
 
+		console.log(this.state);
+
 		this._taskChange = this._taskChange.bind(this);
 		this.onMetadataChange = this.onMetadataChange.bind(this);
+		this.handleTimeout = this.handleTimeout.bind(this);
 	}
 
 	onMetadataChange(elem, index, e) {
-		this.metadata[e.currentTarget.value] = elem;
+		if (this.checkedVariables[e.currentTarget.value][index]) {  //Is unselected
+			delete this.metadata[elem.properties.building_nr+e.currentTarget.value];
+			this.checkedVariables[e.currentTarget.value][index] = false;
+			this.checkedVariables.tooMany = false;
+			this.checkedVariables['count'] --;
+		} else if (this.checkedVariables.count > this.props.elementsInTask-1){
+			this.checkedVariables.tooMany = true;
+		} else {
+			this.metadata[elem.properties.building_nr+e.currentTarget.value] = elem;
+			this.checkedVariables[e.currentTarget.value][index] = true;
+			this.checkedVariables['count'] ++;
+		}
+		this.setState({checkedMeta: this.checkedVariables});
 		this.props._changeEnableBtnState();
+	}
+
+	handleTimeout() {
+		console.log('changing state');
+		this.setState({taskType: this.task.METATASK});
 	}
 
 	_taskChange() {
@@ -52,9 +85,10 @@ class TaskBoxComponent extends Component {
 				break;
 			case this.task.GEOMTASK:
 				this.setState({
-					taskType: this.task.METATASK,
+					taskType: this.task.REGISTEREDANSWER,
 					btnName: 'finish'
 				});
+				setTimeout(this.handleTimeout, 1000);
 				this.props._changeHideMapState(true); //Hide map
 				this.change=true;
 				break;
@@ -70,16 +104,17 @@ class TaskBoxComponent extends Component {
 
 	_handleTaskChange() {
 		let shownTask;
+		const build_s = (this.props.elementsInTask == 1) ? 'building' : 'buildings';
 		if (this.state.taskType == this.task.GEOMTASK) {
 			let chosenGeomLayer = this._infoClickedLayer();
 			const info = (this.props.task.id === this.props.testTaskId) ? <div className="task-div"><hr/><p>
-				<i>Remember to use the layer control on the top right of the map.</i><br/><br/>
-				The next-button will enable when the number of chosen layers matches the number of buildings in the task. Here you need to select one layer.
+				<i>Each task will have one or more buildings and each building will always be marked with two colors. This training task has two buildings. To answer the first question you need to click on the color on the map that you think fits the marked buildings best.</i><br/><br/>
+				The next-button will enable when all the buildings listed under the question is chosen. Here you have two buildings to select.
 				</p></div> : '';
 			shownTask =
 				<div className="task-div">
-					<h4>1. Which geometry to use?</h4>
-					<p><i>Click on the correct geometry layer on the map</i></p>
+					<h5>1. Click on the color that fits the marked {build_s} on the map best</h5>
+					<p><i>Use the zoom and the layer control on the top right of the map as aids</i></p>
 					{chosenGeomLayer.map(elem => {
 						return elem;
 					})}
@@ -87,24 +122,27 @@ class TaskBoxComponent extends Component {
 				</div>;
 		} else if (this.state.taskType == this.task.METATASK){
 			const info = (this.props.task.id === this.props.testTaskId) ? <div className="task-div"><hr/><p>
-				<i>Remember to chose the row which contains the most informative descriptions about the building. </i> <br/><br/>
-				The finish-button will enable when the number of chosen layers matches the number of buildings in the task. Here you need to select one since it's only one building.
+				<i>In this task chose the row which contains the most informative descriptions about a building. Think that the information should be informative for everyone, independent of education, background etc.
+				</i> <br/><br/>
+				The finish-button will enable when the number of chosen rows matches the number of buildings in the task. Here you need to select two row's since it's two buildings.
 				</p></div> : '';
 			shownTask =
 				<div className="meta-tables-inline">
 					<MetadataTask
 						activeTaskElements={this.props.activeTaskElements}
 						elementsInTask={this.props.elementsInTask}
+						checkedMeta={this.state.checkedMeta}
 						onChange={this.onMetadataChange}
+						tooMany={this.state.checkedMeta.tooMany}
 					/>
 					{info}
 				</div>;
 		} else if (this.state.taskType == this.task.INFOTASK) {
 			const intro = this.props.task.description_geom.split('+')[0],
 						tekst1 = this.props.task.description_geom.split('+')[1].split('Tip:')[0],
-						tip1 = this.props.task.description_geom.split('Tip:')[1],
-						tekst2 = this.props.task.description_meta.split('Tip:')[0],
-						tip2 = this.props.task.description_meta.split('Tip:')[1].split('+')[0],
+						// tip1 = this.props.task.description_geom.split('Tip:')[1],
+						tekst2 = this.props.task.description_meta.split('+')[0],
+						// tip2 = this.props.task.description_meta.split('Tip:')[1].split('+')[0],
 						pressnext = this.props.task.description_meta.split('+')[1];
 
 			shownTask = (
@@ -113,13 +151,15 @@ class TaskBoxComponent extends Component {
 					<hr/>
 					<p><b>{intro}</b></p>
 					<p>{tekst1}</p>
-					<p className="redishcolor">Tip: {tip1}</p>
+					{/*<p className="redishcolor">Tip: {tip1}</p>*/}
 					<p>{tekst2}</p>
-					<p className="redishcolor">Tip: {tip2}</p>
+					{/*<p className="redishcolor">Tip: {tip2}</p>*/}
 					<p>The layers on the map will change order and color between each task.</p>
 					<p className="pressnext"><i>{pressnext}</i></p>
 				</div>
 				)
+		} else if (this.state.taskType == this.task.REGISTEREDANSWER) {
+			shownTask = <RegisteredAnswerView/>
 		}
 		return shownTask;
 	}
@@ -162,7 +202,9 @@ class TaskBoxComponent extends Component {
 					<hr/>
 					{shownTask}
 					<div className="d-flex justify-content-end">
-						<button className="btn-sm btn-outline-secondary choose-btn" onClick={this._taskChange} disabled={!this.props.enableBtn}>
+						<button className="btn-sm btn-outline-secondary choose-btn"
+										style={{display: (this.state.taskType == this.task.REGISTEREDANSWER) ? 'none' : 'inline'}}
+										onClick={this._taskChange} disabled={!this.props.enableBtn}>
 							{this.state.btnName}
 						</button>
 					</div>
