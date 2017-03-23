@@ -15,14 +15,14 @@ class metadataTask extends Component{
 			tableTaskPair = (
 					<tbody>
 						<tr key="colelem">
-							<td key={0.1+base[0].id}><input className="margin-right" type="checkbox" name="meta_choice" checked={this.props.checkedMeta[0][0]} value={0} onChange={this.props.onChange.bind(this, base[0], 0)}/>
+							<td key={0.1+base[0].id}><input className="margin-right" type="checkbox" name="meta_choice" checked={this.props.checkedMeta[0][0]} value='0' onChange={this.props.onChange.bind(this, base[0], 0)}/>
 							</td>
 							<td key={1+base[0].id}>{base[0].properties.info1}</td>
 							<td key={2+base[0].id}>{base[0].properties.info2}</td>
 							<td key={3+base[0].id}>{base[0].properties.info3}</td>
 						</tr>
 						<tr key="colconfl">
-							<td key={0.1+base[1].id}><input className="margin-right" type="checkbox" name="meta_choice" checked={this.props.checkedMeta[1][1]} value={1} onChange={this.props.onChange.bind(this, base[1], 1)}/>
+							<td key={0.1+base[1].id}><input className="margin-right" type="checkbox" name="meta_choice" checked={this.props.checkedMeta[1][1]} value='1' onChange={this.props.onChange.bind(this, base[1], 1)}/>
 							</td>
 							<td key={1+base[1].id}>{base[1].properties.info1}</td>
 							<td key={2+base[1].id}>{base[1].properties.info2}</td>
@@ -37,7 +37,7 @@ class metadataTask extends Component{
 							<tbody key={'body'+elem[0].id}>
 							<tr key={'colelem'+elem[0].id}>
 								<td key={'0.1'+elem[0].id+index}>
-									<input className="margin-right" type="checkbox" name='meta_choice' checked={this.props.checkedMeta[0][index]} value={0} onChange={this.props.onChange.bind(this, elem[0], index)} />
+									<input className="margin-right" type="checkbox" name='meta_choice' checked={this.props.checkedMeta[0][index]} value='0' onChange={this.props.onChange.bind(this, elem[0], index)} />
 								</td>
 								<td key={'1'+elem[0].id+index}>{elem[0].properties.info1}</td>
 								<td key={'2'+elem[0].id+index}>{elem[0].properties.info2}</td>
@@ -45,7 +45,7 @@ class metadataTask extends Component{
 							</tr>
 							<tr key={'colconfl'+elem[1].id}>
 								<td key={'0.1'+elem[1].id+index}>
-									<input className="margin-right" type="checkbox" name='meta_choice' checked={this.props.checkedMeta[1][index]} value={1} onChange={this.props.onChange.bind(this, elem[1], index)} />
+									<input className="margin-right" type="checkbox" name='meta_choice' checked={this.props.checkedMeta[1][index]} value='1' onChange={this.props.onChange.bind(this, elem[1], index)} />
 								</td>
 								<td key={'1'+elem[1].id+index}>{elem[1].properties.info1}</td>
 								<td key={'2'+elem[1].id+index}>{elem[1].properties.info2}</td>

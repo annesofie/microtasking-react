@@ -48,6 +48,7 @@ class TaskBoxComponent extends Component {
 	}
 
 	onMetadataChange(elem, index, e) {
+		console.log(parseInt(e.currentTarget.value) + ' , ' + index + ' , ' + elem.properties.building_nr);
 		if (this.checkedVariables[e.currentTarget.value][index]) {  //Is unselected
 			delete this.metadata[elem.properties.building_nr+e.currentTarget.value];
 			this.checkedVariables[e.currentTarget.value][index] = false;
@@ -60,6 +61,7 @@ class TaskBoxComponent extends Component {
 			this.checkedVariables[e.currentTarget.value][index] = true;
 			this.checkedVariables['count'] ++;
 		}
+		console.log(this.metadata);
 		this.setState({checkedMeta: this.checkedVariables});
 		this.props._changeEnableBtnState();
 	}
@@ -84,10 +86,16 @@ class TaskBoxComponent extends Component {
 				this.change=false;
 				break;
 			case this.task.GEOMTASK:
+				for (let i=0; i < this.props.elementsInTask; i++) {  //Reset
+					this.checkedVariables[0][i] = false;
+					this.checkedVariables[1][i] = false;
+				}
 				this.setState({
 					taskType: this.task.REGISTEREDANSWER,
-					btnName: 'finish'
+					btnName: 'finish',
+					checkedMeta: this.checkedVariables
 				});
+				console.log(this.state);
 				setTimeout(this.handleTimeout, 1000);
 				this.props._changeHideMapState(true); //Hide map
 				this.change=true;
@@ -167,7 +175,7 @@ class TaskBoxComponent extends Component {
 		let chosenGeomLayer = [];
 		let base = this.props;
 		//console.log(this.props.activeTaskElements);
-		if (base.elementsInTask == base.currentTaskNum) {
+		if (base.elementsInTask == base.currentTaskNum && base.elementsInTask !== 1) {
 			for (let i = 0; i < base.elementsInTask; i++) {
 				//console.log(this.props.activeTaskElements[i][2]);
 				let buildingNr = this.props.activeTaskElements[i][2];
