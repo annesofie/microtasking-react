@@ -72,24 +72,6 @@ class AfterEachTaskSurvey extends Component {
 				</Label>
 			</div>
 		);
-		//if (this.props.task.id = this.props.testTaskId) {
-        //
-		//	return (
-		//		<div className="">
-		//			<div className="">
-		//				<div className="d-flex flex-row justify-content-center">
-		//					<h4>Survey</h4>
-		//				</div>
-		//				<div className="d-flex justify-content-center">
-		//					<h3>Let's start</h3>
-		//					<p>Hope you got enough training!</p>
-		//					<button onClick={this.startTaskView}>Start</button>
-		//				</div>
-		//			</div>
-		//		</div>
-		//	)
-        //
-		//} else {
 
 			return (
 				<Form className="pure-form pure-form-aligned margin-top" initialData={this.initialData} onSubmit={this.saveAndContinue}>
@@ -104,7 +86,7 @@ class AfterEachTaskSurvey extends Component {
 						</Label>
 
 						<div className="pure-controls">
-							<button className="pure-button pure-button-primary" type="submit">
+							<button className="pure-button btn-outline-success" type="submit">
 								{this.props.task.id == this.props.testTaskId ?
 									'Start tasks':
 									'Submit'
@@ -117,9 +99,6 @@ class AfterEachTaskSurvey extends Component {
 			)
 	}
 }
-//{(this.props.task.id == this.props.testTaskId) ?
-//	<button className="pure-button pure-button-primary" type="submit">Start tasks</button> : }
-//<TextInput className="margin-left margin-top comment-box-size" key="comment" label="Other comments?" name="comment"/>
 
 
 export default AfterEachTaskSurvey;

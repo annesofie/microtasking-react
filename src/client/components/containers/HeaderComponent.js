@@ -12,19 +12,35 @@ class HeaderComponent extends Component {
 	}
 
 	render() {
-		return (
-			<div id="header" className="start-view">
-				<div className="d-flex flex-row justify-content-center">
-					<h1 className="header-text">Welcome to Micro tasking Survey</h1>
+		if (this.props.taskMode == 3) {
+
+			return (
+				<div id="header" className="start-view">
+					<div className="d-flex flex-row justify-content-center">
+						<h1 className="header-text">Thank you for your contributions to the Micro tasking Survey</h1>
+					</div>
+					<div className="d-flex flex-row justify-content-center">
+						<h3>The results will be available in mid june</h3>
+					</div>
 				</div>
-				<div className="d-flex flex-row justify-content-center">
-					<h3>Optimizing the micro-tasking workflow</h3>
-				</div>
-				<div id="start-survey-btn-div" className="d-flex flex-row justify-content-center">
-					<button type="button" className="btn btn-outline-secondary start-survey" onClick={this.props.onClick}>Start Survey</button>
-				</div>
-		</div>
-		)
+			)
+
+		} else {
+
+			return (
+					<div id="header" className="start-view">
+						<div className="d-flex flex-row justify-content-center">
+							<h1 className="header-text">Welcome to Micro tasking Survey</h1>
+						</div>
+						<div className="d-flex flex-row justify-content-center">
+							<h3>Optimizing the micro-tasking workflow</h3>
+						</div>
+						<div id="start-survey-btn-div" className="d-flex flex-row justify-content-center">
+							<button type="button" className="btn btn-outline-secondary start-survey" onClick={this.props.onClick}>Start Survey</button>
+						</div>
+					</div>
+			)
+		}
 	}
 }
 
