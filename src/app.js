@@ -177,7 +177,7 @@ export default class extends Component {
 		this._changeProgressTitle();
 		if (this.state.task.id == this.testTaskId && this.num < this.numOfObjects) {
 			this.setState({
-				activeTaskElements: base[0],
+				activeTaskElements: base,
 				currentTaskNum: 6,
 				enableBtn: true
 			});

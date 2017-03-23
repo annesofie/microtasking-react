@@ -101,10 +101,10 @@ class TaskBoxComponent extends Component {
 				</div>;
 		} else if (this.state.taskType == this.task.INFOTASK) {
 			const intro = this.props.task.description_geom.split('+')[0],
-						tekst1 = this.props.task.description_geom.split('+')[1].split('Tip:')[0],
-						tip1 = this.props.task.description_geom.split('Tip:')[1],
-						tekst2 = this.props.task.description_meta.split('Tip:')[0],
-						tip2 = this.props.task.description_meta.split('Tip:')[1].split('+')[0],
+						tekst1 = this.props.task.description_geom.split('+')[1],
+						// tip1 = this.props.task.description_geom.split('Tip:')[1],
+						tekst2 = this.props.task.description_meta.split('+')[0],
+						// tip2 = this.props.task.description_meta.split('Tip:')[1].split('+')[0],
 						pressnext = this.props.task.description_meta.split('+')[1];
 
 			shownTask = (
@@ -113,9 +113,9 @@ class TaskBoxComponent extends Component {
 					<hr/>
 					<p><b>{intro}</b></p>
 					<p>{tekst1}</p>
-					<p className="redishcolor">Tip: {tip1}</p>
+					{/*<p className="redishcolor">Tip: {tip1}</p>*/}
 					<p>{tekst2}</p>
-					<p className="redishcolor">Tip: {tip2}</p>
+					{/*<p className="redishcolor">Tip: {tip2}</p>*/}
 					<p>The layers on the map will change order and color between each task.</p>
 					<p className="pressnext"><i>{pressnext}</i></p>
 				</div>
