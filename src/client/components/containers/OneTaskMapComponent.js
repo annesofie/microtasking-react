@@ -40,7 +40,6 @@ export default class OneTaskMapComponent extends Component {
 				weight: 7
 			});
 			this.activelayer=e.target;
-			console.log(e.target);
 			this.props._setChosenBuildingLayer(e.target, id);
 		}.bind(this));
 	}
@@ -58,7 +57,6 @@ export default class OneTaskMapComponent extends Component {
 				weight: 7
 			});
 			this.activelayer=e.target;
-			//console.log(e.target);
 			this.props._setChosenBuildingLayer(e.target, id);
 		}.bind(this));
 	}

@@ -28,13 +28,12 @@ class TaskBoxComponent extends Component {
 			taskType: (this.props.task.id == this.props.testTaskId ? this.task.INFOTASK : this.task.GEOMTASK),
 			btnName: 'next',
 			shownTask: null,
+			showTaskProgress: !(this.props.task.id == this.props.testTaskId),
 			checkedMeta: this.checkedVariables
 		};
 
 		this.change=false; //Change taskType
 		this.metadata=[];
-
-		console.log(this.state);
 
 		this.createBooleanArray=this.createBooleanArray.bind(this);
 		this._taskChange = this._taskChange.bind(this);
@@ -76,7 +75,9 @@ class TaskBoxComponent extends Component {
 	}
 
 	handleTimeout() {
-		this.setState({taskType: this.task.METATASK});
+		this.setState({
+			taskType: this.task.METATASK
+		});
 	}
 
 	_taskChange() {
@@ -98,9 +99,8 @@ class TaskBoxComponent extends Component {
 					this.setState({
 						taskType: this.task.REGISTEREDANSWER,
 						btnName: 'finish',
-						checkedMeta: this.checkedVariables
+						checkedMeta: this.checkedVariables,
 					});
-					console.log(this.state);
 					setTimeout(this.handleTimeout, 1000);
 				}.bind(this));
 				this.props._changeHideMapState(true); //Hide map
@@ -108,7 +108,9 @@ class TaskBoxComponent extends Component {
 				break;
 			case this.task.INFOTASK:
 				this.props._changeHideMapState(false); //Show map
-				this.setState({taskType: this.task.GEOMTASK});
+				this.setState({
+					taskType: this.task.GEOMTASK,
+				});
 				break;
 			default:
 				break;
@@ -128,14 +130,16 @@ class TaskBoxComponent extends Component {
 			shownTask =
 				<div className="task-div">
 					<h5>1. Click on the color that fits the marked {build_s} on the map best</h5>
-					<p><i>Use the zoom on the top left and the layer control on the top right of the map as aids</i></p>
-					{chosenGeomLayer.map(elem => {
-						return elem;
-					})}
+					<p className=""><i>Use the zoom on the top left and the layer control on the top right of the map as aids</i></p>
+					<div className="margin-top-medium">
+						{chosenGeomLayer.map(elem => {
+							return elem;
+						})}
+					</div>
 					{info}
 				</div>;
 		} else if (this.state.taskType == this.task.METATASK){
-			const info = (this.props.task.id === this.props.testTaskId) ? <div className="task-div"><hr/><p>
+			const info = (this.props.task.id === this.props.testTaskId) ? <div className=""><hr/><p>
 				<i>In this task chose the row which contains the most informative descriptions about an arbitrary building. Think that the information should be informative for everyone, independent of education, background etc.
 				</i> <br/><br/>
 				The finish-button will enable when the number of chosen rows matches the number asked for in the question. The number will vary between one and six. Here you need to select two row's since it's two buildings.
@@ -206,13 +210,17 @@ class TaskBoxComponent extends Component {
 
 	render() {
 		let shownTask = this._handleTaskChange();
+		let currentTask = (this.props.currentTaskNum/this.props.elementsInTask);
+		let totalnum = (6 / this.props.elementsInTask);
 		// let desc = !this.change ? this.props.task.description_geom : this.props.task.description_meta;
 		return (
 				<div className="p-2 task-box">
-					<h4 className="task-header">{this.props.task.title}</h4>
+					<h4 className="task-header">{this.props.tasknummer}. {this.props.task.title}</h4>
 					<hr/>
 					{shownTask}
-					<div className="d-flex justify-content-end">
+					<div className="d-flex justify-content-end margin-top">
+						<p className="margin-right margin-top" style={{display: this.state.showTaskProgress ? 'inline' : 'none'}}>
+							Task {this.props.tasknummer} progress: {currentTask} / {totalnum}</p>
 						<button className="btn-sm btn-outline-secondary choose-btn"
 										style={{display: (this.state.taskType == this.task.REGISTEREDANSWER) ? 'none' : 'inline'}}
 										onClick={this._taskChange} disabled={!this.props.enableBtn}>

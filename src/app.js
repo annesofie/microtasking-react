@@ -32,6 +32,7 @@ export default class extends Component {
 			mode: this.viewState.HOMEVIEW,
 			participant: [],
 			taskorder: '',
+			tasknummer: 0,
 			map_taskmode: 0,
 			task: [],
 			currentTaskNum: 0,
@@ -180,7 +181,6 @@ export default class extends Component {
 		const base = this.randomOrderTaskElements;
 		this._changeProgressTitle();
 		if (this.state.task.id == this.testTaskId && this.num < this.numOfObjects) {
-			console.log(base);
 			this.setState({
 				activeTaskElements: base,
 				currentTaskNum: 6,
@@ -235,7 +235,7 @@ export default class extends Component {
 			currentTaskNum: this.num,
 			enableBtn: false
 		});
-
+		console.log('get next task ' + this.taskMode);
 		taskApi.getTask(this.state.taskorder[this.taskMode]).then(elem => {
 			this.elementsInTask = elem.num_of_elements;
 			this.setState({task: elem});
@@ -252,7 +252,7 @@ export default class extends Component {
 		const progressTitle = ['Test', 'Task 1', 'Task 2', 'Task3'];
 		this.setState({
 			title: progressTitle[this.taskMode],
-			percent: this.state.percent+10
+			percent: this.state.percent+5
 		});
 	}
 
@@ -293,6 +293,7 @@ export default class extends Component {
 					<div className="d-flex task-map-box">
 						<TaskBoxComponent task={this.state.task}
 															testTaskId={this.testTaskId}
+															tasknummer={this.taskMode}
 															currentTaskNum={this.state.currentTaskNum}
 															elementsInTask={this.state.map_taskmode}
 															hidemap={this.state.hidemap}
