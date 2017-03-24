@@ -126,11 +126,11 @@ export default class extends Component {
 		//console.log(this.state.mode);
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				this.setState({mode: this.viewState.REGISTERVIEW});
-				//this._handleTaskMode(true, function(str) {
-				//	this.setState({mode: this.viewState.TASKVIEW});
-				//	this.interval = setInterval(this._timeElapsed, 1000);
-				//}.bind(this));
+				// this.setState({mode: this.viewState.REGISTERVIEW});
+				this._handleTaskMode(true, function(str) {
+					this.setState({mode: this.viewState.TASKVIEW});
+					this.interval = setInterval(this._timeElapsed, 1000);
+				}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
@@ -180,6 +180,7 @@ export default class extends Component {
 		const base = this.randomOrderTaskElements;
 		this._changeProgressTitle();
 		if (this.state.task.id == this.testTaskId && this.num < this.numOfObjects) {
+			console.log(base);
 			this.setState({
 				activeTaskElements: base,
 				currentTaskNum: 6,
@@ -298,7 +299,6 @@ export default class extends Component {
 															activeTaskElements={this.state.activeTaskElements}
 															chosenBuildingGeom={this.state.chosenBuildingGeom}
 															enableBtn={this.state.enableBtn}
-															//enableNextMetaBtn={this.state.enableNextMetaBtn}
 															_setChosenMetadata={this._setChosenMetadata}
 															_getNextTaskElements={this._handleTaskMode}
 															_changeHideMapState={this._changeHideMapState}
@@ -338,12 +338,14 @@ export default class extends Component {
 //style={{display: this.state.hidemap ? 'none' : 'block' }}
 function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task) {
 	let result = {};
-	Object.keys(geomlay).map((elem, index) => {
+	Object.keys(geomlay).map(elem => {
 		geomlay['correct'] = (geomlay['correct']==undefined ? 0 : geomlay['correct']);
-		metalay['correct'] = (metalay['correct']==undefined ? 0 : metalay['correct']);
 		if (geomlay[elem].properties.is_imported) {
 			geomlay['correct']++;
 		}
+	});
+	Object.keys(metalay).map(elem => {
+		metalay['correct'] = (metalay['correct']==undefined ? 0 : metalay['correct']);
 		if (metalay[elem].properties.is_imported) {
 			metalay['correct']++;
 		}

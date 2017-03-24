@@ -55,7 +55,7 @@ class RegisterFormView extends Component {
 						<label>Age</label>
 						<input id="register-input" type="number" ref="age" required/>
 					</div>
-					<LabeledInput label="Nationality" name="nationality" required/>
+
 					<LabeledSelect label="Gender" name="gender" values={this.genderval} />
 					<LabeledSelect label="Do you have experience of working with spatialdata?" name="experienced" values={this.values}/>
 					<LabeledSelect label="Have you heard of micro-tasking before?" name="microtasking" values={this.values}/>

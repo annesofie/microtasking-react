@@ -4,29 +4,48 @@
 
 import React, { Component } from 'react';
 import {Form, TextInput, Checkbox, Select, Label} from 'react-easy-form';
+// import Select from 'react-select';
 
 class AfterEachTaskSurvey extends Component {
 
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			canSubmit: false
-		};
-
 		this.initialData = {
 			difficulty: '',
 			besteffort: '',
 			interupted: '',
 			comment: '',
+			country: '',
 			participant: this.props.participant.id,
 			task: this.props.task.id
 		};
+
+		this.state = {
+			canSubmit: false,
+			survey: this.initialData
+		};
+
+		// this.values = [{label: 'Yes', value: true}, {label: 'No', value: false}];
 		this.values = ['Select', 'Yes', 'No'];
 		this.difficulty = ['Select', 'Hard', 'Medium', 'Easy'];
+		this.countries = ['Norway', 'Germany', 'English', 'Sweden', 'Danish'];
+		// this.options = [];
+		// this.countries.map((elem, index) => {
+		// 	let country = {
+		// 		value: elem,
+		// 		label: elem
+		// 	};
+		// 	this.options.push(country);
+		// });
+
 		this.saveAndContinue = this.saveAndContinue.bind(this);
-		this.checkInput = this.checkInput.bind(this);
+		// this.checkInput = this.checkInput.bind(this);
 		this.startTaskView = this.startTaskView.bind(this);
+		this.setCountryInput = this.setCountryInput.bind(this);
+		this.setDifficulty = this.setDifficulty.bind(this);
+		this.setEffort = this.setEffort.bind(this);
+		this.setInterupted = this.setInterupted.bind(this);
 		//this.checkValidation = this.checkValidation.bind(this);
 	}
 
@@ -35,11 +54,32 @@ class AfterEachTaskSurvey extends Component {
 		this.initialData.difficulty = this.checkInput(this.initialData.difficulty);
 		this.initialData.interupted = this.checkInput(this.initialData.interupted);
 		this.initialData.comment = this.refs.comment.value;
+		console.log(this.initialData);
 		//this.initialData.besteffort == 'Yes' ? this.initialData.besteffort=true :	this.initialData.besteffort=false;
 		//this.initialData.interupted == 'No' ? this.initialData.interupted=false :	this.initialData.interupted=true;
 		this.props.handleRegisterSubmit(this.initialData, false);
 	}
 
+	setCountryInput(val) {
+		this.initialData.country = val.value;
+		this.setState({survey: this.initialData});
+	}
+
+	setDifficulty(val) {
+		console.log(val);
+		this.initialData.difficulty = val.value;
+		this.setState({survey: this.initialData});
+	}
+	setEffort(val) {
+		console.log(val);
+		this.initialData.besteffort = val.value;
+		this.setState({survey: this.initialData});
+	}
+	setInterupted(val) {
+		console.log(val);
+		this.initialData.interupted = val.value;
+		this.setState({survey: this.initialData});
+	}
 	startTaskView() {
 		this.props.handleRegisterSubmit(this.initialData, false, true);
 	}
@@ -55,14 +95,6 @@ class AfterEachTaskSurvey extends Component {
 			return answer;
 		}
 	}
-	//checkValidation() {
-	//	if (this.initialData.besteffort == 'Select' || this.initialData.difficulty == 'Select' || this.initialData.interupted == 'Select') {
-	//		console.log('invalid');
-	//	} else {
-	//		console.log('valid');
-	//	}
-    //
-	//}
 
 	render() {
 		const LabeledSelect = (props) => (
@@ -72,9 +104,12 @@ class AfterEachTaskSurvey extends Component {
 				</Label>
 			</div>
 		);
+<<<<<<< HEAD
 
+=======
+>>>>>>> new_survey_metatable
 			return (
-				<Form className="pure-form pure-form-aligned margin-top" initialData={this.initialData} onSubmit={this.saveAndContinue}>
+				<Form className="pure-form pure-form-aligned" initialData={this.initialData} onSubmit={this.saveAndContinue}>
 					<fieldset>
 
 						<LabeledSelect key="difficulty" label="How difficult was this task?" name="difficulty" values={this.difficulty} />
@@ -82,7 +117,7 @@ class AfterEachTaskSurvey extends Component {
 						<LabeledSelect key="interupted" label="Where you interupted during this task?" name="interupted" values={this.values}/>
 
 						<Label>Other comments?
-							<textarea name="comment" ref="comment" id="comment-textarea" cols="30" rows="10"/>
+							<textarea className="survey-comment-textarea" name="comment" ref="comment" id="comment-textarea" cols="30" rows="10"/>
 						</Label>
 
 						<div className="pure-controls">
@@ -91,14 +126,17 @@ class AfterEachTaskSurvey extends Component {
 									'Start tasks':
 									'Submit'
 								}
-								</button>
+							</button>
 						</div>
 
 					</fieldset>
 				</Form>
-			)
+			);
 	}
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> new_survey_metatable
 
 export default AfterEachTaskSurvey;
