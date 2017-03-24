@@ -17,10 +17,10 @@ export default class OneTaskMapComponent extends Component {
 			lng: 10.4499185,
 			zoom: 18
 		};
-		var x = Math.floor(Math.random() * ((4-1)+1));
-		var y = Math.floor(Math.random() * ((4-1)+1));
+		let x = Math.floor(Math.random() * ((4-1)+1));
+		let y = Math.floor(Math.random() * ((4-1)+1));
 		this.colormap1 = ['#3fe5e5', '#43cd80', '#63137a', '#8e374d'];
-		this.colormap2 = ['#105576', '#2a7a13', '#63137a', '#e68e74'];
+		this.colormap2 = ['#105576', '#2a7a13', '#7A4065', '#e68e74'];
 		this.colorPair = [this.colormap1[x], this.colormap2[y]];
 		this.activelayer=null;
 		this._clickEventHandler1 = this._clickEventHandler1.bind(this);
@@ -40,7 +40,7 @@ export default class OneTaskMapComponent extends Component {
 				weight: 5
 			});
 			this.activelayer=e.target;
-			//console.log(e.target);
+			console.log(e.target);
 			this.props._setChosenBuildingLayer(e.target, id);
 		}.bind(this));
 	}

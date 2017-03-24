@@ -20,43 +20,50 @@ export default class OneTaskMapComponent extends Component {
 		const x = Math.floor(Math.random() * ((4-1)+1));
 		const y = Math.floor(Math.random() * ((4-1)+1));
 		this.colormap1 = ['#3fe5e5', '#43cd80', '#63137a', '#8e374d'];
-		this.colormap2 = ['#105576', '#2a7a13', '#63137a', '#e68e74'];
+		this.colormap2 = ['#105576', '#2a7a13', '#7A555D', '#e68e74'];
 		this.colorPair = [this.colormap1[x], this.colormap2[y]];
-		this.activelayer=null;
+		this.activelayer=[];
 		this._clickEventHandler1 = this._clickEventHandler1.bind(this);
 		this._clickEventHandler2 = this._clickEventHandler2.bind(this);
 	}
 
 	_clickEventHandler1(id, feature, layer) {
 		layer.on('click', function(e) {
-			if (this.activelayer && this.activelayer.feature.id == feature.id) {
-				this.activelayer.setStyle({
-					color: this.colorPair[1],
-					weight: 4
-				});
+			const buildingNr = e.target.feature.properties.building_nr;
+			if (this.activelayer[buildingNr]) {  //if building already been selected
+				if (this.activelayer[buildingNr] !== e.target) { //pressed the other layer
+					console.log('the other layer is pressed');
+					this.activelayer[buildingNr].setStyle({
+						color: this.colorPair[1],
+						weight: 4
+					})
+				}
 			}
 			e.target.setStyle({
-				color: 'blue',
-				weight: 5
+				color: e.target.options.color,
+				weight: 7
 			});
-			this.activelayer=e.target;
+			this.activelayer[buildingNr]=e.target;
 			this.props._setChosenBuildingLayer(e.target, id);
 		}.bind(this));
 	}
 
 	_clickEventHandler2(id, feature, layer) {
 		layer.on('click', function(e) {
-			if (this.activelayer && this.activelayer.feature.id == feature.id) {
-				this.activelayer.setStyle({
-					color: this.colorPair[0],
-					weight: 4
-				});
+			const buildingNr = e.target.feature.properties.building_nr;
+			if (this.activelayer[buildingNr]) { //if building already been selected
+				if (this.activelayer[buildingNr] !== e.target) { //pressed the other layer
+					this.activelayer[buildingNr].setStyle({
+						color: this.colorPair[0],
+						weight: 4
+					})
+				}
 			}
 			e.target.setStyle({
-				color: 'blue',
-				weight: 5
+				color: e.target.options.color,
+				weight: 7
 			});
-			this.activelayer=e.target;
+			this.activelayer[buildingNr]=e.target;
 			this.props._setChosenBuildingLayer(e.target, id);
 		}.bind(this));
 	}
