@@ -333,18 +333,13 @@ export default class extends Component {
 //style={{display: this.state.hidemap ? 'none' : 'block' }}
 function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task) {
 	let result = {};
-	Object.keys(geomlay).map((elem, index) => {
+	Object.keys(geomlay).map(elem => {
 		geomlay['correct'] = (geomlay['correct']==undefined ? 0 : geomlay['correct']);
-		// metalay['correct'] = (metalay['correct']==undefined ? 0 : metalay['correct']);
 		if (geomlay[elem].properties.is_imported) {
 			geomlay['correct']++;
 		}
-		// if (metalay[elem].properties.is_imported) {
-		// 	metalay['correct']++;
-		// }
 	});
-	Object.keys(metalay).map((elem, index) => {
-		console.log(elem);
+	Object.keys(metalay).map(elem => {
 		metalay['correct'] = (metalay['correct']==undefined ? 0 : metalay['correct']);
 		if (metalay[elem].properties.is_imported) {
 			metalay['correct']++;

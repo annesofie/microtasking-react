@@ -77,7 +77,7 @@ class metadataTask extends Component{
 					</thead>
 					{tableInput}
 				</table>
-				<p style={{display: (this.props.tooMany ? 'inline' : 'none')}}><b>You can only select {this.props.elementsInTask} alternatives</b></p>
+				<p style={{display: (this.props.tooMany ? 'inline' : 'none')}}><b>You can only select {this.props.elementsInTask} {alternative_s}</b></p>
 			</div>
 		)
 	}
