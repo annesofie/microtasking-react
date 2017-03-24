@@ -29,15 +29,15 @@ export default class OneTaskMapComponent extends Component {
 
 	_clickEventHandler1(id, feature, layer) {
 		layer.on('click', function(e) {
-			if (this.activelayer) {
+			if (this.activelayer && this.activelayer !== e.target) {
 				this.activelayer.setStyle({
 					color: this.colorPair[1],
 					weight: 4
 				});
 			}
 			e.target.setStyle({
-				color: 'blue',
-				weight: 5
+				color: e.target.options.color,
+				weight: 7
 			});
 			this.activelayer=e.target;
 			console.log(e.target);
@@ -47,15 +47,15 @@ export default class OneTaskMapComponent extends Component {
 
 	_clickEventHandler2(id, feature, layer) {
 		layer.on('click', function(e) {
-			if (this.activelayer) {
+			if (this.activelayer && this.activelayer !== e.target) {
 				this.activelayer.setStyle({
 					color: this.colorPair[0],
 					weight: 4
 				});
 			}
 			e.target.setStyle({
-				color: 'blue',
-				weight: 5
+				color: e.target.options.color,
+				weight: 7
 			});
 			this.activelayer=e.target;
 			//console.log(e.target);

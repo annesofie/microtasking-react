@@ -128,7 +128,7 @@ class TaskBoxComponent extends Component {
 			shownTask =
 				<div className="task-div">
 					<h5>1. Click on the color that fits the marked {build_s} on the map best</h5>
-					<p><i>Use the zoom and the layer control on the top right of the map as aids</i></p>
+					<p><i>Use the zoom on the top left and the layer control on the top right of the map as aids</i></p>
 					{chosenGeomLayer.map(elem => {
 						return elem;
 					})}
@@ -136,9 +136,9 @@ class TaskBoxComponent extends Component {
 				</div>;
 		} else if (this.state.taskType == this.task.METATASK){
 			const info = (this.props.task.id === this.props.testTaskId) ? <div className="task-div"><hr/><p>
-				<i>In this task chose the row which contains the most informative descriptions about a building. Think that the information should be informative for everyone, independent of education, background etc.
+				<i>In this task chose the row which contains the most informative descriptions about an arbitrary building. Think that the information should be informative for everyone, independent of education, background etc.
 				</i> <br/><br/>
-				The finish-button will enable when the number of chosen rows matches the number of buildings in the task. Here you need to select two row's since it's two buildings.
+				The finish-button will enable when the number of chosen rows matches the number asked for in the question. The number will vary between one and six. Here you need to select two row's since it's two buildings.
 				</p></div> : '';
 			shownTask =
 				<div className="meta-tables-inline">
