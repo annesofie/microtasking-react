@@ -19,16 +19,10 @@ class TaskBoxComponent extends Component {
 			METATASK: 2,
 			REGISTEREDANSWER: 3
 		};
-		this.checkedVariables={
-			0: [],
-			1: [],
-			count: 0,
-			tooMany: false
-		};
-		for (let i=0; i < this.props.elementsInTask; i++) {
-			this.checkedVariables[0][i] = false;
-			this.checkedVariables[1][i] = false;
-		}
+
+		this.createBooleanArray(function () {
+
+		}.bind(this));
 
 		this.state = {
 			taskType: (this.props.task.id == this.props.testTaskId ? this.task.INFOTASK : this.task.GEOMTASK),
@@ -42,9 +36,25 @@ class TaskBoxComponent extends Component {
 
 		console.log(this.state);
 
+		this.createBooleanArray=this.createBooleanArray.bind(this);
 		this._taskChange = this._taskChange.bind(this);
 		this.onMetadataChange = this.onMetadataChange.bind(this);
 		this.handleTimeout = this.handleTimeout.bind(this);
+	}
+
+	createBooleanArray(callback) {
+		//Used in checkbox metadata table
+		this.checkedVariables={
+			0: [],
+			1: [],
+			count: 0,
+			tooMany: false
+		};
+		for (let i=0; i <= this.props.elementsInTask; i++) {
+			this.checkedVariables[0][i] = false;
+			this.checkedVariables[1][i] = false;
+		}
+		callback('done');
 	}
 
 	onMetadataChange(elem, index, e) {
@@ -54,13 +64,15 @@ class TaskBoxComponent extends Component {
 			this.checkedVariables[e.currentTarget.value][index] = false;
 			this.checkedVariables.tooMany = false;
 			this.checkedVariables['count'] --;
-		} else if (this.checkedVariables.count > this.props.elementsInTask-1){
+		} else if (this.checkedVariables.count >= this.props.elementsInTask){
 			this.checkedVariables.tooMany = true;
 		} else {
+			console.log('set checkbox to true' + index);
 			this.metadata[elem.properties.building_nr+e.currentTarget.value] = elem;
 			this.checkedVariables[e.currentTarget.value][index] = true;
 			this.checkedVariables['count'] ++;
 		}
+		console.log(this.checkedVariables);
 		console.log(this.metadata);
 		this.setState({checkedMeta: this.checkedVariables});
 		this.props._changeEnableBtnState();
@@ -86,17 +98,15 @@ class TaskBoxComponent extends Component {
 				this.change=false;
 				break;
 			case this.task.GEOMTASK:
-				for (let i=0; i < this.props.elementsInTask; i++) {  //Reset
-					this.checkedVariables[0][i] = false;
-					this.checkedVariables[1][i] = false;
-				}
-				this.setState({
-					taskType: this.task.REGISTEREDANSWER,
-					btnName: 'finish',
-					checkedMeta: this.checkedVariables
-				});
-				console.log(this.state);
-				setTimeout(this.handleTimeout, 1000);
+				this.createBooleanArray(function (resp) { //Reset boolean array
+					this.setState({
+						taskType: this.task.REGISTEREDANSWER,
+						btnName: 'finish',
+						checkedMeta: this.checkedVariables
+					});
+					console.log(this.state);
+					setTimeout(this.handleTimeout, 1000);
+				}.bind(this));
 				this.props._changeHideMapState(true); //Hide map
 				this.change=true;
 				break;
