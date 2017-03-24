@@ -28,30 +28,16 @@ class AfterEachTaskSurvey extends Component {
 
 		// this.values = [{label: 'Yes', value: true}, {label: 'No', value: false}];
 		this.values = ['Select', 'Yes', 'No'];
-		this.difficulty = ['Select', 'Hard', 'Medium', 'Easy'];
-		this.countries = ['Norway', 'Germany', 'English', 'Sweden', 'Danish'];
-		// this.options = [];
-		// this.countries.map((elem, index) => {
-		// 	let country = {
-		// 		value: elem,
-		// 		label: elem
-		// 	};
-		// 	this.options.push(country);
-		// });
 
 		this.saveAndContinue = this.saveAndContinue.bind(this);
 		// this.checkInput = this.checkInput.bind(this);
 		this.startTaskView = this.startTaskView.bind(this);
-		this.setCountryInput = this.setCountryInput.bind(this);
 		this.setDifficulty = this.setDifficulty.bind(this);
-		this.setEffort = this.setEffort.bind(this);
-		this.setInterupted = this.setInterupted.bind(this);
 		//this.checkValidation = this.checkValidation.bind(this);
 	}
 
 	saveAndContinue() {
 		this.initialData.besteffort = this.checkInput(this.initialData.besteffort);
-		this.initialData.difficulty = this.checkInput(this.initialData.difficulty);
 		this.initialData.interupted = this.checkInput(this.initialData.interupted);
 		this.initialData.comment = this.refs.comment.value;
 		console.log(this.initialData);
@@ -60,26 +46,10 @@ class AfterEachTaskSurvey extends Component {
 		this.props.handleRegisterSubmit(this.initialData, false);
 	}
 
-	setCountryInput(val) {
-		this.initialData.country = val.value;
-		this.setState({survey: this.initialData});
+	setDifficulty(e) {
+		this.initialData.difficulty = e.currentTarget.value;
 	}
 
-	setDifficulty(val) {
-		console.log(val);
-		this.initialData.difficulty = val.value;
-		this.setState({survey: this.initialData});
-	}
-	setEffort(val) {
-		console.log(val);
-		this.initialData.besteffort = val.value;
-		this.setState({survey: this.initialData});
-	}
-	setInterupted(val) {
-		console.log(val);
-		this.initialData.interupted = val.value;
-		this.setState({survey: this.initialData});
-	}
 	startTaskView() {
 		this.props.handleRegisterSubmit(this.initialData, false, true);
 	}
@@ -104,15 +74,23 @@ class AfterEachTaskSurvey extends Component {
 				</Label>
 			</div>
 		);
-<<<<<<< HEAD
-
-=======
->>>>>>> new_survey_metatable
 			return (
-				<Form className="pure-form pure-form-aligned" initialData={this.initialData} onSubmit={this.saveAndContinue}>
+				<Form className="pure-form pure-form-aligned small-margin-top" initialData={this.initialData} onSubmit={this.saveAndContinue}>
 					<fieldset>
 
-						<LabeledSelect key="difficulty" label="How difficult was this task?" name="difficulty" values={this.difficulty} />
+						<div className="row">
+							<label className="col-7">How difficult was this task?</label>
+							<p className="col-1 margin-negative-left">Easy</p>
+							<div className="col-3">
+								<input className="radio-btn-margin" type="radio" name="difficulty" value='1' onChange={this.setDifficulty}/>
+								<input className="radio-btn-margin" type="radio" name="difficulty" value='5' onChange={this.setDifficulty}/>
+								<input className="radio-btn-margin" type="radio" name="difficulty" value='2' onChange={this.setDifficulty}/>
+								<input className="radio-btn-margin" type="radio" name="difficulty" value='3' onChange={this.setDifficulty}/>
+								<input className="radio-btn-margin" type="radio" name="difficulty" value='4' onChange={this.setDifficulty}/>
+							</div>
+							<p className="col-1 margin-negative-left">Hard</p>
+						</div>
+
 						<LabeledSelect key="besteffort" label="Did you try your best?" name="besteffort" values={this.values}/>
 						<LabeledSelect key="interupted" label="Where you interupted during this task?" name="interupted" values={this.values}/>
 
@@ -134,9 +112,4 @@ class AfterEachTaskSurvey extends Component {
 			);
 	}
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> new_survey_metatable
-
 export default AfterEachTaskSurvey;

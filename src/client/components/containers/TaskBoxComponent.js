@@ -58,7 +58,7 @@ class TaskBoxComponent extends Component {
 	}
 
 	onMetadataChange(elem, index, e) {
-		console.log(parseInt(e.currentTarget.value) + ' , ' + index + ' , ' + elem.properties.building_nr);
+		// console.log(parseInt(e.currentTarget.value) + ' , ' + index + ' , ' + elem.properties.building_nr);
 		if (this.checkedVariables[e.currentTarget.value][index]) {  //Is unselected
 			delete this.metadata[elem.properties.building_nr+e.currentTarget.value];
 			this.checkedVariables[e.currentTarget.value][index] = false;
@@ -67,19 +67,15 @@ class TaskBoxComponent extends Component {
 		} else if (this.checkedVariables.count >= this.props.elementsInTask){
 			this.checkedVariables.tooMany = true;
 		} else {
-			console.log('set checkbox to true' + index);
 			this.metadata[elem.properties.building_nr+e.currentTarget.value] = elem;
 			this.checkedVariables[e.currentTarget.value][index] = true;
 			this.checkedVariables['count'] ++;
 		}
-		console.log(this.checkedVariables);
-		console.log(this.metadata);
 		this.setState({checkedMeta: this.checkedVariables});
 		this.props._changeEnableBtnState();
 	}
 
 	handleTimeout() {
-		console.log('changing state');
 		this.setState({taskType: this.task.METATASK});
 	}
 
@@ -157,11 +153,7 @@ class TaskBoxComponent extends Component {
 				</div>;
 		} else if (this.state.taskType == this.task.INFOTASK) {
 			const intro = this.props.task.description_geom.split('+')[0],
-<<<<<<< HEAD
-						tekst1 = this.props.task.description_geom.split('+')[1],
-=======
 						tekst1 = this.props.task.description_geom.split('+')[1].split('Tip:')[0],
->>>>>>> new_survey_metatable
 						// tip1 = this.props.task.description_geom.split('Tip:')[1],
 						tekst2 = this.props.task.description_meta.split('+')[0],
 						// tip2 = this.props.task.description_meta.split('Tip:')[1].split('+')[0],
@@ -188,10 +180,6 @@ class TaskBoxComponent extends Component {
 	_infoClickedLayer() {
 		let chosenGeomLayer = [];
 		let base = this.props;
-<<<<<<< HEAD
-=======
-		//console.log(this.props.activeTaskElements);
->>>>>>> new_survey_metatable
 		if (base.elementsInTask == base.currentTaskNum && base.elementsInTask !== 1) {
 			for (let i = 0; i < base.elementsInTask; i++) {
 				let buildingNr = this.props.activeTaskElements[i][2];
