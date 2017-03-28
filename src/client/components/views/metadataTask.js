@@ -64,8 +64,8 @@ class metadataTask extends Component{
 		let alternative_s = (this.props.elementsInTask == 1) ? 'alternative' : ' alternatives';
 		return (
 			<div className="">
-				<h5>2. Select {this.props.elementsInTask} {row_s} that describes an arbitrary building best</h5>
-				<p><i>Choose the most informative {row_s} by clicking the button in the first column, select {this.props.elementsInTask} {row_s}</i></p>
+				<h5>2. Select the {this.props.elementsInTask} most informative {row_s} that describes an arbitrary building best</h5>
+				<p><i>Think that the information should be informative for everyone, independent of education, background etc.</i></p>
 				<table key={'meta-table'} className="table table-striped">
 					<thead>
 					<tr>

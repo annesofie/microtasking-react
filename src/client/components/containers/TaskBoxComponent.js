@@ -140,9 +140,7 @@ class TaskBoxComponent extends Component {
 				</div>;
 		} else if (this.state.taskType == this.task.METATASK){
 			const info = (this.props.task.id === this.props.testTaskId) ? <div className=""><hr/><p>
-				<i>In this task chose the row which contains the most informative descriptions about an arbitrary building. Think that the information should be informative for everyone, independent of education, background etc.
-				</i> <br/><br/>
-				The finish-button will enable when the number of chosen rows matches the number asked for in the question. The number will vary between one and six. Here you need to select two row's since it's two buildings.
+				The finish-button will enable when the number of chosen rows matches the number asked for in the question. The number will vary between one and six. Here you need to select two rows.
 				</p></div> : '';
 			shownTask =
 				<div className="meta-tables-inline">
@@ -168,10 +166,7 @@ class TaskBoxComponent extends Component {
 					<p><i>Information about this survey</i></p>
 					<hr/>
 					<p><b>{intro}</b></p>
-					<p>{tekst1}</p>
-					{/*<p className="redishcolor">Tip: {tip1}</p>*/}
-					<p>{tekst2}</p>
-					{/*<p className="redishcolor">Tip: {tip2}</p>*/}
+					<p>{tekst1} {tekst2}</p>
 					<p>The layers on the map will change order and color between each task.</p>
 					<p className="pressnext"><i>{pressnext}</i></p>
 				</div>
