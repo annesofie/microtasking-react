@@ -79,16 +79,16 @@ class AfterEachTaskSurvey extends Component {
 					<fieldset>
 
 						<div className="row">
-							<label className="col-7">How difficult was this task?</label>
-							<p className="col-1 margin-negative-left">Easy</p>
-							<div className="col-3">
+							<label className="col-6">How difficult was this task?</label>
+							<div className="col-6 d-flex flex-row">
+								<p className="">Easy</p>
 								<input className="radio-btn-margin" type="radio" name="difficulty" value='1' onChange={this.setDifficulty}/>
 								<input className="radio-btn-margin" type="radio" name="difficulty" value='5' onChange={this.setDifficulty}/>
 								<input className="radio-btn-margin" type="radio" name="difficulty" value='2' onChange={this.setDifficulty}/>
 								<input className="radio-btn-margin" type="radio" name="difficulty" value='3' onChange={this.setDifficulty}/>
 								<input className="radio-btn-margin" type="radio" name="difficulty" value='4' onChange={this.setDifficulty}/>
+								<p className="">Hard</p>
 							</div>
-							<p className="col-1 margin-negative-left">Hard</p>
 						</div>
 
 						<LabeledSelect key="besteffort" label="Did you try your best?" name="besteffort" values={this.values}/>
