@@ -129,7 +129,7 @@ class TaskBoxComponent extends Component {
 						btnName: 'next',
 						answerview: this.task.METATASK
 					});
-					setTimeout(this.handleTimeout, 1500);
+					setTimeout(this.handleTimeout, 1800);
 				break;
 			case this.task.GEOMTASK:
 				clearInterval(this.interval);
@@ -140,7 +140,7 @@ class TaskBoxComponent extends Component {
 						answerview: this.task.GEOMTASK,
 						checkedMeta: this.checkedVariables
 					});
-					setTimeout(this.handleTimeout, 1800);
+					setTimeout(this.handleTimeout, 1500);
 				}.bind(this));
 				this.props._changeHideMapState(true); //Hide map
 				break;
