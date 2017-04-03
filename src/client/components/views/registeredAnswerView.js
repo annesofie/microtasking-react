@@ -15,10 +15,12 @@ class RegisteredAnswerView extends Component {
 			REGISTEREDANSWER: 3
 		};
 
+		this.donetext = (this.props.buildingsleftintask == 0 ? 'Good work, this task is finish!' : 'Good work, you have ' + this.props.buildingsleftintask + ' buildings left in this task');
+
 	}
 
 	render() {
-		const text = (this.props.answerview == this.task.GEOMTASK ? 'Get ready for question two' : 'Good work!');
+		const text = (this.props.answerview == this.task.GEOMTASK ? 'Get ready for question two' : this.donetext);
 		return (
 			<div className="d-flex flex-column align-content-center">
 				<div className="wrapper">

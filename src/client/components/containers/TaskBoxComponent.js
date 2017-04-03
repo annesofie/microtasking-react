@@ -20,9 +20,18 @@ class TaskBoxComponent extends Component {
 			REGISTEREDANSWER: 3
 		};
 
-		this.createBooleanArray(function () {
+		this.viewState = {
+			HOMEVIEW: 'home',
+			REGISTERVIEW: 'register',
+			TASKDESCRIPTIONVIEW: 'taskdescription',
+			TASKVIEW: 'taskview',
+			SURVEYVIEW: 'survey'
+		};
 
-		}.bind(this));
+		this.interval=0;
+		this.timeResult = {};
+
+		this.createBooleanArray();
 
 		this.state = {
 			taskType: this.task.INFOTASK,
@@ -32,14 +41,17 @@ class TaskBoxComponent extends Component {
 			checkedMeta: this.checkedVariables,
 			answerview: ''
 		};
-
-		this.change=false; //Change taskType
 		this.metadata=[];
 
 		this.createBooleanArray=this.createBooleanArray.bind(this);
 		this._taskChange = this._taskChange.bind(this);
 		this.onMetadataChange = this.onMetadataChange.bind(this);
 		this.handleTimeout = this.handleTimeout.bind(this);
+		this._timeElapsed = this._timeElapsed.bind(this);
+	}
+	componentWillUnmount(){
+		console.log('taskboxview will unmount');
+		clearInterval(this.interval);
 	}
 
 	createBooleanArray(callback) {
@@ -54,16 +66,16 @@ class TaskBoxComponent extends Component {
 			this.checkedVariables[0][i] = false;
 			this.checkedVariables[1][i] = false;
 		}
-		callback('done');
+		if (callback) callback('done');
 	}
 
 	onMetadataChange(elem, index, e) {
-		if (this.checkedVariables[e.currentTarget.value][index]) {  //Is unselected
+		if (this.checkedVariables[e.currentTarget.value][index]) {  // Unchecking the row
 			delete this.metadata[elem.properties.building_nr+e.currentTarget.value];
 			this.checkedVariables[e.currentTarget.value][index] = false;
 			this.checkedVariables.tooMany = false;
 			this.checkedVariables['count'] --;
-		} else if (this.checkedVariables.count >= this.props.elementsInTask){
+		} else if (this.checkedVariables.count >= this.props.elementsInTask){ // Too many rows is selected
 			this.checkedVariables.tooMany = true;
 		} else {
 			this.metadata[elem.properties.building_nr+e.currentTarget.value] = elem;
@@ -74,7 +86,13 @@ class TaskBoxComponent extends Component {
 		this.props._changeEnableBtnState();
 	}
 
-	handleTimeout() {
+	handleTimeout() {  // Change view after x seconds
+		console.log(this.props.taskview);
+		if (this.props.taskview == this.viewState.TASKVIEW) {
+			this.interval = setInterval(this._timeElapsed, 1000);
+		} else {
+			clearInterval(this.interval);
+		}
 		if (this.state.answerview == this.task.GEOMTASK) {
 			this.setState({
 				taskType: this.task.METATASK
@@ -83,25 +101,39 @@ class TaskBoxComponent extends Component {
 			this.setState({
 				taskType: this.task.GEOMTASK
 			});
-			this.props._changeHideMapState(false);
-			this.props._getNextTaskElements(false, function (resp) {
-			});
-			this.change=false;
+			this.props._changeHideMapState(false); //Show map
+			this.props._getNextTaskElements(false); //Get next buildings elements in task
 		}
+	}
+
+	_timeElapsed() {
+		const base = this.timeResult;
+		base['geomTime'] = (base['geomTime'] == undefined ? 0 : base['geomTime']);
+		base['metaTime'] = (base['metaTime'] == undefined ? 0 : base['metaTime']);
+		if (this.state.taskType == this.task.GEOMTASK) {
+			base['geomTime'] = base['geomTime']+1;
+		} else if (this.state.taskType == this.task.METATASK) {
+			base['metaTime'] = base['metaTime']+1;
+		}
+		base['totalTime']=base['geomTime']+base['metaTime'];
+		console.log(base);
 	}
 
 	_taskChange() {
 		switch (this.state.taskType) {
 			case this.task.METATASK:
+				this.props._setElapsedTaskTime(this.timeResult);
 				this.props._setChosenMetadata(this.metadata); //Set chosen metadata
+				clearInterval(this.interval);
 					this.setState({
 						taskType: this.task.REGISTEREDANSWER,
 						btnName: 'next',
 						answerview: this.task.METATASK
 					});
-					setTimeout(this.handleTimeout, 1000);
+					setTimeout(this.handleTimeout, 1500);
 				break;
 			case this.task.GEOMTASK:
+				clearInterval(this.interval);
 				this.createBooleanArray(function (resp) { //Reset boolean array
 					this.setState({
 						taskType: this.task.REGISTEREDANSWER,
@@ -112,14 +144,15 @@ class TaskBoxComponent extends Component {
 					setTimeout(this.handleTimeout, 1500);
 				}.bind(this));
 				this.props._changeHideMapState(true); //Hide map
-				this.change=true;
 				break;
 			case this.task.INFOTASK:
+				clearInterval(this.interval);
 				this.props._changeHideMapState(false); //Show map
 				this.setState({
 					taskType: this.task.GEOMTASK,
 					btnName: 'next'
 				});
+				this.interval = setInterval(this._timeElapsed, 1000);
 				break;
 			default:
 				break;
@@ -190,7 +223,8 @@ class TaskBoxComponent extends Component {
 				)
 			}
 		} else if (this.state.taskType == this.task.REGISTEREDANSWER) {
-			shownTask = <RegisteredAnswerView answerview={this.state.answerview}/>
+			const buildingsleftintask = 6 - this.props.currentTaskNum;
+			shownTask = <RegisteredAnswerView answerview={this.state.answerview} buildingsleftintask={buildingsleftintask}/>
 		}
 		return shownTask;
 	}
@@ -225,7 +259,6 @@ class TaskBoxComponent extends Component {
 		let shownTask = this._handleTaskChange();
 		let currentTask = (this.props.currentTaskNum/this.props.elementsInTask);
 		let totalnum = (6 / this.props.elementsInTask);
-		// let desc = !this.change ? this.props.task.description_geom : this.props.task.description_meta;
 		return (
 				<div className="p-2 task-box">
 					<h4 className="task-header">Task {this.props.tasknummer}. {this.props.task.title}</h4>

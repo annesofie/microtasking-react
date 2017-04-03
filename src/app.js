@@ -48,8 +48,7 @@ export default class extends Component {
 		this.randomOrderTaskElements = [];
 		this.chosenGeomLayer=[];
 		this.chosenMetadata=[];
-		this.timeResult= {};
-		this.interval=0;
+		this.timeResult = {};
 		this.num=0;  // Number in the task sequence (+1 i elementsInTask 1, +3 in elementsInTask 2, + numOfObjects in elementsInTask 3)
 		this.numOfObjects = 6; // ---- TODO! HUSK å endre, totalt antall task elements i DBen
 		this.taskMode = 0; // Taskmode number: 0, 1, 2, 3
@@ -59,8 +58,9 @@ export default class extends Component {
 		this._handleModeChange = this._handleModeChange.bind(this);
 		this._setParticipantId = this._setParticipantId.bind(this);
 		this._setChosenBuildingGeom = this._setChosenBuildingGeom.bind(this);
+		this._setElapsedTaskTime = this._setElapsedTaskTime.bind(this);
 		this._setChosenMetadata = this._setChosenMetadata.bind(this);
-		this._timeElapsed = this._timeElapsed.bind(this);
+		//this._timeElapsed = this._timeElapsed.bind(this);
 		this._handleTaskMode = this._handleTaskMode.bind(this);
 		this._changeHideMapState = this._changeHideMapState.bind(this);
 		this._changeProgressTitle = this._changeProgressTitle.bind(this);
@@ -73,9 +73,7 @@ export default class extends Component {
 		taskApi.getTaskOrder().then(listorder => {
 			listorder.unshift(this.testTaskId);
 			this.setState({taskorder: listorder});
-			this._getTaskElements(this.testTaskId, function(resp) {
-				//console.log(resp);
-			});
+			this._getTaskElements(this.testTaskId);
 			taskApi.getTask(this.testTaskId).then(elem => {
 				console.log(this.state.taskorder);
 				this.setState({task: elem});
@@ -89,7 +87,9 @@ export default class extends Component {
 		getAllElements(id, function(resp) {
 			this.randomOrderTaskElements = resp;
 			//this.setState({activeTaskElements: resp});
-			callback(resp);
+			if (callback) {
+				callback(resp);
+			}
 		}.bind(this));
 	}
 
@@ -105,15 +105,18 @@ export default class extends Component {
 	_setChosenMetadata(obj) {
 		this.chosenMetadata = obj;
 	}
-
+	_setElapsedTaskTime(time) {
+		console.log(time);
+		this.timeResult = time;
+	}
 	_changeHideMapState(bool) {
-		clearInterval(this.interval);
+		//clearInterval(this.interval);
 		this.numOfChosenElem = 0;
 		this.setState({
 			hidemap: bool,
 			enableBtn: false
 		});
-		this.interval = setInterval(this._timeElapsed, 1000);
+		//this.interval = setInterval(this._timeElapsed, 1000);
 	}
 	_changeEnableBtnState() {
 		this.numOfChosenElem +=1;
@@ -134,7 +137,6 @@ export default class extends Component {
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
 					this.setState({mode: this.viewState.TASKVIEW});
-					this.interval = setInterval(this._timeElapsed, 1000);
 				}.bind(this));
 				break;
 			case this.viewState.TASKVIEW:
@@ -142,7 +144,6 @@ export default class extends Component {
 					const base = this.timeResult;
 					base['totalTime']=base['geomTime']+base['metaTime'];
 				//}
-				clearInterval(this.interval);
 				this.setState({mode: this.viewState.SURVEYVIEW});
 				break;
 			case this.viewState.SURVEYVIEW:
@@ -158,20 +159,9 @@ export default class extends Component {
 							chosenBuildingGeom: [],
 							mode: this.viewState.TASKVIEW
 						});
-						this.interval = setInterval(this._timeElapsed, 1000);
 					}.bind(this));
 				}
 				break;
-		}
-	}
-	_timeElapsed() {
-		const base = this.timeResult;
-		base['geomTime'] = (base['geomTime'] == undefined ? 0 : base['geomTime']);
-		base['metaTime'] = (base['metaTime'] == undefined ? 0 : base['metaTime']);
-		if (!this.state.hidemap) {
-			base['geomTime'] = base['geomTime']+1;
-		} else {
-			base['metaTime'] = base['metaTime']+1;
 		}
 	}
 	_handleTaskMode(isFirst, callback) {
@@ -192,7 +182,7 @@ export default class extends Component {
 					currentTaskNum: this.num+1
 				});
 				this.num += 1;
-				callback('done');
+				if (callback) callback('done');
 			}.bind(this))
 		} else if (this.elementsInTask == 3 && this.num < this.numOfObjects) {
 			//this.chosenGeomLayer=[]; //Reset
@@ -202,7 +192,7 @@ export default class extends Component {
 					currentTaskNum: this.num + 3
 				});
 				this.num += 3;
-				callback('done');
+				if (callback) callback('done');
 			}.bind(this));
 		} else if (this.num < this.numOfObjects){
 				//use all
@@ -212,10 +202,9 @@ export default class extends Component {
 					activeTaskElements: resp,
 					currentTaskNum: this.num
 				});
-				callback('done');
+				if (callback) callback('done');
 			}.bind(this));
 		} else if (!isFirst){
-			//console.log('task finish, go to survey view');
 			this._handleModeChange(); //Go to Survey view
 		}
 	}
@@ -292,6 +281,7 @@ export default class extends Component {
 						<TaskBoxComponent task={this.state.task}
 															testTaskId={this.testTaskId}
 															tasknummer={this.taskMode}
+															taskview={this.state.mode}
 															currentTaskNum={this.state.currentTaskNum}
 															elementsInTask={this.state.map_taskmode}
 															hidemap={this.state.hidemap}
@@ -299,6 +289,7 @@ export default class extends Component {
 															chosenBuildingGeom={this.state.chosenBuildingGeom}
 															enableBtn={this.state.enableBtn}
 															_setChosenMetadata={this._setChosenMetadata}
+															_setElapsedTaskTime={this._setElapsedTaskTime}
 															_getNextTaskElements={this._handleTaskMode}
 															_changeHideMapState={this._changeHideMapState}
 															_changeEnableBtnState={this._changeEnableBtnState}
