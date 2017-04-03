@@ -24,9 +24,15 @@ $button-backgroundcolor: #bebebe;
     bottom: 2vh;
     right: 35vw;
 }
-
 .choose-btn {
-    color: white;
+    width: 3.5vw;
+    height: 5.5vh;
+    color: #737070;
+    border-radius: 8px;
+    background-color: #efefef;
+}
+.choose-btn:disabled {
+    color: #6f6f6f;
     border-radius: 8px;
     background-color: #cacaca;
 }

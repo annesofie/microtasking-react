@@ -3,6 +3,7 @@
  */
 
 import React, {Component} from 'react';
+import LeafletControl from 'react-leaflet-control';
 import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON, LayersControl} from 'react-leaflet'
 
 class OneTaskMapView extends Component {
@@ -49,6 +50,12 @@ class OneTaskMapView extends Component {
 							{layer2}
 						</LayersControl.Overlay>
 					</LayersControl>
+					<LeafletControl position="bottomleft">
+						<div className="map-legend">
+							<h5 style={{color: this.props.colorPair[0]}}>Geom 1</h5>
+							<h5 style={{color: this.props.colorPair[1]}}>Geom 2</h5>
+						</div>
+					</LeafletControl>
 				</Map>
 			</div>
 		)

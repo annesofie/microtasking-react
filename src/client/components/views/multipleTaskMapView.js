@@ -3,7 +3,8 @@
  */
 
 import React, {Component} from 'react';
-import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON, LayersControl} from 'react-leaflet'
+import LeafletControl from 'react-leaflet-control';
+import { Map, TileLayer, Marker, Popup, LayerGroup, GeoJSON, LayersControl} from 'react-leaflet';
 
 class MultipleMapView extends Component {
 
@@ -13,6 +14,7 @@ class MultipleMapView extends Component {
 		this.getLayergroupConfl = this.getLayergroupConfl.bind(this);
 		this.getLayergroupElem = this.getLayergroupElem.bind(this);
 	}
+
 
 	oneTaskElemLayerGroup(elem) {
 		return <LayerGroup>
@@ -47,7 +49,7 @@ class MultipleMapView extends Component {
 		let layerControlOverlayList = [];
 		layerelem.map((elem, index) => {
 			let build = this.props.activeTaskElements[index][0];
-			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_elem_'+build.id} name={'Building ' + build.properties.building_nr + ' ' + build.properties.title} checked={true}>
+			layerControlOverlayList[index] = <LayersControl.Overlay className="layercontrol0" key={'lco_elem_'+build.id} name={'Building ' + build.properties.building_nr + ' ' + build.properties.title} checked={true} >
 				{layerelem[index]}
 			</LayersControl.Overlay>;
 		});
@@ -58,7 +60,7 @@ class MultipleMapView extends Component {
 		let layerControlOverlayList = [];
 		layerconfl.map((elem, index) => {
 			let build = this.props.activeTaskElements[index][1];
-			layerControlOverlayList[index] = <LayersControl.Overlay key={'lco_confl_'+this.props.activeTaskElements[index][1].id} name={'Building ' + build.properties.building_nr + ' ' + build.properties.title} checked={true}>
+			layerControlOverlayList[index] = <LayersControl.Overlay className="layercontrol1" key={'lco_confl_'+this.props.activeTaskElements[index][1].id} name={'Building ' + build.properties.building_nr + ' ' + build.properties.title} checked={true} >
 				{layerconfl[index]}
 			</LayersControl.Overlay>;
 		});
@@ -86,6 +88,12 @@ class MultipleMapView extends Component {
 							{layercontroloverlay2[index]}
 						</LayersControl>;
 					})}
+					<LeafletControl position="bottomleft">
+						<div className="map-legend">
+							<h5 style={{color: this.props.colorPair[0]}}>Geom 1</h5>
+							<h5 style={{color: this.props.colorPair[1]}}>Geom 2</h5>
+						</div>
+					</LeafletControl>
 				</Map>
 			</div>
 		)

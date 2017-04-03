@@ -116,7 +116,6 @@ class TaskBoxComponent extends Component {
 			base['metaTime'] = base['metaTime']+1;
 		}
 		base['totalTime']=base['geomTime']+base['metaTime'];
-		console.log(base);
 	}
 
 	_taskChange() {
@@ -267,7 +266,7 @@ class TaskBoxComponent extends Component {
 					<div className="d-flex justify-content-end margin-top">
 						<p className="margin-right margin-top" style={{display: this.state.showTaskProgress ? 'inline' : 'none'}}>
 							Task {this.props.tasknummer} progress: {currentTask} / {totalnum}</p>
-						<button className="btn-sm btn-outline-secondary choose-btn"
+						<button className="btn-sm choose-btn"
 										style={{display: (this.state.taskType == this.task.REGISTEREDANSWER) ? 'none' : 'inline'}}
 										onClick={this._taskChange} disabled={!this.props.enableBtn}>
 							{this.state.btnName}

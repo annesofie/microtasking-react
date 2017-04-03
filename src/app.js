@@ -110,13 +110,11 @@ export default class extends Component {
 		this.timeResult = time;
 	}
 	_changeHideMapState(bool) {
-		//clearInterval(this.interval);
 		this.numOfChosenElem = 0;
 		this.setState({
 			hidemap: bool,
 			enableBtn: false
 		});
-		//this.interval = setInterval(this._timeElapsed, 1000);
 	}
 	_changeEnableBtnState() {
 		this.numOfChosenElem +=1;
@@ -128,11 +126,10 @@ export default class extends Component {
 	_handleModeChange() {
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				 this.setState({mode: this.viewState.REGISTERVIEW});
-				//this._handleTaskMode(true, function(str) {
-				//	this.setState({mode: this.viewState.TASKVIEW});
-				//	this.interval = setInterval(this._timeElapsed, 1000);
-				//}.bind(this));
+				 //this.setState({mode: this.viewState.REGISTERVIEW});
+				this._handleTaskMode(true, function(str) {
+					this.setState({mode: this.viewState.TASKVIEW});
+				}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {

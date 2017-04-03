@@ -3,9 +3,6 @@
  */
 import React, {Component} from 'react';
 
-//Presentational Components should never change the prop data itself.
-//In fact, any component that receives props should consider that data immutable and owned by the parent.
-
 class metadataTask extends Component{
 
 	setInputInMetaTable() {
@@ -62,9 +59,10 @@ class metadataTask extends Component{
 		let tableInput = this.setInputInMetaTable();
 		let row_s = (this.props.elementsInTask == 1) ? 'row' : ' rows';
 		let alternative_s = (this.props.elementsInTask == 1) ? 'alternative' : ' alternatives';
+		let building_s = (this.props.elementsInTask == 1) ? 'an arbitrary building best' : ' arbitrary buildings best';
 		return (
 			<div className="">
-				<h5>2. Select the {this.props.elementsInTask} most informative {row_s} that describes an arbitrary building best</h5>
+				<h5>2. Select the {this.props.elementsInTask} most informative {row_s} that describes {building_s}</h5>
 				<p><i>Think that the information should be informative for everyone, independent of education, background etc.</i></p>
 				<table key={'meta-table'} className="table table-striped">
 					<thead>

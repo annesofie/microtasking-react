@@ -20,7 +20,6 @@ class RegisterFormView extends Component {
 
 		this.values = ['Select', 'Yes', 'No'];
 		this.genderval = ['Select', 'Female', 'Male'];
-		this.ageGroup = ['Select', '15-25', '36-45', '46-55', '56-65', '66-75', '76-100'];
 		this.saveAndContinue = this.saveAndContinue.bind(this);
 		this.checkInput = this.checkInput.bind(this);
 	}
@@ -45,15 +44,7 @@ class RegisterFormView extends Component {
 		}
 	}
 
-
 	render() {
-		const LabeledInput = (props) => (
-			<div className="pure-control-group">
-				<Label value={props.label} position="before">
-					<TextInput id="register-input" {...props}/>
-				</Label>
-			</div>
-		);
 		const LabeledSelect = (props) => (
 			<div className="pure-control-group">
 				<Label value={props.label} position="before">
@@ -72,7 +63,7 @@ class RegisterFormView extends Component {
 					</div>
 
 					<LabeledSelect label="Gender" name="gender" values={this.genderval} />
-					<LabeledSelect label="Do you have experience of working with spatialdata?" name="experienced" values={this.values}/>
+					<LabeledSelect label="Do you have experience of working with spatial data?" name="experienced" values={this.values}/>
 					<LabeledSelect label="Have you heard of micro-tasking before?" name="microtasking" values={this.values}/>
 
 					<p style={{textAlign: 'center', color: 'blue', display: this.props.showMessage ? 'block' : 'none'}}>Please select an alternative on every question</p>
@@ -86,7 +77,5 @@ class RegisterFormView extends Component {
 
 	}
 }
-
-/*<LabeledSelect label="Age" name="age" values={this.ageGroup} placeholder="dkjha" />*/
 
 export default RegisterFormView;
