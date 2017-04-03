@@ -26,14 +26,12 @@ class AfterEachTaskSurvey extends Component {
 			survey: this.initialData
 		};
 
-		// this.values = [{label: 'Yes', value: true}, {label: 'No', value: false}];
 		this.values = ['Select', 'Yes', 'No'];
 
 		this.saveAndContinue = this.saveAndContinue.bind(this);
-		// this.checkInput = this.checkInput.bind(this);
+		this.checkInput = this.checkInput.bind(this);
 		this.startTaskView = this.startTaskView.bind(this);
 		this.setDifficulty = this.setDifficulty.bind(this);
-		//this.checkValidation = this.checkValidation.bind(this);
 	}
 
 	saveAndContinue() {
@@ -41,8 +39,6 @@ class AfterEachTaskSurvey extends Component {
 		this.initialData.interupted = this.checkInput(this.initialData.interupted);
 		this.initialData.comment = this.refs.comment.value;
 		console.log(this.initialData);
-		//this.initialData.besteffort == 'Yes' ? this.initialData.besteffort=true :	this.initialData.besteffort=false;
-		//this.initialData.interupted == 'No' ? this.initialData.interupted=false :	this.initialData.interupted=true;
 		this.props.handleRegisterSubmit(this.initialData, false);
 	}
 
@@ -97,6 +93,8 @@ class AfterEachTaskSurvey extends Component {
 						<Label>Other comments?
 							<textarea className="survey-comment-textarea" name="comment" ref="comment" id="comment-textarea" cols="30" rows="10"/>
 						</Label>
+
+						<p style={{textAlign: 'center', color: 'purple', display: this.props.showMessage ? 'block' : 'none'}}>Please select an alternative on every question</p>
 
 						<div className="pure-controls">
 							<button className="pure-button btn-outline-success" type="submit">

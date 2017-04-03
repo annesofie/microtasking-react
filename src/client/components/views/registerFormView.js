@@ -17,17 +17,32 @@ class RegisterFormView extends Component {
 			experienced: '',
 			microtasking: ''
 		};
+
 		this.values = ['Select', 'Yes', 'No'];
 		this.genderval = ['Select', 'Female', 'Male'];
 		this.ageGroup = ['Select', '15-25', '36-45', '46-55', '56-65', '66-75', '76-100'];
 		this.saveAndContinue = this.saveAndContinue.bind(this);
+		this.checkInput = this.checkInput.bind(this);
 	}
 
 	saveAndContinue() {
-		this.initialData.experienced == 'Yes' ? this.initialData.experienced=true :	this.initialData.experienced=false;
-		this.initialData.microtasking == 'Yes' ? this.initialData.microtasking=true :	this.initialData.microtasking=false;
+		this.initialData.experienced = this.checkInput(this.initialData.experienced);
+		this.initialData.microtasking = this.checkInput(this.initialData.microtasking);
 		this.initialData.age = this.refs.age.value;
+		this.initialData.nationality = 'unknown';
 		this.props.handleRegisterSubmit(this.initialData, true);
+	}
+
+	checkInput(answer) {
+		if (answer === 'Select') {
+			return undefined;
+		} else if (answer === 'Yes') {
+			return true;
+		} else if (answer === 'No') {
+			return false;
+		} else {
+			return answer;
+		}
 	}
 
 
@@ -59,6 +74,8 @@ class RegisterFormView extends Component {
 					<LabeledSelect label="Gender" name="gender" values={this.genderval} />
 					<LabeledSelect label="Do you have experience of working with spatialdata?" name="experienced" values={this.values}/>
 					<LabeledSelect label="Have you heard of micro-tasking before?" name="microtasking" values={this.values}/>
+
+					<p style={{textAlign: 'center', color: 'blue', display: this.props.showMessage ? 'block' : 'none'}}>Please select an alternative on every question</p>
 
 					<div className="pure-controls">
 						<button className="pure-button pure-button-primary" type="submit">Submit</button>

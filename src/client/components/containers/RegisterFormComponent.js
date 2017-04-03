@@ -16,7 +16,8 @@ export default class RegisterFormComponent extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			value: null
+			value: null,
+			showMessage: false
 		};
 		this.participantValues = {
 			age: 0,
@@ -31,15 +32,25 @@ export default class RegisterFormComponent extends Component {
 	handleRegisterSubmit(data, isRegistration) {
 		this.participantValues = Object.assign({}, this.participantValues, data);
 		if (isRegistration) {
-			taskApi.saveParticipant(this.participantValues).then(resp => {
-				const participant = resp.data;
-				this.props._setParticipantId(participant);
-			})
+			taskApi.saveParticipant(this.participantValues)
+				.then(resp => {
+					if (resp.response && resp.response.status == 400) {
+						this.setState({showMessage: true});
+					} else {
+						const participant = resp.data;
+						this.props._setParticipantId(participant);
+					}
+				})
 		} else if (!isRegistration){
-			this.props.task.id == this.props.testTaskId ?
-				this.props._handleModeChange() :
+			//this.props.task.id == this.props.testTaskId ?
+			//	this.props._handleModeChange() :
 				resultApi.saveTaskSurvey(data).then(resp => {
-					this.props._handleModeChange();
+					console.log(resp);
+					if (resp.response && resp.response.status == 400) {
+						this.setState({showMessage: true});
+					} else {
+						this.props._handleModeChange();
+					}
 				})
 		}
 
@@ -49,11 +60,12 @@ export default class RegisterFormComponent extends Component {
 		if (this.props.mode == 'register') {
 			return (
 				<div className="container-fluid">
-					<div className="d-flex flex-row justify-content-center">
+					<div className="d-flex flex-row justify-content-center padding-top">
 						<h4>Registration</h4>
 						<RegisterFormView
 							handleRegisterSubmit={this.handleRegisterSubmit}
 							fieldValues={this.participantValues}
+							showMessage={this.state.showMessage}
 						/>
 					</div>
 				</div>
@@ -76,6 +88,7 @@ export default class RegisterFormComponent extends Component {
 									task={this.props.task}
 									testTaskId={this.props.testTaskId}
 									handleRegisterSubmit={this.handleRegisterSubmit}
+									showMessage={this.state.showMessage}
 								/>
 							</div>
 					</div>

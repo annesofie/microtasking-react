@@ -4,6 +4,8 @@
 import axios from 'axios';
 
 const apiURL = 'http://34.252.179.235/result/';
+//const apiURL = 'http://localhost:8000/result/';
+
 
 export function saveTaskSurvey(data) {
 	return axios.post(apiURL+'tasksurvey/', {
@@ -34,5 +36,4 @@ export function saveTaskResult(data) {
 	})
 		.then(response => response)
 		.catch(error => error)
-
 }

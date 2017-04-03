@@ -25,11 +25,12 @@ class TaskBoxComponent extends Component {
 		}.bind(this));
 
 		this.state = {
-			taskType: (this.props.task.id == this.props.testTaskId ? this.task.INFOTASK : this.task.GEOMTASK),
-			btnName: 'next',
+			taskType: this.task.INFOTASK,
+			btnName: 'start',
 			shownTask: null,
 			showTaskProgress: !(this.props.task.id == this.props.testTaskId),
-			checkedMeta: this.checkedVariables
+			checkedMeta: this.checkedVariables,
+			answerview: ''
 		};
 
 		this.change=false; //Change taskType
@@ -57,7 +58,6 @@ class TaskBoxComponent extends Component {
 	}
 
 	onMetadataChange(elem, index, e) {
-		// console.log(parseInt(e.currentTarget.value) + ' , ' + index + ' , ' + elem.properties.building_nr);
 		if (this.checkedVariables[e.currentTarget.value][index]) {  //Is unselected
 			delete this.metadata[elem.properties.building_nr+e.currentTarget.value];
 			this.checkedVariables[e.currentTarget.value][index] = false;
@@ -75,33 +75,41 @@ class TaskBoxComponent extends Component {
 	}
 
 	handleTimeout() {
-		this.setState({
-			taskType: this.task.METATASK
-		});
+		if (this.state.answerview == this.task.GEOMTASK) {
+			this.setState({
+				taskType: this.task.METATASK
+			});
+		} else if (this.state.answerview == this.task.METATASK) {
+			this.setState({
+				taskType: this.task.GEOMTASK
+			});
+			this.props._changeHideMapState(false);
+			this.props._getNextTaskElements(false, function (resp) {
+			});
+			this.change=false;
+		}
 	}
 
 	_taskChange() {
 		switch (this.state.taskType) {
 			case this.task.METATASK:
 				this.props._setChosenMetadata(this.metadata); //Set chosen metadata
-				this.setState({
-					taskType: this.task.GEOMTASK,
-					btnName: 'next'
-				});
-				this.props._changeHideMapState(false);
-				this.props._getNextTaskElements(false, function (resp) {
-					//console.log(resp);
-				});
-				this.change=false;
+					this.setState({
+						taskType: this.task.REGISTEREDANSWER,
+						btnName: 'next',
+						answerview: this.task.METATASK
+					});
+					setTimeout(this.handleTimeout, 1000);
 				break;
 			case this.task.GEOMTASK:
 				this.createBooleanArray(function (resp) { //Reset boolean array
 					this.setState({
 						taskType: this.task.REGISTEREDANSWER,
 						btnName: 'finish',
-						checkedMeta: this.checkedVariables,
+						answerview: this.task.GEOMTASK,
+						checkedMeta: this.checkedVariables
 					});
-					setTimeout(this.handleTimeout, 1000);
+					setTimeout(this.handleTimeout, 1500);
 				}.bind(this));
 				this.props._changeHideMapState(true); //Hide map
 				this.change=true;
@@ -110,6 +118,7 @@ class TaskBoxComponent extends Component {
 				this.props._changeHideMapState(false); //Show map
 				this.setState({
 					taskType: this.task.GEOMTASK,
+					btnName: 'next'
 				});
 				break;
 			default:
@@ -154,25 +163,34 @@ class TaskBoxComponent extends Component {
 					{info}
 				</div>;
 		} else if (this.state.taskType == this.task.INFOTASK) {
-			const intro = this.props.task.description_geom.split('+')[0],
-						tekst1 = this.props.task.description_geom.split('+')[1].split('Tip:')[0],
-						// tip1 = this.props.task.description_geom.split('Tip:')[1],
-						tekst2 = this.props.task.description_meta.split('+')[0],
-						// tip2 = this.props.task.description_meta.split('Tip:')[1].split('+')[0],
-						pressnext = this.props.task.description_meta.split('+')[1];
+			if (this.props.task.id == this.props.testTaskId) {
+				const intro = this.props.task.description_geom.split('+')[0],
+							tekst1 = this.props.task.description_geom.split('+')[1].split('Tip:')[0],
+							tekst2 = this.props.task.description_meta.split('+')[0],
+							pressnext = this.props.task.description_meta.split('+')[1];
 
-			shownTask = (
-				<div className="padding-infotext">
-					<p><i>Information about this survey</i></p>
-					<hr/>
-					<p><b>{intro}</b></p>
-					<p>{tekst1} {tekst2}</p>
-					<p>The layers on the map will change order and color between each task.</p>
-					<p className="pressnext"><i>{pressnext}</i></p>
-				</div>
+				shownTask = (
+					<div className="padding-infotext">
+						<p><i>Information about this survey</i></p>
+						<hr/>
+						<p><b>{intro}</b></p>
+						<p>{tekst1} {tekst2}</p>
+						<p>The layers on the map will change order and color between each task.</p>
+						<p className="pressnext"><i>{pressnext}</i></p>
+					</div>
+					)
+			} else {
+				const text = this.props.task.description_geom.split('+')[0],
+							text2 = (this.props.tasknummer == 3 ? 'Get ready for the last task' : 'Get ready for task ' + this.props.tasknummer);
+				shownTask = (
+					<div className="padding-infotext2">
+						<p><b>{text2}</b></p>
+						<p>{text}</p>
+					</div>
 				)
+			}
 		} else if (this.state.taskType == this.task.REGISTEREDANSWER) {
-			shownTask = <RegisteredAnswerView/>
+			shownTask = <RegisteredAnswerView answerview={this.state.answerview}/>
 		}
 		return shownTask;
 	}
@@ -210,7 +228,7 @@ class TaskBoxComponent extends Component {
 		// let desc = !this.change ? this.props.task.description_geom : this.props.task.description_meta;
 		return (
 				<div className="p-2 task-box">
-					<h4 className="task-header">{this.props.tasknummer}. {this.props.task.title}</h4>
+					<h4 className="task-header">Task {this.props.tasknummer}. {this.props.task.title}</h4>
 					<hr/>
 					{shownTask}
 					<div className="d-flex justify-content-end margin-top">

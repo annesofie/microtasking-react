@@ -32,7 +32,7 @@ export default class OneTaskMapComponent extends Component {
 			const buildingNr = e.target.feature.properties.building_nr;
 			if (this.activelayer[buildingNr]) {  //if building already been selected
 				if (this.activelayer[buildingNr] !== e.target) { //pressed the other layer
-					console.log('the other layer is pressed');
+					//console.log('the other layer is pressed');
 					this.activelayer[buildingNr].setStyle({
 						color: this.colorPair[1],
 						weight: 4

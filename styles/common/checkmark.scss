@@ -1,82 +1,33 @@
-@-webkit-keyframes check {
+.great-job {
+  font-family: sans-serif;
+  color: #6f6f6f;
+  font-size: 25px;
+  font-weight: bold;
+  margin: 20px auto;
+  text-align: center;
+  animation: text .5s linear .4s;
+  -webkit-animation: text .4s linear .3s;
+}
+
+.wrapper {
+  width: 100px;
+  margin: 4em auto 0;
+}
+
+.checkmark2 {
+  stroke: green;
+  stroke-dashoffset: 745.74853515625;
+  stroke-dasharray: 745.74853515625;
+  animation: dash 2s ease-out forwards infinite;
+}
+
+@keyframes dash {
   0% {
-    height: 0;
-    width: 0;
+    stroke-dashoffset: 745.74853515625;
   }
-
-  33.3333% {
-    width: 40px;
-    height: 0;
-  }
-
-}
-@-moz-keyframes check {
-  0% {
-    height: 0;
-    width: 0;
-  }
-
-  33.3333% {
-    width: 40px;
-    height: 0;
-  }
-}
-@-ms-keyframes check {
-  0% {
-    height: 0;
-    width: 0;
-  }
-
-  33.3333% {
-    width: 40px;
-    height: 0;
-  }
-}
-@keyframes check {
-  0% {
-    height: 0;
-    width: 0;
-  }
-
-  33.3333% {
-    width: 40px;
-    height: 0;
+  100% {
+    stroke-dashoffset: 0;
   }
 }
 
 
-.checkmark {
-  display: block;
-  height: 200px;
-  position: relative;
-  width: 200px;
-  margin-left: 38vw;
-}
-
-
-.checkmark:after {
-  -webkit-animation: check .8s;
-  -moz-animation: check .8s ;
-  -o-animation: check .8s;
-  animation: check .8s;
-}
-
-.checkmark:after {
-  -moz-transform: scaleX(-1) rotate(135deg);
-  -ms-transform: scaleX(-1) rotate(135deg);
-  -webkit-transform: scaleX(-1) rotate(135deg);
-  transform: scaleX(-1) rotate(135deg);
-  -moz-transform-origin: left top;
-  -ms-transform-origin: left top;
-  -webkit-transform-origin: left top;
-  transform-origin: left top;
-  border-right: 30px solid #68d683;
-  border-top: 30px solid #68d683;
-  content: '';
-  display: block;
-  height: 80px;
-  left: 14px;
-  position: absolute;
-  top: 100px;
-  width: 40px;
-}

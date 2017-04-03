@@ -103,7 +103,6 @@ export default class extends Component {
 		this._changeEnableBtnState();
 	}
 	_setChosenMetadata(obj) {
-		//console.log(obj);
 		this.chosenMetadata = obj;
 	}
 
@@ -124,14 +123,13 @@ export default class extends Component {
 		}
 	}
 	_handleModeChange() {
-		//console.log(this.state.mode);
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				// this.setState({mode: this.viewState.REGISTERVIEW});
-				this._handleTaskMode(true, function(str) {
-					this.setState({mode: this.viewState.TASKVIEW});
-					this.interval = setInterval(this._timeElapsed, 1000);
-				}.bind(this));
+				 this.setState({mode: this.viewState.REGISTERVIEW});
+				//this._handleTaskMode(true, function(str) {
+				//	this.setState({mode: this.viewState.TASKVIEW});
+				//	this.interval = setInterval(this._timeElapsed, 1000);
+				//}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
@@ -140,19 +138,18 @@ export default class extends Component {
 				}.bind(this));
 				break;
 			case this.viewState.TASKVIEW:
-				if (this.state.task.id !== this.testTaskId) {
+				//if (this.state.task.id !== this.testTaskId) {
 					const base = this.timeResult;
 					base['totalTime']=base['geomTime']+base['metaTime'];
-					//console.log(this.timeResult);
-				}
+				//}
 				clearInterval(this.interval);
 				this.setState({mode: this.viewState.SURVEYVIEW});
 				break;
 			case this.viewState.SURVEYVIEW:
-				if (this.state.task.id !== this.testTaskId) {
 					console.log('save task result');
+				//if (this.state.task.id !== this.testTaskId) {
 					saveTaskResult(this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task);
-				}
+				//}
 				if(this.taskMode == 3) {
 					this.setState({mode: this.viewState.HOMEVIEW});
 				} else {
@@ -233,7 +230,8 @@ export default class extends Component {
 		this.timeResult = {};
 		this.setState({
 			currentTaskNum: this.num,
-			enableBtn: false
+			enableBtn: true,
+			hidemap: true
 		});
 		console.log('get next task ' + this.taskMode);
 		taskApi.getTask(this.state.taskorder[this.taskMode]).then(elem => {
