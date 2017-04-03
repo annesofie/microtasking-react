@@ -39,7 +39,7 @@ class OneTaskMapView extends Component {
 					center={position} zoom={this.props.mapOptions.zoom}
 				>
 					<TileLayer
-						url={ortomap+tileapikey}
+						url={mapboxtile}
 						maxZoom={20}
 					/>
 					<LayersControl position='topright' collapsed={false}>

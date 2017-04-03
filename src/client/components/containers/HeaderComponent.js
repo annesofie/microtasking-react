@@ -17,10 +17,10 @@ class HeaderComponent extends Component {
 			return (
 				<div id="header" className="start-view">
 					<div className="d-flex flex-row justify-content-center">
-						<h1 className="header-text">Thank you for your contributions to the Micro tasking Survey</h1>
+						<h3 className="header-text">Thank you for your contributions!</h3>
 					</div>
 					<div className="d-flex flex-row justify-content-center">
-						<h3>The results will be available in mid june</h3>
+						<h5>The results will be available in mid june</h5>
 					</div>
 				</div>
 			)

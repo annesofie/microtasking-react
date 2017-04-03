@@ -140,7 +140,7 @@ class TaskBoxComponent extends Component {
 						answerview: this.task.GEOMTASK,
 						checkedMeta: this.checkedVariables
 					});
-					setTimeout(this.handleTimeout, 1500);
+					setTimeout(this.handleTimeout, 1800);
 				}.bind(this));
 				this.props._changeHideMapState(true); //Hide map
 				break;
@@ -264,8 +264,8 @@ class TaskBoxComponent extends Component {
 					<hr/>
 					{shownTask}
 					<div className="d-flex justify-content-end margin-top">
-						<p className="margin-right margin-top" style={{display: this.state.showTaskProgress ? 'inline' : 'none'}}>
-							Task {this.props.tasknummer} progress: {currentTask} / {totalnum}</p>
+						<p className="margin-right" style={{display: this.state.showTaskProgress ? 'inline' : 'none'}}>
+							<i>Task {this.props.tasknummer} progress: {currentTask} / {totalnum}</i></p>
 						<button className="btn-sm choose-btn"
 										style={{display: (this.state.taskType == this.task.REGISTEREDANSWER) ? 'none' : 'inline'}}
 										onClick={this._taskChange} disabled={!this.props.enableBtn}>
