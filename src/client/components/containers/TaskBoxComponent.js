@@ -49,8 +49,8 @@ class TaskBoxComponent extends Component {
 		this.handleTimeout = this.handleTimeout.bind(this);
 		this._timeElapsed = this._timeElapsed.bind(this);
 	}
+
 	componentWillUnmount(){
-		console.log('taskboxview will unmount');
 		clearInterval(this.interval);
 	}
 
