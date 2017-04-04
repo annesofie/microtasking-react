@@ -51,6 +51,11 @@ export function getConflictsInTask(taskid) {
 		});
 }
 
+export function getBuildingElements(buildingid) {
+	return axios.get(apiURL+'buildings/'+buildingid+'/')
+		.then(response => response.data)
+		.catch(error => error)
+}
 
 
 //

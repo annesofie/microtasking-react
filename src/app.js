@@ -60,22 +60,21 @@ export default class extends Component {
 		this._setChosenBuildingGeom = this._setChosenBuildingGeom.bind(this);
 		this._setElapsedTaskTime = this._setElapsedTaskTime.bind(this);
 		this._setChosenMetadata = this._setChosenMetadata.bind(this);
-		//this._timeElapsed = this._timeElapsed.bind(this);
 		this._handleTaskMode = this._handleTaskMode.bind(this);
 		this._changeHideMapState = this._changeHideMapState.bind(this);
 		this._changeProgressTitle = this._changeProgressTitle.bind(this);
 		this._changeEnableBtnState = this._changeEnableBtnState.bind(this);
- 		this._getTaskElements = this._getTaskElements.bind(this);
 		this._getNextTask = this._getNextTask.bind(this);
+		this._getBuildingTaskElements = this._getBuildingTaskElements.bind(this);
 	}
 
 	componentDidMount() {
 		taskApi.getTaskOrder().then(listorder => {
 			listorder.unshift(this.testTaskId);
 			this.setState({taskorder: listorder});
-			this._getTaskElements(this.testTaskId);
 			taskApi.getTask(this.testTaskId).then(elem => {
 				console.log(this.state.taskorder);
+				this._getBuildingTaskElements(elem);
 				this.setState({task: elem});
 				this.elementsInTask = elem.num_of_elements;
 				this.setState({map_taskmode: elem.num_of_elements});
@@ -83,13 +82,9 @@ export default class extends Component {
 		});
 	}
 
-	_getTaskElements(id, callback) {
-		getAllElements(id, function(resp) {
+	_getBuildingTaskElements(task) {
+		getAllBuildingElements(task.buildings, function(resp) {
 			this.randomOrderTaskElements = resp;
-			//this.setState({activeTaskElements: resp});
-			if (callback) {
-				callback(resp);
-			}
 		}.bind(this));
 	}
 
@@ -100,7 +95,7 @@ export default class extends Component {
 	_setChosenBuildingGeom(layer, id) {
 		this.chosenGeomLayer[layer.feature.properties.building_nr]=layer.feature;
 		this.setState({chosenBuildingGeom: this.chosenGeomLayer});
-		this._changeEnableBtnState();
+		this._changeEnableBtnState(true);
 	}
 	_setChosenMetadata(obj) {
 		this.chosenMetadata = obj;
@@ -115,8 +110,8 @@ export default class extends Component {
 			enableBtn: false
 		});
 	}
-	_changeEnableBtnState() {
-		this.numOfChosenElem +=1;
+	_changeEnableBtnState(isChosen) {
+		this.numOfChosenElem = isChosen ?  this.numOfChosenElem+1 : this.numOfChosenElem-1;
 		if (this.numOfChosenElem == this.elementsInTask){
 			this.setState({
 						enableBtn: true});
@@ -295,6 +290,7 @@ export default class extends Component {
 								<div className="p-2 mapbox" >
 										<MapContainer elementsInTask={this.state.map_taskmode}
 																	activeTaskElements={this.state.activeTaskElements}
+																	_changeEnableBtnState={this._changeEnableBtnState}
 																	_setChosenBuildingGeom={this._setChosenBuildingGeom}
 									/>
 								</div> }
@@ -359,6 +355,27 @@ function getAllElements(taskid, callback) {
 			});
 		});
 	});
+}
+
+function getAllBuildingElements(buildinglist, callback) {
+	let building = [];
+	for (let i=0; i < buildinglist.length; i++) {
+		taskApi.getBuildingElements(buildinglist[i])
+			.then(resp => {
+				const x = Math.round(Math.random());
+				const y = (x === 0 ? 1 : 0);
+				let geom = {};
+				resp[0].properties.title = resp[0].properties.title + ': ' + (x + 1).toString();
+				resp[1].properties.title = resp[1].properties.title + ': ' + (y + 1).toString();
+				geom[x] = resp[0];
+				geom[y] = resp[1];
+				geom[2] = buildinglist[i];
+				building[i] = geom;
+				if (i == buildinglist.length -1) {
+					callback(building);
+				}
+			})
+	}
 }
 
 function randPlaceElem(list1, list2, callback) {

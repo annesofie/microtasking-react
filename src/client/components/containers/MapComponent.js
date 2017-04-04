@@ -28,6 +28,7 @@ export default class MapComponent extends Component {
 					<OneTaskMapComp
 						activeTaskElements={this.props.activeTaskElements}
 						_setChosenBuildingLayer={this._setChosenBuildingLayer}
+						_changeEnableBtnState={this.props._changeEnableBtnState}
 					/>
 			);
 		} else {
@@ -35,6 +36,7 @@ export default class MapComponent extends Component {
 					<MultipleTaskMapComp
 						activeTaskElements={this.props.activeTaskElements}
 						_setChosenBuildingLayer={this._setChosenBuildingLayer}
+						_changeEnableBtnState={this.props._changeEnableBtnState}
 					/>
 			)
 		}

@@ -166,12 +166,14 @@ class TaskBoxComponent extends Component {
 		if (this.state.taskType == this.task.GEOMTASK) {
 			let chosenGeomLayer = this._infoClickedLayer();
 			const info = (this.props.task.id === this.props.testTaskId) ? <div className="task-div"><hr/><p>
-				<i>Each task will have one or more buildings and each building will always be marked with two colors. This training task has two buildings. To answer the first question you need to click on the color on the map that you think fits the marked buildings best.</i><br/><br/>
+				<i>Question 1 description</i>
+				<p>Each task will have one or more buildings. Each building will always be marked with two colors. <br/>
+					This training task has two buildings. To answer the first question you need to click on the color on the map that you think fits the shape of the marked buildings best.</p><br/><br/>
 				The next-button will enable when all the buildings listed under the question is chosen. Here you have two buildings to select.
 				</p></div> : '';
 			shownTask =
 				<div className="task-div">
-					<h5>1. Click on the color that fits the marked {build_s} on the map best</h5>
+					<h5>1. Click on the color that fits the shape of the marked {build_s} on the map best</h5>
 					<p className=""><i>Use the zoom on the top left and the layer control on the top right of the map as aids</i></p>
 					<div className="margin-top-medium">
 						{chosenGeomLayer.map(elem => {

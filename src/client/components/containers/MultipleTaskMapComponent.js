@@ -31,6 +31,7 @@ export default class OneTaskMapComponent extends Component {
 		layer.on('click', function(e) {
 			const buildingNr = e.target.feature.properties.building_nr;
 			if (this.activelayer[buildingNr]) {  //if building already been selected
+				this.props._changeEnableBtnState(false);
 				if (this.activelayer[buildingNr] !== e.target) { //pressed the other layer
 					//console.log('the other layer is pressed');
 					this.activelayer[buildingNr].setStyle({
@@ -52,6 +53,7 @@ export default class OneTaskMapComponent extends Component {
 		layer.on('click', function(e) {
 			const buildingNr = e.target.feature.properties.building_nr;
 			if (this.activelayer[buildingNr]) { //if building already been selected
+				this.props._changeEnableBtnState(false);
 				if (this.activelayer[buildingNr] !== e.target) { //pressed the other layer
 					this.activelayer[buildingNr].setStyle({
 						color: this.colorPair[0],

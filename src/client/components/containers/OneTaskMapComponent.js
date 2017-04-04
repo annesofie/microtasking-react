@@ -30,6 +30,7 @@ export default class OneTaskMapComponent extends Component {
 	_clickEventHandler1(id, feature, layer) {
 		layer.on('click', function(e) {
 			if (this.activelayer && this.activelayer !== e.target) {
+				this.props._changeEnableBtnState(false);
 				this.activelayer.setStyle({
 					color: this.colorPair[1],
 					weight: 4
@@ -47,6 +48,7 @@ export default class OneTaskMapComponent extends Component {
 	_clickEventHandler2(id, feature, layer) {
 		layer.on('click', function(e) {
 			if (this.activelayer && this.activelayer !== e.target) {
+				this.props._changeEnableBtnState(false);
 				this.activelayer.setStyle({
 					color: this.colorPair[0],
 					weight: 4
