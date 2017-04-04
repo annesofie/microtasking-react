@@ -236,7 +236,7 @@ export default class extends Component {
 		const progressTitle = ['Test', 'Task 1', 'Task 2', 'Task3'];
 		this.setState({
 			title: progressTitle[this.taskMode],
-			percent: this.state.percent+5
+			percent: this.state.percent+8
 		});
 	}
 
