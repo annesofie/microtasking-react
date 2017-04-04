@@ -6,6 +6,8 @@ import React, { Component, PropTypes } from 'react';
 //Views
 import MetadataTask from './../views/metadataTask';
 import RegisteredAnswerView from './../views/registeredAnswerView';
+import MovieView from './../views/movieView';
+
 
 class TaskBoxComponent extends Component {
 
@@ -86,8 +88,7 @@ class TaskBoxComponent extends Component {
 		this.props._changeEnableBtnState();
 	}
 
-	handleTimeout() {  // Change view after x seconds
-		console.log(this.props.taskview);
+	handleTimeout() {
 		if (this.props.taskview == this.viewState.TASKVIEW) {
 			this.interval = setInterval(this._timeElapsed, 1000);
 		} else {
@@ -207,6 +208,8 @@ class TaskBoxComponent extends Component {
 						<hr/>
 						<p><b>{intro}</b></p>
 						<p>{tekst1} {tekst2}</p>
+						<p><i>First watch the instructions about how to do the survey:</i></p>
+						<MovieView/>
 						<p>The layers on the map will change order and color between each task.</p>
 						<p className="pressnext"><i>{pressnext}</i></p>
 					</div>
@@ -266,7 +269,7 @@ class TaskBoxComponent extends Component {
 					<div className="d-flex justify-content-end margin-top">
 						<p className="margin-right" style={{display: this.state.showTaskProgress ? 'inline' : 'none'}}>
 							<i>Task {this.props.tasknummer} progress: {currentTask} / {totalnum}</i></p>
-						<button className="btn-sm choose-btn"
+						<button className="btn btn-outline-success"
 										style={{display: (this.state.taskType == this.task.REGISTEREDANSWER) ? 'none' : 'inline'}}
 										onClick={this._taskChange} disabled={!this.props.enableBtn}>
 							{this.state.btnName}

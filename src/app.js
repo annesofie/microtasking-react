@@ -106,7 +106,6 @@ export default class extends Component {
 		this.chosenMetadata = obj;
 	}
 	_setElapsedTaskTime(time) {
-		console.log(time);
 		this.timeResult = time;
 	}
 	_changeHideMapState(bool) {
@@ -233,6 +232,7 @@ export default class extends Component {
 		});
 	}
 	_changeProgressTitle() {
+		//console.log('progress');
 		const progressTitle = ['Test', 'Task 1', 'Task 2', 'Task3'];
 		this.setState({
 			title: progressTitle[this.taskMode],
@@ -274,7 +274,7 @@ export default class extends Component {
 							percent={this.state.percent}
 						/>
 					</div>
-					<div className="d-flex task-map-box">
+					<div className="d-flex">
 						<TaskBoxComponent task={this.state.task}
 															testTaskId={this.testTaskId}
 															tasknummer={this.taskMode}

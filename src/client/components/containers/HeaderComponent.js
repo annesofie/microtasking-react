@@ -36,7 +36,7 @@ class HeaderComponent extends Component {
 							<h3>Optimizing the micro-tasking workflow</h3>
 						</div>
 						<div id="start-survey-btn-div" className="d-flex flex-row justify-content-center">
-							<button type="button" className="btn btn-outline-secondary start-survey" onClick={this.props.onClick}>Start Survey</button>
+							<button type="button" className="big-btn pure-button btn-outline-success" onClick={this.props.onClick}>Start Survey</button>
 						</div>
 					</div>
 			)
