@@ -120,10 +120,10 @@ export default class extends Component {
 	_handleModeChange() {
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				 this.setState({mode: this.viewState.REGISTERVIEW});
-				//this._handleTaskMode(true, function(str) {
-				//	this.setState({mode: this.viewState.TASKVIEW});
-				//}.bind(this));
+				 //this.setState({mode: this.viewState.REGISTERVIEW});
+				this._handleTaskMode(true, function(str) {
+					this.setState({mode: this.viewState.TASKVIEW});
+				}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
@@ -347,16 +347,6 @@ function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task)
 
 }
 
-function getAllElements(taskid, callback) {
-	taskApi.getElementsInTask(taskid).then(elem1 => {
-		taskApi.getConflictsInTask(taskid).then(elem2 => {
-			randPlaceElem(elem1, elem2, function(resp) {
-				callback(resp);
-			});
-		});
-	});
-}
-
 function getAllBuildingElements(buildinglist, callback) {
 	let building = [];
 	for (let i=0; i < buildinglist.length; i++) {
@@ -377,73 +367,4 @@ function getAllBuildingElements(buildinglist, callback) {
 			})
 	}
 }
-
-function randPlaceElem(list1, list2, callback) {
-	let building = [];
-	for (let i = 0; i < list1.features.length; i++) {
-		const x = Math.round(Math.random());
-		const y = (x === 0 ? 1 : 0);
-		let geom = {};
-		list1.features[i].properties.title = list1.features[i].properties.title + ': ' + (x + 1).toString();
-		list2.features[i].properties.title = list2.features[i].properties.title + ': ' + (y + 1).toString();
-		geom[x] = list1.features[i];
-		geom[y] = list2.features[i];
-		geom[2] = list1.features[i].properties.building_nr;
-		building[i] = geom;
-	}
-	callback(building);
-}
-
-
-//function reshuffleTaskElements(isFirst, list, callback) {
-//	console.log(list);
-//	let building = [];
-//	const x = Math.round(Math.random());
-//	const y = (x === 0 ? 1 : 0);
-//
-//	if (isFirst) {
-//		const elem1 = list[0];
-//		const elem2 = list[1];
-//		elem1.properties.title = elem1.properties.title.split(':')[0] + ': ' + (x+1).toString();
-//		elem2.properties.title = elem2.properties.title.split(':')[0] + ': ' + (y+1).toString();
-//
-//		let geom = {};
-//		geom[x] = elem1;
-//		geom[y] = elem2;
-//		building=geom;
-//
-//	} else {
-//		for (let i=0; i < list.length; i++) {
-//			const elem1 = list[i][0];
-//			const elem2 = list[i][1];
-//			elem1.properties.title = elem1.properties.title.split(':')[0] + ': ' + (x+1).toString();
-//			elem2.properties.title = elem2.properties.title.split(':')[0] + ': ' + (y+1).toString();
-//
-//			let geom = {};
-//			geom[x] = elem1;
-//			geom[y] = elem2;
-//			building[i]=geom;
-//		}
-//	}
-//	callback(building);
-//}
-
-//function getallTaskElemConflElemPairs(elements, onlyone, callback) {
-//	let taskPairs = [];
-//	let i=0;
-//	if (onlyone) {
-//		taskApi.getTaskElemAndConflictElem(elements.id, function(resp) {
-//			taskPairs=resp;
-//			callback(taskPairs);
-//		})
-//	} else {
-//		elements.map(elem => {
-//			taskApi.getTaskElemAndConflictElem(elem.id, function(resp) {
-//				taskPairs[i]=resp;
-//				i+=1;
-//			});
-//		});
-//		callback(taskPairs);
-//	}
-//}
 
