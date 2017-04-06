@@ -77,15 +77,16 @@ class TaskBoxComponent extends Component {
 			this.checkedVariables[e.currentTarget.value][index] = false;
 			this.checkedVariables.tooMany = false;
 			this.checkedVariables['count'] --;
+			this.props._changeEnableBtnState(false);
 		} else if (this.checkedVariables.count >= this.props.elementsInTask){ // Too many rows is selected
 			this.checkedVariables.tooMany = true;
 		} else {
 			this.metadata[elem.properties.building_nr+e.currentTarget.value] = elem;
 			this.checkedVariables[e.currentTarget.value][index] = true;
 			this.checkedVariables['count'] ++;
+			this.props._changeEnableBtnState(true);
 		}
 		this.setState({checkedMeta: this.checkedVariables});
-		this.props._changeEnableBtnState();
 	}
 
 	handleTimeout() {

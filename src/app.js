@@ -114,20 +114,22 @@ export default class extends Component {
 		});
 	}
 	_changeEnableBtnState(isChosen) {
-		//this.numOfChosenElem = isChosen ?  this.numOfChosenElem+1 : this.numOfChosenElem-1;
-		this.numOfChosenElem +=1;
+		this.numOfChosenElem = isChosen ?  this.numOfChosenElem+1 : this.numOfChosenElem-1;
 		if (this.numOfChosenElem == this.elementsInTask){
 			this.setState({
 						enableBtn: true});
+		} else if (this.numOfChosenElem !== this.elementsInTask) {
+			this.setState({
+				enableBtn: false});
 		}
 	}
 	_handleModeChange() {
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				//this.setState({mode: this.viewState.REGISTERVIEW});
-				this._handleTaskMode(true, function(str) {
-					this.setState({mode: this.viewState.TASKVIEW});
-				}.bind(this));
+				this.setState({mode: this.viewState.REGISTERVIEW});
+				//this._handleTaskMode(true, function(str) {
+				//	this.setState({mode: this.viewState.TASKVIEW});
+				//}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
@@ -180,14 +182,6 @@ export default class extends Component {
 				this.num += 1;
 				if (callback) callback('done');
 			}.bind(this));
-			//this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
-			//	this.setState({
-			//		activeTaskElements: resp[this.num],
-			//		currentTaskNum: this.num+1
-			//	});
-			//	this.num += 1;
-			//	if (callback) callback('done');
-			//}.bind(this))
 		} else if (this.elementsInTask == 3 && this.num < this.numOfObjects) {
 			this._getBuildingTaskElements(this.state.task, function(resp) {
 				console.log(resp);
@@ -198,14 +192,6 @@ export default class extends Component {
 				this.num += 3;
 				if (callback) callback('done');
 			}.bind(this));
-			//this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
-			//	this.setState({
-			//		activeTaskElements: resp.slice(this.num, this.num+3),
-			//		currentTaskNum: this.num + 3
-			//	});
-			//	this.num += 3;
-			//	if (callback) callback('done');
-			//}.bind(this));
 		} else if (this.num < this.numOfObjects){
 				//use all
 			this._getBuildingTaskElements(this.state.task, function(resp) {
@@ -217,14 +203,6 @@ export default class extends Component {
 				});
 				if (callback) callback('done');
 			}.bind(this));
-			//this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
-			//	this.num = this.numOfObjects;
-			//	this.setState({
-			//		activeTaskElements: resp,
-			//		currentTaskNum: this.num
-			//	});
-			//	if (callback) callback('done');
-			//}.bind(this));
 		} else if (!isFirst){
 			this._handleModeChange(); //Go to Survey view
 		}
@@ -243,7 +221,6 @@ export default class extends Component {
 			enableBtn: true,
 			hidemap: true
 		});
-		console.log('get next task ' + this.taskMode);
 		taskApi.getTask(this.state.taskorder[this.taskMode]).then(elem => {
 			this.elementsInTask = elem.num_of_elements;
 			this.setState({task: elem});
@@ -256,7 +233,6 @@ export default class extends Component {
 		});
 	}
 	_changeProgressTitle() {
-		//console.log('progress');
 		const progressTitle = ['Test', 'Task 1', 'Task 2', 'Task3'];
 		this.setState({
 			title: progressTitle[this.taskMode],
@@ -347,7 +323,7 @@ export default class extends Component {
 		}
 	}
 }
-//style={{display: this.state.hidemap ? 'none' : 'block' }}
+
 function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task) {
 	let result = {};
 	Object.keys(geomlay).map(elem => {
@@ -375,16 +351,6 @@ function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task)
 
 }
 
-function getAllElements(taskid, callback) {
-	taskApi.getElementsInTask(taskid).then(elem1 => {
-		taskApi.getConflictsInTask(taskid).then(elem2 => {
-			randPlaceElem(elem1, elem2, function(resp) {
-				callback(resp);
-			});
-		});
-	});
-}
-
 function getAllBuildingElements(buildinglist, callback) {
 	taskApi.getBuildingLayersInTask(buildinglist)
 		.then(list => {
@@ -393,26 +359,9 @@ function getAllBuildingElements(buildinglist, callback) {
 				list[i][1].properties.title = 'Shape ' + (2).toString();
 				list[i][2] = list[i][0].properties.building_nr;
 				if (i === list.length-1){
-					console.log('inside if');
 					callback(list);
 				}
 			}
 		});
-}
-
-function randPlaceElem(list1, list2, callback) {
-	let building = [];
-	for (let i = 0; i < list1.features.length; i++) {
-		const x = Math.round(Math.random());
-		const y = (x === 0 ? 1 : 0);
-		let geom = {};
-		list1.features[i].properties.title = list1.features[i].properties.title + ': ' + (x + 1).toString();
-		list2.features[i].properties.title = list2.features[i].properties.title + ': ' + (y + 1).toString();
-		geom[x] = list1.features[i];
-		geom[y] = list2.features[i];
-		geom[2] = list1.features[i].properties.building_nr;
-		building[i] = geom;
-	}
-	callback(building);
 }
 
