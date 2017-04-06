@@ -235,6 +235,7 @@ class TaskBoxComponent extends Component {
 	_infoClickedLayer() {
 		let chosenGeomLayer = [];
 		let base = this.props;
+
 		if (base.elementsInTask == base.currentTaskNum && base.elementsInTask !== 1) {
 			for (let i = 0; i < base.elementsInTask; i++) {
 				let buildingNr = this.props.activeTaskElements[i][2];
