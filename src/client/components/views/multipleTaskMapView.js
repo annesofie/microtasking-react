@@ -90,8 +90,8 @@ class MultipleMapView extends Component {
 					})}
 					<LeafletControl position="bottomleft">
 						<div className="map-legend">
-							<h5 style={{color: this.props.colorPair[0]}}>Geom 1</h5>
-							<h5 style={{color: this.props.colorPair[1]}}>Geom 2</h5>
+							<h5 style={{color: this.props.colorPair[0]}}>Shape 1</h5>
+							<h5 style={{color: this.props.colorPair[1]}}>Shape 2</h5>
 						</div>
 					</LeafletControl>
 				</Map>

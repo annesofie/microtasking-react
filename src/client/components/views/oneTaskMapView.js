@@ -27,7 +27,7 @@ class OneTaskMapView extends Component {
 		const position = [this.props.activeTaskElements[0].geometry.coordinates[0][0][0][1], this.props.activeTaskElements[0].geometry.coordinates[0][0][0][0]];
 		const ortomap = 'https://waapi.webatlas.no/maptiles/tiles/webatlas-orto-newup/wa_grid/{z}/{x}/{y}.jpeg?APITOKEN=';
 		const tileapikey = '2564333f-3201-4cee-adaf-d3beaf650208';
-		const mapboxtile = 'https://api.mapbox.com/styles/v1/aserichs/cj14qe14u001k2ro16zbjcwkc.html?title=true&access_token=pk.eyJ1IjoiYXNlcmljaHMiLCJhIjoicWJQd3JTayJ9.HwayzXsujmebUczPif8uig#15.0/63.427137/10.375315/0';
+		const mapboxtile = 'https://api.mapbox.com/styles/v1/aserichs/cj14qe14u001k2ro16zbjcwkc/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYXNlcmljaHMiLCJhIjoicWJQd3JTayJ9.HwayzXsujmebUczPif8uig';
 		const base = this.props.activeTaskElements;
 		const layer1 = this.oneTaskElemLayerGroup();
 		const layer2 = this.oneTaskConflLayerGroup();
@@ -51,8 +51,8 @@ class OneTaskMapView extends Component {
 					</LayersControl>
 					<LeafletControl position="bottomleft">
 						<div className="map-legend">
-							<h5 style={{color: this.props.colorPair[0]}}>Geom 1</h5>
-							<h5 style={{color: this.props.colorPair[1]}}>Geom 2</h5>
+							<h5 style={{color: this.props.colorPair[0]}}>Shape 1</h5>
+							<h5 style={{color: this.props.colorPair[1]}}>Shape 2</h5>
 						</div>
 					</LeafletControl>
 				</Map>

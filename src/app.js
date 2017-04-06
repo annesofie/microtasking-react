@@ -389,8 +389,8 @@ function getAllBuildingElements(buildinglist, callback) {
 	taskApi.getBuildingLayersInTask(buildinglist)
 		.then(list => {
 			for (let i=0; i<list.length; i++) {
-				list[i][0].properties.title = list[i][0].properties.title + ' ' + (0).toString();
-				list[i][1].properties.title = list[i][1].properties.title + ' ' + (1).toString();
+				list[i][0].properties.title = 'Shape ' + (1).toString();
+				list[i][1].properties.title = 'Shape ' + (2).toString();
 				list[i][2] = list[i][0].properties.building_nr;
 				if (i === list.length-1){
 					console.log('inside if');
