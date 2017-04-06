@@ -82,9 +82,12 @@ export default class extends Component {
 		});
 	}
 
-	_getBuildingTaskElements(task) {
+	_getBuildingTaskElements(task, callback) {
 		getAllBuildingElements(task.buildings, function(resp) {
+			console.log(resp);
 			this.randomOrderTaskElements = resp;
+			console.log(resp[0][0].properties.title);
+			if (callback) callback(resp);
 		}.bind(this));
 	}
 
@@ -111,7 +114,8 @@ export default class extends Component {
 		});
 	}
 	_changeEnableBtnState(isChosen) {
-		this.numOfChosenElem = isChosen ?  this.numOfChosenElem+1 : this.numOfChosenElem-1;
+		//this.numOfChosenElem = isChosen ?  this.numOfChosenElem+1 : this.numOfChosenElem-1;
+		this.numOfChosenElem +=1;
 		if (this.numOfChosenElem == this.elementsInTask){
 			this.setState({
 						enableBtn: true});
@@ -120,7 +124,7 @@ export default class extends Component {
 	_handleModeChange() {
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				 this.setState({mode: this.viewState.REGISTERVIEW});
+				this.setState({mode: this.viewState.REGISTERVIEW});
 				//this._handleTaskMode(true, function(str) {
 				//	this.setState({mode: this.viewState.TASKVIEW});
 				//}.bind(this));
@@ -167,17 +171,26 @@ export default class extends Component {
 			this.num = this.numOfObjects;
 			callback('done');
 		} else if (this.elementsInTask == 1 && this.num < this.numOfObjects) {
-			this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
+			this._getBuildingTaskElements(this.state.task, function(resp) {
+				console.log(resp);
 				this.setState({
 					activeTaskElements: resp[this.num],
 					currentTaskNum: this.num+1
 				});
 				this.num += 1;
 				if (callback) callback('done');
-			}.bind(this))
+			}.bind(this));
+			//this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
+			//	this.setState({
+			//		activeTaskElements: resp[this.num],
+			//		currentTaskNum: this.num+1
+			//	});
+			//	this.num += 1;
+			//	if (callback) callback('done');
+			//}.bind(this))
 		} else if (this.elementsInTask == 3 && this.num < this.numOfObjects) {
-			//this.chosenGeomLayer=[]; //Reset
-			this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
+			this._getBuildingTaskElements(this.state.task, function(resp) {
+				console.log(resp);
 				this.setState({
 					activeTaskElements: resp.slice(this.num, this.num+3),
 					currentTaskNum: this.num + 3
@@ -185,9 +198,18 @@ export default class extends Component {
 				this.num += 3;
 				if (callback) callback('done');
 			}.bind(this));
+			//this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
+			//	this.setState({
+			//		activeTaskElements: resp.slice(this.num, this.num+3),
+			//		currentTaskNum: this.num + 3
+			//	});
+			//	this.num += 3;
+			//	if (callback) callback('done');
+			//}.bind(this));
 		} else if (this.num < this.numOfObjects){
 				//use all
-			this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
+			this._getBuildingTaskElements(this.state.task, function(resp) {
+				console.log(resp);
 				this.num = this.numOfObjects;
 				this.setState({
 					activeTaskElements: resp,
@@ -195,6 +217,14 @@ export default class extends Component {
 				});
 				if (callback) callback('done');
 			}.bind(this));
+			//this._getTaskElements(this.state.taskorder[this.taskMode], function(resp) {
+			//	this.num = this.numOfObjects;
+			//	this.setState({
+			//		activeTaskElements: resp,
+			//		currentTaskNum: this.num
+			//	});
+			//	if (callback) callback('done');
+			//}.bind(this));
 		} else if (!isFirst){
 			this._handleModeChange(); //Go to Survey view
 		}
@@ -223,7 +253,6 @@ export default class extends Component {
 				});
 				callback(resp);
 			}.bind(this));
-			//callback('hey');
 		});
 	}
 	_changeProgressTitle() {
@@ -231,7 +260,7 @@ export default class extends Component {
 		const progressTitle = ['Test', 'Task 1', 'Task 2', 'Task3'];
 		this.setState({
 			title: progressTitle[this.taskMode],
-			percent: this.state.percent+8
+			percent: this.state.percent+6
 		});
 	}
 
@@ -337,7 +366,6 @@ function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task)
 	result['chosenMetadata'] = metalay;
 	result['time'] = timeres;
 	result['taskorder'] = taskorder;
-	// result['participant'] = participant.id;
 	result['participant'] = participant.id;
 	result['task'] = task.id;
 
@@ -358,24 +386,18 @@ function getAllElements(taskid, callback) {
 }
 
 function getAllBuildingElements(buildinglist, callback) {
-	let building = [];
-	for (let i=0; i < buildinglist.length; i++) {
-		taskApi.getBuildingElements(buildinglist[i])
-			.then(resp => {
-				const x = Math.round(Math.random());
-				const y = (x === 0 ? 1 : 0);
-				let geom = {};
-				resp[0].properties.title = resp[0].properties.title + ': ' + (x + 1).toString();
-				resp[1].properties.title = resp[1].properties.title + ': ' + (y + 1).toString();
-				geom[x] = resp[0];
-				geom[y] = resp[1];
-				geom[2] = buildinglist[i];
-				building[i] = geom;
-				if (i == buildinglist.length -1) {
-					callback(building);
+	taskApi.getBuildingLayersInTask(buildinglist)
+		.then(list => {
+			for (let i=0; i<list.length; i++) {
+				list[i][0].properties.title = list[i][0].properties.title + ' ' + (0).toString();
+				list[i][1].properties.title = list[i][1].properties.title + ' ' + (1).toString();
+
+				if (i === list.length-1){
+					console.log('inside if');
+					callback(list);
 				}
-			})
-	}
+			}
+		});
 }
 
 function randPlaceElem(list1, list2, callback) {
@@ -393,57 +415,4 @@ function randPlaceElem(list1, list2, callback) {
 	}
 	callback(building);
 }
-
-
-//function reshuffleTaskElements(isFirst, list, callback) {
-//	console.log(list);
-//	let building = [];
-//	const x = Math.round(Math.random());
-//	const y = (x === 0 ? 1 : 0);
-//
-//	if (isFirst) {
-//		const elem1 = list[0];
-//		const elem2 = list[1];
-//		elem1.properties.title = elem1.properties.title.split(':')[0] + ': ' + (x+1).toString();
-//		elem2.properties.title = elem2.properties.title.split(':')[0] + ': ' + (y+1).toString();
-//
-//		let geom = {};
-//		geom[x] = elem1;
-//		geom[y] = elem2;
-//		building=geom;
-//
-//	} else {
-//		for (let i=0; i < list.length; i++) {
-//			const elem1 = list[i][0];
-//			const elem2 = list[i][1];
-//			elem1.properties.title = elem1.properties.title.split(':')[0] + ': ' + (x+1).toString();
-//			elem2.properties.title = elem2.properties.title.split(':')[0] + ': ' + (y+1).toString();
-//
-//			let geom = {};
-//			geom[x] = elem1;
-//			geom[y] = elem2;
-//			building[i]=geom;
-//		}
-//	}
-//	callback(building);
-//}
-
-//function getallTaskElemConflElemPairs(elements, onlyone, callback) {
-//	let taskPairs = [];
-//	let i=0;
-//	if (onlyone) {
-//		taskApi.getTaskElemAndConflictElem(elements.id, function(resp) {
-//			taskPairs=resp;
-//			callback(taskPairs);
-//		})
-//	} else {
-//		elements.map(elem => {
-//			taskApi.getTaskElemAndConflictElem(elem.id, function(resp) {
-//				taskPairs[i]=resp;
-//				i+=1;
-//			});
-//		});
-//		callback(taskPairs);
-//	}
-//}
 

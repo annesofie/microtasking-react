@@ -4,8 +4,8 @@
 
 import axios from 'axios';
 
-const apiURL = 'http://34.252.179.235/api/';
-// const apiURL = 'http://localhost:8000/api/';
+//const apiURL = 'http://34.252.179.235/api/';
+ const apiURL = 'http://localhost:8000/api/';
 
 export function saveParticipant(data) {
 	return axios.post(apiURL+'participant/', {
@@ -51,47 +51,12 @@ export function getConflictsInTask(taskid) {
 		});
 }
 
-export function getBuildingElements(buildingid) {
-	return axios.get(apiURL+'buildings/'+buildingid+'/')
-		.then(response => response.data)
-		.catch(error => error)
+export function getBuildingLayersInTask(buildinglist){
+	return axios.post(apiURL+'buildings/layers/', {
+			building_numbers: buildinglist
+	}).then(response => response.data)
+	.catch(error => error)
 }
 
 
-//
-//export function getTaskElemAndConflictElem(taskelemid, onFinishCallback) { //TODO: add taskelem and conflelem in an random order
-//	var taskPair = {
-//		'elem': [],
-//		'confl': []
-//	};
-//	var building = {};
-//	axios.all([getTaskElement(taskelemid), getTaskElementConflict(taskelemid)])
-//		.then(axios.spread(function (taskelem, confelem) {
-//			taskPair.elem = taskelem.data;
-//			taskPair.confl = confelem.data;
-//			building = randPlaceElem(taskelem.data, confelem.data);
-//			console.log(building);
-//			onFinishCallback(taskPair, randPlaceElem(taskelem.data, confelem.data));
-//		}))
-//		.catch(function(error) {
-//			console.log(error);
-//		});
-//}
 
-//function randPlaceElem(list1, list2) {
-//	var x = Math.round(Math.random());
-//	var y = (x === 0 ? 1 : 0);
-//	console.log(x + ' , ' + y);
-//	var geom = {};
-//	geom[x] = list1;
-//	geom[y] = list2;
-//	return geom;
-//}
-
-//function getTaskElement(taskelemid) {
-//	return axios.get(apiURL+'task/'+taskelemid+'/');
-//}
-//
-//function getTaskElementConflict(taskelemid) {
-//	return axios.get(apiURL+'task/'+taskelemid+'/conflict/');
-//}

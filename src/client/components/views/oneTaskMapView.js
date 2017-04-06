@@ -27,8 +27,7 @@ class OneTaskMapView extends Component {
 		const position = [this.props.activeTaskElements[0].geometry.coordinates[0][0][0][1], this.props.activeTaskElements[0].geometry.coordinates[0][0][0][0]];
 		const ortomap = 'https://waapi.webatlas.no/maptiles/tiles/webatlas-orto-newup/wa_grid/{z}/{x}/{y}.jpeg?APITOKEN=';
 		const tileapikey = '2564333f-3201-4cee-adaf-d3beaf650208';
-		const mapboxtile = 'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0aGlsZG8iLCJhIjoiY2lrdHZvMHdsMDAxMHdvbTR0MWZkY3FtaCJ9.u4bFYLBtEGNv4Qaa8Uaqzw';
-
+		const mapboxtile = 'https://api.mapbox.com/styles/v1/aserichs/cj14qe14u001k2ro16zbjcwkc.html?title=true&access_token=pk.eyJ1IjoiYXNlcmljaHMiLCJhIjoicWJQd3JTayJ9.HwayzXsujmebUczPif8uig#15.0/63.427137/10.375315/0';
 		const base = this.props.activeTaskElements;
 		const layer1 = this.oneTaskElemLayerGroup();
 		const layer2 = this.oneTaskConflLayerGroup();
