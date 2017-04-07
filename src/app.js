@@ -73,7 +73,6 @@ export default class extends Component {
 			listorder.unshift(this.testTaskId);
 			this.setState({taskorder: listorder});
 			taskApi.getTask(this.testTaskId).then(elem => {
-				console.log(this.state.taskorder);
 				this._getBuildingTaskElements(elem);
 				this.setState({task: elem});
 				this.elementsInTask = elem.num_of_elements;
@@ -84,9 +83,7 @@ export default class extends Component {
 
 	_getBuildingTaskElements(task, callback) {
 		getAllBuildingElements(task.buildings, function(resp) {
-			console.log(resp);
 			this.randomOrderTaskElements = resp;
-			console.log(resp[0][0].properties.title);
 			if (callback) callback(resp);
 		}.bind(this));
 	}
@@ -326,16 +323,24 @@ export default class extends Component {
 
 function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task) {
 	let result = {};
+	let i=0;
+	let j=0;
 	Object.keys(geomlay).map(elem => {
 		geomlay['correct'] = (geomlay['correct']==undefined ? 0 : geomlay['correct']);
+		geomlay['correct_buildings'] = (geomlay['correct_buildings'] == undefined ? [] : geomlay['correct_buildings']);
 		if (geomlay[elem].properties.is_imported) {
 			geomlay['correct']++;
+			geomlay['correct_buildings'][i] = (geomlay[elem].properties.building_nr);
+			i++;
 		}
 	});
 	Object.keys(metalay).map(elem => {
 		metalay['correct'] = (metalay['correct']==undefined ? 0 : metalay['correct']);
+		metalay['correct_buildings'] = (metalay['correct_buildings'] == undefined ? [] : metalay['correct_buildings']);
 		if (metalay[elem].properties.is_imported) {
 			metalay['correct']++;
+			metalay['correct_buildings'][j] = (metalay[elem].properties.building_nr);
+			j++;
 		}
 	});
 	result['chosenGeomLayer'] = geomlay;
@@ -344,6 +349,9 @@ function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task)
 	result['taskorder'] = taskorder;
 	result['participant'] = participant.id;
 	result['task'] = task.id;
+	result['correct_buildings_geom'] = geomlay['correct_buildings'];
+	result['correct_buildings_meta'] = metalay['correct_buildings'];
+
 
 	resultApi.saveTaskResult(result).then(resp => {
 		console.log(resp);

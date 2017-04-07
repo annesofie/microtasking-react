@@ -270,14 +270,14 @@ class TaskBoxComponent extends Component {
 					<h4 className="task-header">Task {this.props.tasknummer}. {this.props.task.title}</h4>
 					<hr/>
 					{shownTask}
-					<div className="d-flex justify-content-end margin-top">
-						<p className="margin-right" style={{display: this.state.showTaskProgress ? 'inline' : 'none'}}>
-							<i>Task {this.props.tasknummer} progress: {currentTask} / {totalnum}</i></p>
+					<div className="d-flex justify-content-center margin-top">
 						<button className="btn btn-outline-success"
 										style={{display: (this.state.taskType == this.task.REGISTEREDANSWER) ? 'none' : 'inline'}}
 										onClick={this._taskChange} disabled={!this.props.enableBtn}>
 							{this.state.btnName}
 						</button>
+						<p className="margin-right" style={{display: this.state.showTaskProgress ? 'inline' : 'none'}}>
+							<i>Task {this.props.tasknummer} progress: {currentTask} / {totalnum}</i></p>
 					</div>
 				</div>
 		);

@@ -29,6 +29,8 @@ export function saveTaskResult(data) {
 		totaltime: data.time.totalTime, //int. blank true
 		correctgeom: data.chosenGeomLayer.correct, //int, blank true
 		correctmetadata: data.chosenMetadata.correct, //int, blank true
+		correct_buildings_geom: data.correct_buildings_geom, //Array, Int, blank null true
+		correct_buildings_meta: data.correct_buildings_meta, //Array, Int, blank null true
 		selectedgeomlayers: data.chosenGeomLayer, //JSON, blank true
 		selectedmetalayers: data.chosenMetadata, //JSON, blank true
 		participant: data.participant, //Foreign key, id
