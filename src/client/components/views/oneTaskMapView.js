@@ -24,7 +24,6 @@ class OneTaskMapView extends Component {
 	}
 
 	render() {
-		console.log(this.props.activeTaskElements);
 		const position = [this.props.activeTaskElements[0].geometry.coordinates[0][0][0][1], this.props.activeTaskElements[0].geometry.coordinates[0][0][0][0]];
 		const ortomap = 'https://waapi.webatlas.no/maptiles/tiles/webatlas-orto-newup/wa_grid/{z}/{x}/{y}.jpeg?APITOKEN=';
 		const tileapikey = '2564333f-3201-4cee-adaf-d3beaf650208';
@@ -32,6 +31,9 @@ class OneTaskMapView extends Component {
 		const base = this.props.activeTaskElements;
 		const layer1 = this.oneTaskElemLayerGroup();
 		const layer2 = this.oneTaskConflLayerGroup();
+		let layerkeyname1 = '<span style=color:'+base[0].properties.buildingColor+'>'+base[0].properties.buildingName+' '+base[0].properties.title+'</span>';
+		let layerkeyname2 = '<span style=color:'+base[1].properties.buildingColor+'>'+base[1].properties.buildingName+' '+base[1].properties.title+'</span>';
+
 
 		return (
 			<div className="map-box">
@@ -43,10 +45,10 @@ class OneTaskMapView extends Component {
 						maxZoom={20}
 					/>
 					<LayersControl position='topright' collapsed={false}>
-						<LayersControl.Overlay key={'lco_elem_'+base[0].id} name={base[0].properties.buildingName+' '+base[0].properties.title} checked={true}>
+						<LayersControl.Overlay key={'lco_elem_'+base[0].id} name={layerkeyname1} checked={true}>
 							{layer1}
 						</LayersControl.Overlay>
-						<LayersControl.Overlay key={'lco_confl_'+base[0].id} name={base[1].properties.buildingName+' '+base[1].properties.title} checked={true}>
+						<LayersControl.Overlay key={'lco_confl_'+base[0].id} name={layerkeyname2} checked={true}>
 							{layer2}
 						</LayersControl.Overlay>
 					</LayersControl>
