@@ -123,10 +123,10 @@ export default class extends Component {
 	_handleModeChange() {
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				this.setState({mode: this.viewState.REGISTERVIEW});
-				//this._handleTaskMode(true, function(str) {
-				//	this.setState({mode: this.viewState.TASKVIEW});
-				//}.bind(this));
+				// this.setState({mode: this.viewState.REGISTERVIEW});
+				this._handleTaskMode(true, function(str) {
+					this.setState({mode: this.viewState.TASKVIEW});
+				}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
@@ -134,17 +134,13 @@ export default class extends Component {
 				}.bind(this));
 				break;
 			case this.viewState.TASKVIEW:
-				//if (this.state.task.id !== this.testTaskId) {
-					const base = this.timeResult;
-					base['totalTime']=base['geomTime']+base['metaTime'];
-				//}
+				const base = this.timeResult;
+				base['totalTime']=base['geomTime']+base['metaTime'];
 				this.setState({mode: this.viewState.SURVEYVIEW});
 				break;
 			case this.viewState.SURVEYVIEW:
 					console.log('save task result');
-				//if (this.state.task.id !== this.testTaskId) {
 					saveTaskResult(this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task);
-				//}
 				if(this.taskMode == 3) {
 					this.setState({mode: this.viewState.HOMEVIEW});
 				} else {

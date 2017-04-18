@@ -6,7 +6,8 @@ import React, { Component, PropTypes } from 'react';
 //Views
 import MetadataTask from './../views/metadataTask';
 import RegisteredAnswerView from './../views/registeredAnswerView';
-import MovieView from './../views/movieView';
+// import MovieView from './../views/movieView';
+import MovieView from './../views/newMovieView';
 
 
 class TaskBoxComponent extends Component {
