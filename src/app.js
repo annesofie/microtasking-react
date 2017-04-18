@@ -123,10 +123,10 @@ export default class extends Component {
 	_handleModeChange() {
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				this.setState({mode: this.viewState.REGISTERVIEW});
-				//this._handleTaskMode(true, function(str) {
-				//	this.setState({mode: this.viewState.TASKVIEW});
-				//}.bind(this));
+				//this.setState({mode: this.viewState.REGISTERVIEW});
+				this._handleTaskMode(true, function(str) {
+					this.setState({mode: this.viewState.TASKVIEW});
+				}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
@@ -364,7 +364,9 @@ function getAllBuildingElements(buildinglist, callback) {
 		.then(list => {
 			for (let i=0; i<list.length; i++) {
 				list[i][0].properties.title = 'Shape ' + (1).toString();
+				list[i][0].properties.buildingName = 'Building ' + (i+1).toString();
 				list[i][1].properties.title = 'Shape ' + (2).toString();
+				list[i][1].properties.buildingName = 'Building ' + (i+1).toString();
 				list[i][2] = list[i][0].properties.building_nr;
 				if (i === list.length-1){
 					callback(list);

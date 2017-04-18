@@ -24,6 +24,7 @@ class OneTaskMapView extends Component {
 	}
 
 	render() {
+		console.log(this.props.activeTaskElements);
 		const position = [this.props.activeTaskElements[0].geometry.coordinates[0][0][0][1], this.props.activeTaskElements[0].geometry.coordinates[0][0][0][0]];
 		const ortomap = 'https://waapi.webatlas.no/maptiles/tiles/webatlas-orto-newup/wa_grid/{z}/{x}/{y}.jpeg?APITOKEN=';
 		const tileapikey = '2564333f-3201-4cee-adaf-d3beaf650208';
@@ -42,10 +43,10 @@ class OneTaskMapView extends Component {
 						maxZoom={20}
 					/>
 					<LayersControl position='topright' collapsed={false}>
-						<LayersControl.Overlay key={'lco_elem_'+base[0].id} name={'Building '+base[0].properties.building_nr+' '+base[0].properties.title} checked={true}>
+						<LayersControl.Overlay key={'lco_elem_'+base[0].id} name={base[0].properties.buildingName+' '+base[0].properties.title} checked={true}>
 							{layer1}
 						</LayersControl.Overlay>
-						<LayersControl.Overlay key={'lco_confl_'+base[0].id} name={'Building '+base[1].properties.building_nr+' '+base[1].properties.title} checked={true}>
+						<LayersControl.Overlay key={'lco_confl_'+base[0].id} name={base[1].properties.buildingName+' '+base[1].properties.title} checked={true}>
 							{layer2}
 						</LayersControl.Overlay>
 					</LayersControl>

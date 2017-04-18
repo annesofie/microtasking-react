@@ -168,13 +168,13 @@ class TaskBoxComponent extends Component {
 			let chosenGeomLayer = this._infoClickedLayer();
 			const info = (this.props.task.id === this.props.testTaskId) ? <div className="task-div"><hr/><p>
 				<i>Question 1 description</i>
-				<p>Each task will have one or more buildings. Each building will always be marked with two colors. <br/>
-					This training task has two buildings. To answer the first question you need to click on the color on the map that you think fits the shape of the marked buildings best.</p><br/><br/>
+				<p>Each task will have one or more buildings. Each building will always be marked with two colors.
+					This training task has two buildings. To answer the first question you need to click on the color on the map that you think fits the shape of the marked buildings best.</p><br/>
 				The next-button will enable when all the buildings listed under the question is chosen. Here you have two buildings to select.
 				</p></div> : '';
 			shownTask =
 				<div className="task-div">
-					<h5>1. Click on the color that fits the shape of the marked {build_s} on the map best</h5>
+					<h5>1. Click on the color that fits the shape of the marked {build_s} best</h5>
 					<p className=""><i>Use the zoom on the top left and the layer control on the top right of the map as aids</i></p>
 					<div className="margin-top-medium">
 						{chosenGeomLayer.map(elem => {
@@ -239,22 +239,27 @@ class TaskBoxComponent extends Component {
 
 		if (base.elementsInTask == base.currentTaskNum && base.elementsInTask !== 1) {
 			for (let i = 0; i < base.elementsInTask; i++) {
-				let buildingNr = this.props.activeTaskElements[i][2];
+				const buildingName = this.props.activeTaskElements[i][1].properties.buildingName;
+				const buildingNumber = this.props.activeTaskElements[i][2];
 				chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
-					Building {buildingNr} : {base.chosenBuildingGeom[buildingNr] ? 'You chose ' + base.chosenBuildingGeom[buildingNr].properties.title : 'not chosen'}
+					{buildingName} : {base.chosenBuildingGeom[buildingNumber] ? 'You chose ' + base.chosenBuildingGeom[buildingNumber].properties.title : 'not chosen'}
 				</h5>
 			}
 		} else {
 			if (base.elementsInTask == 1) {
+				const chosen = <u>You chose  {base.chosenBuildingGeom[this.props.activeTaskElements[2]].properties.title} </u>;
+				const notchosen = <i>Not chosen, click on the color on the map</i>;
 				chosenGeomLayer[0] = <h5 key={'geom'+base.currentTaskNum} id="chosenGeom">
-					Building {this.props.activeTaskElements[2]} : {base.chosenBuildingGeom[this.props.activeTaskElements[2]] ? 'You chose ' + base.chosenBuildingGeom[this.props.activeTaskElements[2]].properties.title : 'not chosen'}
+					{this.props.activeTaskElements[1].properties.buildingName} : {base.chosenBuildingGeom[this.props.activeTaskElements[2]] ? {chosen} : {notchosen}}
 				</h5>
 			} else {
 				for (let i = 0; i < this.props.elementsInTask; i++) {
-					let buildingNr = this.props.activeTaskElements[i][2];
-					chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
-						Building {buildingNr} : {base.chosenBuildingGeom[buildingNr] ? 'You chose ' + base.chosenBuildingGeom[buildingNr].properties.title : 'not chosen'}
-					</h5>
+					const buildingName = this.props.activeTaskElements[i][1].properties.buildingName;
+					const buildingNumber = this.props.activeTaskElements[i][2];
+
+					chosenGeomLayer[i] = <div><h5 key={'geom'+i} id="chosenGeom">
+						{buildingName} : {base.chosenBuildingGeom[buildingNumber] ? <u className="chosenBuildingColor">You chose  {base.chosenBuildingGeom[buildingNumber].properties.title} </u> : <i>Not chosen</i>}
+					</h5></div>
 				}
 			}
 		}
@@ -267,7 +272,7 @@ class TaskBoxComponent extends Component {
 		let totalnum = (6 / this.props.elementsInTask);
 		return (
 				<div className="p-2 task-box">
-					<h4 className="task-header">Task {this.props.tasknummer}. {this.props.task.title}</h4>
+					<h4 className="task-header">{this.props.task.title}</h4>
 					<hr/>
 					{shownTask}
 					<div className="d-flex justify-content-center margin-top">
@@ -276,12 +281,13 @@ class TaskBoxComponent extends Component {
 										onClick={this._taskChange} disabled={!this.props.enableBtn}>
 							{this.state.btnName}
 						</button>
-						<p className="margin-right" style={{display: this.state.showTaskProgress ? 'inline' : 'none'}}>
-							<i>Task {this.props.tasknummer} progress: {currentTask} / {totalnum}</i></p>
 					</div>
+						{(this.props.task.id !== this.props.testTaskId && !this.props.enableBtn) ? <i>Remember that you select the correct color by clicking on it in the map. Not enough buildings selected yet</i> : ''}
 				</div>
 		);
 	}
 }
 
 export default TaskBoxComponent;
+						//<p className="margin-right" style={{display: this.state.showTaskProgress ? 'inline' : 'none'}}>
+						//	<i>Task {this.props.tasknummer} progress: {currentTask} / {totalnum}</i></p>

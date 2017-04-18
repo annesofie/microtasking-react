@@ -42,8 +42,6 @@ export default class RegisterFormComponent extends Component {
 					}
 				})
 		} else if (!isRegistration){
-			//this.props.task.id == this.props.testTaskId ?
-			//	this.props._handleModeChange() :
 				resultApi.saveTaskSurvey(data).then(resp => {
 					console.log(resp);
 					if (resp.response && resp.response.status == 400) {
@@ -78,7 +76,7 @@ export default class RegisterFormComponent extends Component {
 							</div>
 							<div className="">
 								{(this.props.task.id == this.props.testTaskId) ?
-								<div><hr/><p className="survey-info-testtask"><i>After each task there will be a survey. The survey is shown under. Select one option at every question and write any comments if you have. The training task is now finish, press the button to get started on the tasks.</i></p><hr/></div>:
+								<div><hr/><p className="survey-info-testtask"><i>After each task there will be a survey. The survey is shown under. Select one option at every question and write any comments if you have. The training task is now finish, fill out the form and press the button to get started on the tasks.</i></p><hr/></div>:
 								<div><hr/><p className="survey-info-testtask"><i>Select one option at every question, and write a comment if you have, then click submit to start the next task</i></p><hr/></div>
 								}
 							</div>

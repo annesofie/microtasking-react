@@ -16,12 +16,26 @@ class MovieView extends Component {
 		};
 
 		this._onReady = this._onReady.bind(this);
+		this._onPlayVideo = this._onPlayVideo.bind(this);
+		this._onPauseVideo = this._onPauseVideo.bind(this);
 	}
 
 	_onReady(event) {
 		this.setState({
 			player: event.target
 		});
+	}
+
+	_onPlayVideo() {
+		this.state.player.playVideo();
+	}
+
+	_onPauseVideo() {
+		this.state.player.pauseVideo();
+	}
+
+	_onEnd() {
+
 	}
 
 	render () {
@@ -33,11 +47,13 @@ class MovieView extends Component {
 			}
 		};
 		return (
-			<YouTube
-				videoId="qSuXj_Gmz3k"
-				opts={opts}
-				onReady={this._onReady}
-			/>
+			<div>
+				<YouTube
+					videoId="qSuXj_Gmz3k"
+					opts={opts}
+					onReady={this._onReady}
+				/>
+			</div>
 		)
 	}
 
