@@ -242,13 +242,13 @@ class TaskBoxComponent extends Component {
 				const buildingName = this.props.activeTaskElements[i][1].properties.buildingName;
 				const buildingNumber = this.props.activeTaskElements[i][2];
 				chosenGeomLayer[i] = <h5 key={'geom'+i} id="chosenGeom">
-					{buildingName} : {base.chosenBuildingGeom[buildingNumber] ? 'You chose ' + base.chosenBuildingGeom[buildingNumber].properties.title : 'not chosen'}
+					{buildingName} : {base.chosenBuildingGeom[buildingNumber] ? <u style={{color: base.chosenBuildingGeom[buildingNumber].properties.buildingColor}}>You chose  {base.chosenBuildingGeom[buildingNumber].properties.title} </u> : <i>Not chosen</i>}
 				</h5>
 			}
 		} else {
 			if (base.elementsInTask == 1) {
 				chosenGeomLayer[0] = <h5 key={'geom'+base.currentTaskNum} id="chosenGeom">
-					{this.props.activeTaskElements[1].properties.buildingName} : {base.chosenBuildingGeom[this.props.activeTaskElements[2]] ? <u style={{color: base.chosenBuildingGeom[this.props.activeTaskElements[2]].properties.buildingColor}}>You chose  {base.chosenBuildingGeom[this.props.activeTaskElements[2]].properties.title} </u> : <i>Not chosen, click on the color on the map</i>}
+					{this.props.activeTaskElements[1].properties.buildingName} : {base.chosenBuildingGeom[this.props.activeTaskElements[2]] ? <u style={{color: base.chosenBuildingGeom[this.props.activeTaskElements[2]].properties.buildingColor}}>You chose  {base.chosenBuildingGeom[this.props.activeTaskElements[2]].properties.title} </u> : <i>Not chosen</i>}
 				</h5>
 			} else {
 				for (let i = 0; i < this.props.elementsInTask; i++) {

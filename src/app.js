@@ -123,10 +123,10 @@ export default class extends Component {
 	_handleModeChange() {
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				//this.setState({mode: this.viewState.REGISTERVIEW});
-				this._handleTaskMode(true, function(str) {
-					this.setState({mode: this.viewState.TASKVIEW});
-				}.bind(this));
+				this.setState({mode: this.viewState.REGISTERVIEW});
+				//this._handleTaskMode(true, function(str) {
+				//	this.setState({mode: this.viewState.TASKVIEW});
+				//}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
@@ -171,7 +171,6 @@ export default class extends Component {
 			callback('done');
 		} else if (this.elementsInTask == 1 && this.num < this.numOfObjects) {
 			this._getBuildingTaskElements(this.state.task, function(resp) {
-				console.log(resp);
 				this.setState({
 					activeTaskElements: resp[this.num],
 					currentTaskNum: this.num+1
@@ -181,7 +180,6 @@ export default class extends Component {
 			}.bind(this));
 		} else if (this.elementsInTask == 3 && this.num < this.numOfObjects) {
 			this._getBuildingTaskElements(this.state.task, function(resp) {
-				console.log(resp);
 				this.setState({
 					activeTaskElements: resp.slice(this.num, this.num+3),
 					currentTaskNum: this.num + 3
@@ -192,7 +190,6 @@ export default class extends Component {
 		} else if (this.num < this.numOfObjects){
 				//use all
 			this._getBuildingTaskElements(this.state.task, function(resp) {
-				console.log(resp);
 				this.num = this.numOfObjects;
 				this.setState({
 					activeTaskElements: resp,
@@ -230,7 +227,7 @@ export default class extends Component {
 		});
 	}
 	_changeProgressTitle() {
-		const progressTitle = ['Test', 'Task 1', 'Task 2', 'Task3'];
+		const progressTitle = ['Test', 'Task 1', 'Task 2', 'Task 3'];
 		this.setState({
 			title: progressTitle[this.taskMode],
 			percent: this.state.percent+6
@@ -354,7 +351,7 @@ function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task)
 
 
 	resultApi.saveTaskResult(result).then(resp => {
-		console.log(resp);
+		//console.log(resp);
 	});
 
 }
