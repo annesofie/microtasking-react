@@ -360,13 +360,19 @@ function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task)
 }
 
 function getAllBuildingElements(buildinglist, callback) {
+	let x = Math.floor(Math.random() * ((4-1)+1));
+	let y = Math.floor(Math.random() * ((4-1)+1));
+	const colormap1 = ['#3fe5e5', '#43cd80', '#63137a', '#8e374d'];
+	const colormap2 = ['#105576', '#2a7a13', '#7A4065', '#e68e74'];
 	taskApi.getBuildingLayersInTask(buildinglist)
 		.then(list => {
 			for (let i=0; i<list.length; i++) {
 				list[i][0].properties.title = 'Shape ' + (1).toString();
 				list[i][0].properties.buildingName = 'Building ' + (i+1).toString();
+				list[i][0].properties.buildingColor = colormap1[x];
 				list[i][1].properties.title = 'Shape ' + (2).toString();
 				list[i][1].properties.buildingName = 'Building ' + (i+1).toString();
+				list[i][1].properties.buildingColor = colormap2[y];
 				list[i][2] = list[i][0].properties.building_nr;
 				if (i === list.length-1){
 					callback(list);

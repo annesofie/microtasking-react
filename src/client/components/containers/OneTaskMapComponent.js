@@ -17,11 +17,6 @@ export default class OneTaskMapComponent extends Component {
 			lng: 10.4499185,
 			zoom: 18
 		};
-		let x = Math.floor(Math.random() * ((4-1)+1));
-		let y = Math.floor(Math.random() * ((4-1)+1));
-		this.colormap1 = ['#3fe5e5', '#43cd80', '#63137a', '#8e374d'];
-		this.colormap2 = ['#105576', '#2a7a13', '#7A4065', '#e68e74'];
-		this.colorPair = [this.colormap1[x], this.colormap2[y]];
 		this.activelayer=null;
 		this._clickEventHandler1 = this._clickEventHandler1.bind(this);
 		this._clickEventHandler2 = this._clickEventHandler2.bind(this);
@@ -32,7 +27,7 @@ export default class OneTaskMapComponent extends Component {
 			if (this.activelayer && this.activelayer !== e.target) {
 				this.props._changeEnableBtnState(false);
 				this.activelayer.setStyle({
-					color: this.colorPair[1],
+					color: this.activelayer.feature.properties.buildingColor,
 					weight: 4
 				});
 			}
@@ -50,7 +45,7 @@ export default class OneTaskMapComponent extends Component {
 			if (this.activelayer && this.activelayer !== e.target) {
 				this.props._changeEnableBtnState(false);
 				this.activelayer.setStyle({
-					color: this.colorPair[0],
+					color: this.activelayer.feature.properties.buildingColor,
 					weight: 4
 				});
 			}
@@ -70,7 +65,6 @@ export default class OneTaskMapComponent extends Component {
 				activeTaskElements={this.props.activeTaskElements}
 				clickHandler1={this._clickEventHandler1}
 				clickHandler2={this._clickEventHandler2}
-				colorPair={this.colorPair}
 			/>
 		)
 	}

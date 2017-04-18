@@ -17,14 +17,14 @@ class MultipleMapView extends Component {
 
 
 	oneTaskElemLayerGroup(elem) {
-		return <LayerGroup>
-			<GeoJSON key={'1'+elem.id} data={elem} color={this.props.colorPair[0]}
+		return <LayerGroup color="blue">
+			<GeoJSON key={'1'+elem.id} data={elem} color={elem.properties.buildingColor}
 							 onEachFeature={this.props.clickHandler1.bind(this, elem.id)}/>
 		</LayerGroup>;
 	}
 	oneTaskConflLayerGroup(confl) {
-		return <LayerGroup>
-			<GeoJSON key={'2'+confl.id} data={confl} color={this.props.colorPair[1]}
+		return <LayerGroup color="purple">
+			<GeoJSON key={'2'+confl.id} data={confl} color={confl.properties.buildingColor}
 							 onEachFeature={this.props.clickHandler2.bind(this, confl.id)}/>
 		</LayerGroup>;
 	}
@@ -47,22 +47,40 @@ class MultipleMapView extends Component {
 	renderLayerControlOverlayElem() {
 		const layerelem = this.getLayergroupElem();
 		let layerControlOverlayList = [];
+		let layerControlOverlayList2 = [];
 		layerelem.map((elem, index) => {
 			let build = this.props.activeTaskElements[index][0];
-			layerControlOverlayList[index] = <LayersControl.Overlay className="layercontrol0" key={'lco_elem_'+build.id} name={build.properties.buildingName + ' ' + build.properties.title} checked={true} >
+			let layerkeyname = '<span style=color:'+build.properties.buildingColor+'>'+build.properties.buildingName + ' ' + build.properties.title+'</span>';
+			layerControlOverlayList[index] = <LayersControl.Overlay className="layercontrol0" key={'lco_elem_'+build.id} name={layerkeyname} checked={true} >
 				{layerelem[index]}
 			</LayersControl.Overlay>;
+
+			layerControlOverlayList2[index] = <label>
+				<div>
+					<input type="checkbox" className="leaflet-control-layers-selector"/>
+					<span><p style={{color: build.properties.buildingColor}}>{build.properties.buildingName} {build.properties.title}</p></span>
+				</div>
+			</label>
 		});
 		return layerControlOverlayList;
 	}
 	renderLayerControlOverlayConfl() {
 		const layerconfl = this.getLayergroupConfl();
 		let layerControlOverlayList = [];
+		let layerControlOverlayList2 = [];
 		layerconfl.map((elem, index) => {
 			let build = this.props.activeTaskElements[index][1];
-			layerControlOverlayList[index] = <LayersControl.Overlay className="layercontrol1" key={'lco_confl_'+this.props.activeTaskElements[index][1].id} name={build.properties.buildingName + ' ' + build.properties.title} checked={true} >
+			let layerkeyname = '<span style=color:'+build.properties.buildingColor+'>'+build.properties.buildingName + ' ' + build.properties.title+'</span>';
+			layerControlOverlayList[index] = <LayersControl.Overlay className="layercontrol1" key={'lco_confl_'+this.props.activeTaskElements[index][1].id} name={layerkeyname} checked={true} >
 				{layerconfl[index]}
 			</LayersControl.Overlay>;
+
+			layerControlOverlayList2[index] = <label>
+				<div>
+					<input type="checkbox" className="leaflet-control-layers-selector"/>
+					<span><p style={{color: build.properties.buildingColor}}>{build.properties.buildingName} {build.properties.title}</p></span>
+				</div>
+			</label>
 		});
 		return layerControlOverlayList;
 	}
@@ -88,16 +106,16 @@ class MultipleMapView extends Component {
 							{layercontroloverlay2[index]}
 						</LayersControl>;
 					})}
-					<LeafletControl position="bottomleft">
-						<div className="map-legend">
-							<h5 style={{color: this.props.colorPair[0]}}>Shape 1</h5>
-							<h5 style={{color: this.props.colorPair[1]}}>Shape 2</h5>
-						</div>
-					</LeafletControl>
 				</Map>
 			</div>
 		)
 	}
 }
 
+					//<LeafletControl position="bottomleft">
+					//	<div className="map-legend">
+					//		<h5 style={{color: this.props.colorPair[0]}}>Shape 1</h5>
+					//		<h5 style={{color: this.props.colorPair[1]}}>Shape 2</h5>
+					//	</div>
+					//</LeafletControl>
 export default MultipleMapView;

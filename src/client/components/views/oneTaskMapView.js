@@ -11,14 +11,14 @@ class OneTaskMapView extends Component {
 	oneTaskElemLayerGroup() {
 		const base = this.props.activeTaskElements;
 		return <LayerGroup>
-			<GeoJSON key={'1'+base[0].id} data={base[0]} color={this.props.colorPair[0]}
+			<GeoJSON key={'1'+base[0].id} data={base[0]} color={base[0].properties.buildingColor}
 							 onEachFeature={this.props.clickHandler1.bind(this, base[0].id)}/>
 		</LayerGroup>;
 	}
 	oneTaskConflLayerGroup() {
 		const base = this.props.activeTaskElements;
 		return <LayerGroup>
-			<GeoJSON key={'2'+base[1].id} data={base[1]} color={this.props.colorPair[1]}
+			<GeoJSON key={'2'+base[1].id} data={base[1]} color={base[1].properties.buildingColor}
 							 onEachFeature={this.props.clickHandler2.bind(this, base[1].id)}/>
 		</LayerGroup>;
 	}
@@ -50,16 +50,16 @@ class OneTaskMapView extends Component {
 							{layer2}
 						</LayersControl.Overlay>
 					</LayersControl>
-					<LeafletControl position="bottomleft">
-						<div className="map-legend">
-							<h5 style={{color: this.props.colorPair[0]}}>Shape 1</h5>
-							<h5 style={{color: this.props.colorPair[1]}}>Shape 2</h5>
-						</div>
-					</LeafletControl>
 				</Map>
 			</div>
 		)
 	}
 }
+					//<LeafletControl position="bottomleft">
+					//	<div className="map-legend">
+					//		<h5 style={{color: this.props.colorPair[0]}}>Shape 1</h5>
+					//		<h5 style={{color: this.props.colorPair[1]}}>Shape 2</h5>
+					//	</div>
+					//</LeafletControl>
 
 export default OneTaskMapView;
