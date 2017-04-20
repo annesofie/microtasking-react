@@ -63,7 +63,7 @@ class RegisterFormView extends Component {
 					</div>
 
 					<LabeledSelect label="Gender" name="gender" values={this.genderval} />
-					<LabeledSelect label="Do you have experience of working with spatial data?" name="experienced" values={this.values}/>
+					<LabeledSelect label="Do you have experience of working with geospatial data?" name="experienced" values={this.values}/>
 					<LabeledSelect label="Have you heard of micro-tasking before?" name="microtasking" values={this.values}/>
 
 					<p style={{textAlign: 'center', color: 'blue', display: this.props.showMessage ? 'block' : 'none'}}>Please select an alternative on every question</p>

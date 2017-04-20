@@ -123,10 +123,10 @@ export default class extends Component {
 	_handleModeChange() {
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				// this.setState({mode: this.viewState.REGISTERVIEW});
-				this._handleTaskMode(true, function(str) {
-					this.setState({mode: this.viewState.TASKVIEW});
-				}.bind(this));
+				this.setState({mode: this.viewState.REGISTERVIEW});
+				//this._handleTaskMode(true, function(str) {
+				//	this.setState({mode: this.viewState.TASKVIEW});
+				//}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
@@ -166,23 +166,39 @@ export default class extends Component {
 			this.num = this.numOfObjects;
 			callback('done');
 		} else if (this.elementsInTask == 1 && this.num < this.numOfObjects) {
-			this._getBuildingTaskElements(this.state.task, function(resp) {
+			if (this.state.currentTaskNum == 0) {
+				this._getBuildingTaskElements(this.state.task, function(resp) {
+					this.setState({
+						activeTaskElements: resp[this.num],
+						currentTaskNum: this.num+1
+					});
+					this.num += 1;
+					if (callback) callback('done');
+				}.bind(this));
+			} else {
 				this.setState({
-					activeTaskElements: resp[this.num],
+					activeTaskElements: this.randomOrderTaskElements[this.num],
 					currentTaskNum: this.num+1
 				});
 				this.num += 1;
-				if (callback) callback('done');
-			}.bind(this));
+			}
 		} else if (this.elementsInTask == 3 && this.num < this.numOfObjects) {
-			this._getBuildingTaskElements(this.state.task, function(resp) {
+			if (this.state.currentTaskNum == 0){
+				this._getBuildingTaskElements(this.state.task, function(resp) {
+					this.setState({
+						activeTaskElements: resp.slice(this.num, this.num+3),
+						currentTaskNum: this.num + 3
+					});
+					this.num += 3;
+					if (callback) callback('done');
+				}.bind(this));
+			} else {
 				this.setState({
-					activeTaskElements: resp.slice(this.num, this.num+3),
+					activeTaskElements: this.randomOrderTaskElements.slice(this.num, this.num+3),
 					currentTaskNum: this.num + 3
 				});
 				this.num += 3;
-				if (callback) callback('done');
-			}.bind(this));
+			}
 		} else if (this.num < this.numOfObjects){
 				//use all
 			this._getBuildingTaskElements(this.state.task, function(resp) {
@@ -193,6 +209,7 @@ export default class extends Component {
 				});
 				if (callback) callback('done');
 			}.bind(this));
+
 		} else if (!isFirst){
 			this._handleModeChange(); //Go to Survey view
 		}
