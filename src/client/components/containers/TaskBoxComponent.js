@@ -6,8 +6,6 @@ import React, { Component, PropTypes } from 'react';
 //Views
 import MetadataTask from './../views/metadataTask';
 import RegisteredAnswerView from './../views/registeredAnswerView';
-// import MovieView from './../views/movieView';
-import MovieView from './../views/newMovieView';
 
 
 class TaskBoxComponent extends Component {
@@ -213,7 +211,10 @@ class TaskBoxComponent extends Component {
 						<p><b>{intro}</b></p>
 						<p>{tekst1} {tekst2}</p>
 						<p><i>First watch the instructions about how to do the survey:</i></p>
-						<MovieView/>
+						<video width="100%" height="80%" controls>
+							<source src="../assets/microt_training_2.mov" type="video/mp4" />
+									Your browser does not support the video tag.
+						</video>
 						<p>The layers on the map will change order and color between each task.</p>
 						<p className="pressnext"><i>{pressnext}</i></p>
 					</div>
