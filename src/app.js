@@ -123,10 +123,10 @@ export default class extends Component {
 	_handleModeChange() {
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
-				//this.setState({mode: this.viewState.REGISTERVIEW});
-				this._handleTaskMode(true, function(str) {
-					this.setState({mode: this.viewState.TASKVIEW});
-				}.bind(this));
+				this.setState({mode: this.viewState.REGISTERVIEW});
+				//this._handleTaskMode(true, function(str) {
+				//	this.setState({mode: this.viewState.TASKVIEW});
+				//}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {

@@ -40,13 +40,16 @@ class TaskBoxComponent extends Component {
 			shownTask: null,
 			showTaskProgress: !(this.props.task.id == this.props.testTaskId),
 			checkedMeta: this.checkedVariables,
-			answerview: ''
+			answerview: '',
+			showInformation: false,
+			questionmarkBtn: '?'
 		};
 		this.metadata=[];
 
 		this.createBooleanArray=this.createBooleanArray.bind(this);
 		this._taskChange = this._taskChange.bind(this);
 		this.onMetadataChange = this.onMetadataChange.bind(this);
+		this.showInformationText = this.showInformationText.bind(this);
 		this.handleTimeout = this.handleTimeout.bind(this);
 		this._timeElapsed = this._timeElapsed.bind(this);
 	}
@@ -86,6 +89,20 @@ class TaskBoxComponent extends Component {
 			this.props._changeEnableBtnState(true);
 		}
 		this.setState({checkedMeta: this.checkedVariables});
+	}
+
+	showInformationText() {
+		if (this.state.showInformationText) {
+			this.setState({
+				showInformationText: false,
+				questionmarkBtn: '?'
+			})
+		} else {
+			this.setState({
+				showInformationText: true,
+				questionmarkBtn: 'x'
+			})
+		}
 	}
 
 	handleTimeout() {
@@ -281,8 +298,19 @@ class TaskBoxComponent extends Component {
 										onClick={this._taskChange} disabled={!this.props.enableBtn}>
 							{this.state.btnName}
 						</button>
+						<button
+							type="button"
+							className="btn margin-left"
+							onClick={this.showInformationText}
+							style={{display: (this.props.enableBtn) ? 'none' : 'inline'}}>{this.state.questionmarkBtn}</button>
 					</div>
-						{(this.props.task.id !== this.props.testTaskId && !this.props.enableBtn) ? <i>Remember that you select the correct color by clicking on it in the map. Not enough buildings selected yet</i> : ''}
+					<div className="d-flex">
+						<p className="margin-sides-small-top">
+							<i style={{display: (this.state.showInformationText) ? 'inline' : 'none'}}>
+								Remember that you select the correct color by clicking on it in the map. Not enough buildings selected yet
+							</i>
+						</p>
+					</div>
 				</div>
 		);
 	}
