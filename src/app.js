@@ -127,7 +127,7 @@ export default class extends Component {
 				this.setState({mode: this.viewState.REGISTERVIEW});
 				//this._handleTaskMode(true, function(str) {
 				//	this.setState({mode: this.viewState.TASKVIEW});
-				//}.bind(this));
+				//}.bind(this))
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {

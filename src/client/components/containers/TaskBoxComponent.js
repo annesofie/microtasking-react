@@ -41,7 +41,7 @@ class TaskBoxComponent extends Component {
 			showTaskProgress: !(this.props.task.id == this.props.testTaskId),
 			checkedMeta: this.checkedVariables,
 			answerview: '',
-			showInformation: false,
+			showInformationText: false,
 			questionmarkBtn: '?'
 		};
 		this.metadata=[];
@@ -49,7 +49,7 @@ class TaskBoxComponent extends Component {
 		this.createBooleanArray=this.createBooleanArray.bind(this);
 		this._taskChange = this._taskChange.bind(this);
 		this.onMetadataChange = this.onMetadataChange.bind(this);
-		this.showInformationText = this.showInformationText.bind(this);
+		this.changeShowInformationText = this.changeShowInformationText.bind(this);
 		this.handleTimeout = this.handleTimeout.bind(this);
 		this._timeElapsed = this._timeElapsed.bind(this);
 	}
@@ -91,7 +91,7 @@ class TaskBoxComponent extends Component {
 		this.setState({checkedMeta: this.checkedVariables});
 	}
 
-	showInformationText() {
+	changeShowInformationText() {
 		if (this.state.showInformationText) {
 			this.setState({
 				showInformationText: false,
@@ -147,6 +147,9 @@ class TaskBoxComponent extends Component {
 						btnName: 'next',
 						answerview: this.task.METATASK
 					});
+				if (this.state.showInformationText) {
+					this.changeShowInformationText();
+				}
 					setTimeout(this.handleTimeout, 1800);
 				break;
 			case this.task.GEOMTASK:
@@ -156,8 +159,12 @@ class TaskBoxComponent extends Component {
 						taskType: this.task.REGISTEREDANSWER,
 						btnName: 'finish',
 						answerview: this.task.GEOMTASK,
-						checkedMeta: this.checkedVariables
+						checkedMeta: this.checkedVariables,
+						showInformationText: false
 					});
+					if (this.state.showInformationText) {
+						this.changeShowInformationText();
+					}
 					setTimeout(this.handleTimeout, 1500);
 				}.bind(this));
 				this.props._changeHideMapState(true); //Hide map
@@ -169,6 +176,9 @@ class TaskBoxComponent extends Component {
 					taskType: this.task.GEOMTASK,
 					btnName: 'next'
 				});
+				if (this.state.showInformation) {
+					this.state.changeShowInformationText();
+				}
 				this.interval = setInterval(this._timeElapsed, 1000);
 				break;
 			default:
@@ -191,7 +201,7 @@ class TaskBoxComponent extends Component {
 			shownTask =
 				<div className="task-div">
 					<h5>1. Click on the color that fits the shape of the marked {build_s} best</h5>
-					<p className=""><i>Use the zoom on the top left and the layer control on the top right of the map as aids</i></p>
+					<p className=""><i>There are {this.props.elementsInTask} {build_s} marked on the map in this task. <br/> Use the zoom on the top left and the hide/show menu on the top right of the map as help</i></p>
 					<div className="margin-top-medium">
 						{chosenGeomLayer.map(elem => {
 							return elem;
@@ -301,13 +311,15 @@ class TaskBoxComponent extends Component {
 						<button
 							type="button"
 							className="btn margin-left"
-							onClick={this.showInformationText}
-							style={{display: (this.props.enableBtn) ? 'none' : 'inline'}}>{this.state.questionmarkBtn}</button>
+							style={{display: (this.props.enableBtn) ? 'none' : 'inline'}}
+							onClick={this.changeShowInformationText}>{this.state.questionmarkBtn}
+						</button>
 					</div>
-					<div className="d-flex">
+					<div className="d-flex justify-content-center">
 						<p className="margin-sides-small-top">
 							<i style={{display: (this.state.showInformationText) ? 'inline' : 'none'}}>
-								Remember that you select the correct color by clicking on it in the map. Not enough buildings selected yet
+								{this.state.taskType == this.task.GEOMTASK ? 'Remember that you select by clicking on the shape on the map. Not enough buildings selected yet'
+									: 'Remember to select enough rows. Not enough rows selected yet'}
 							</i>
 						</p>
 					</div>
