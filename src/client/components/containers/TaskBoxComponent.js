@@ -36,7 +36,7 @@ class TaskBoxComponent extends Component {
 
 		this.state = {
 			taskType: this.task.INFOTASK,
-			btnName: 'start',
+			btnName: 'Start training task',
 			shownTask: null,
 			showTaskProgress: !(this.props.task.id == this.props.testTaskId),
 			checkedMeta: this.checkedVariables,
@@ -201,7 +201,7 @@ class TaskBoxComponent extends Component {
 			shownTask =
 				<div className="task-div">
 					<h5>1. Click on the color that fits the shape of the marked {build_s} best</h5>
-					<p className=""><i>There are {this.props.elementsInTask} {build_s} marked on the map in this task. <br/> Use the zoom on the top left and the hide/show menu on the top right of the map as help</i></p>
+					<p className=""><i>You need to select {this.props.elementsInTask} {build_s} in this task. <br/> Use the zoom on the top left and the hide/show menu on the top right of the map as help</i></p>
 					<div className="margin-top-medium">
 						{chosenGeomLayer.map(elem => {
 							return elem;
@@ -233,17 +233,10 @@ class TaskBoxComponent extends Component {
 
 				shownTask = (
 					<div className="padding-infotext">
-						<p><i>Information about this survey</i></p>
-						<hr/>
 						<p><b>{intro}</b></p>
-						<p>{tekst1} {tekst2}</p>
 						<p><i>First watch the instructions about how to do the survey:</i></p>
-						<video width="100%" height="80%" controls>
-							<source src="../microt_training_2.mov" type="video/mp4" />
-									Your browser does not support the video tag.
-						</video>
-						<p>The layers on the map will change order and color between each task.</p>
-						<p className="pressnext"><i>{pressnext}</i></p>
+						<iframe src="//player.vimeo.com/video/215234056" width="760" height="360" frameBorder="0" ></iframe>
+						<p className="pressnext"><i>When you have watched the video: <br/> Press the start button <u>below</u> to start the training task</i></p>
 					</div>
 					)
 			} else {
@@ -299,15 +292,23 @@ class TaskBoxComponent extends Component {
 		let totalnum = (6 / this.props.elementsInTask);
 		return (
 				<div className="p-2 task-box">
-					<h4 className="task-header">{this.props.task.title}</h4>
+					<h4 className="task-header">{this.state.taskType == this.task.INFOTASK ? 'Instructions' : 'Task' + this.props.tasknummer}</h4>
 					<hr/>
 					{shownTask}
 					<div className="d-flex justify-content-center margin-top">
-						<button className="btn btn-outline-success"
-										style={{display: (this.state.taskType == this.task.REGISTEREDANSWER) ? 'none' : 'inline'}}
-										onClick={this._taskChange} disabled={!this.props.enableBtn}>
+						{this.state.taskType == this.task.INFOTASK ?
+							<button className="big-btn pure-button btn-outline-success"
+											style={{display: (this.state.taskType == this.task.REGISTEREDANSWER) ? 'none' : 'inline'}}
+											onClick={this._taskChange} disabled={!this.props.enableBtn}>
+								{this.state.btnName}
+							</button>
+						: <button className="btn btn-outline-success"
+											style={{display: (this.state.taskType == this.task.REGISTEREDANSWER) ? 'none' : 'inline'}}
+											onClick={this._taskChange} disabled={!this.props.enableBtn}>
 							{this.state.btnName}
 						</button>
+						}
+
 						<button
 							type="button"
 							className="btn margin-left"

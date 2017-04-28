@@ -15,7 +15,7 @@ export default class OneTaskMapComponent extends Component {
 		this.mapOptions = {
 			lat: 63.4239779,
 			lng: 10.4499185,
-			zoom: 17
+			zoom: 16
 		};
 		this.activelayer=[];
 		this._clickEventHandler1 = this._clickEventHandler1.bind(this);
