@@ -79,10 +79,10 @@ class AfterEachTaskSurvey extends Component {
 							<div className="col-6 d-flex flex-row">
 								<p className="">Easy</p>
 								<input className="radio-btn-margin" type="radio" name="difficulty" value='1' onChange={this.setDifficulty}/>
-								<input className="radio-btn-margin" type="radio" name="difficulty" value='5' onChange={this.setDifficulty}/>
 								<input className="radio-btn-margin" type="radio" name="difficulty" value='2' onChange={this.setDifficulty}/>
 								<input className="radio-btn-margin" type="radio" name="difficulty" value='3' onChange={this.setDifficulty}/>
 								<input className="radio-btn-margin" type="radio" name="difficulty" value='4' onChange={this.setDifficulty}/>
+								<input className="radio-btn-margin" type="radio" name="difficulty" value='5' onChange={this.setDifficulty}/>
 								<p className="">Hard</p>
 							</div>
 						</div>

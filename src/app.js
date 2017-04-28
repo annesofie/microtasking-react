@@ -41,7 +41,8 @@ export default class extends Component {
 			title: 'Welcome',
 			percent: 0,  //Progress
 			chosenBuildingGeom: [],
-			enableBtn: false
+			enableBtn: false,
+			taskresultId: null
 		};
 
 		this.testTaskId = 4;
@@ -140,7 +141,7 @@ export default class extends Component {
 				break;
 			case this.viewState.SURVEYVIEW:
 					console.log('save task result');
-					saveTaskResult(this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task);
+
 				if(this.taskMode == 3) {
 					this.setState({mode: this.viewState.HOMEVIEW});
 				} else {
@@ -211,7 +212,12 @@ export default class extends Component {
 			}.bind(this));
 
 		} else if (!isFirst){
-			this._handleModeChange(); //Go to Survey view
+			saveTaskResult(this.taskMode, this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task, function(resp) {
+				this.setState({
+					taskresultId: resp.data.id
+				});
+				this._handleModeChange(); //Go to Survey view
+			}.bind(this));
 		}
 	}
 	_getNextTask(callback) {
@@ -322,6 +328,7 @@ export default class extends Component {
 										participant={this.state.participant}
 										task={this.state.task}
 										testTaskId={this.testTaskId}
+										taskresultId={this.state.taskresultId}
 										viewState={this.viewState}
 										_handleModeChange={this._handleModeChange}
 					/>
@@ -331,25 +338,29 @@ export default class extends Component {
 	}
 }
 
-function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task) {
+function saveTaskResult(taskordernumber, geomlay, metalay, timeres, taskorder, participant, task, callback) {
 	let result = {};
 	let i=0;
 	let j=0;
 	Object.keys(geomlay).map(elem => {
 		geomlay['correct'] = (geomlay['correct']==undefined ? 0 : geomlay['correct']);
+		result['total_correct'] = (result['total_correct'] == undefined ? 0 : result['total_correct']);
 		geomlay['correct_buildings'] = (geomlay['correct_buildings'] == undefined ? [] : geomlay['correct_buildings']);
 		if (geomlay[elem].properties.is_imported) {
 			geomlay['correct']++;
 			geomlay['correct_buildings'][i] = (geomlay[elem].properties.building_nr);
+			result['total_correct'] ++;
 			i++;
 		}
 	});
 	Object.keys(metalay).map(elem => {
 		metalay['correct'] = (metalay['correct']==undefined ? 0 : metalay['correct']);
+		result['total_correct'] = (result['total_correct'] == undefined ? 0 : result['total_correct']);
 		metalay['correct_buildings'] = (metalay['correct_buildings'] == undefined ? [] : metalay['correct_buildings']);
 		if (metalay[elem].properties.is_imported) {
 			metalay['correct']++;
 			metalay['correct_buildings'][j] = (metalay[elem].properties.building_nr);
+			result['total_correct'] ++;
 			j++;
 		}
 	});
@@ -359,12 +370,15 @@ function saveTaskResult(geomlay, metalay, timeres, taskorder, participant, task)
 	result['taskorder'] = taskorder;
 	result['participant'] = participant.id;
 	result['task'] = task.id;
+	result['tasknumber'] = task.id;
 	result['correct_buildings_geom'] = geomlay['correct_buildings'];
 	result['correct_buildings_meta'] = metalay['correct_buildings'];
+	result['taskordernumber'] = taskordernumber;
 
 
 	resultApi.saveTaskResult(result).then(resp => {
-		//console.log(resp);
+		console.log(resp);
+		if (callback) callback(resp)
 	});
 
 }

@@ -229,7 +229,7 @@ class TaskBoxComponent extends Component {
 						<p>{tekst1} {tekst2}</p>
 						<p><i>First watch the instructions about how to do the survey:</i></p>
 						<video width="100%" height="80%" controls>
-							<source src="../assets/microt_training_2.mov" type="video/mp4" />
+							<source src="../microt_training_2.mov" type="video/mp4" />
 									Your browser does not support the video tag.
 						</video>
 						<p>The layers on the map will change order and color between each task.</p>
