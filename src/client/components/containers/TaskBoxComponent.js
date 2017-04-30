@@ -236,7 +236,7 @@ class TaskBoxComponent extends Component {
 						<p><b>{intro}</b></p>
 						<p><i>First watch the instructions about how to do the survey:</i></p>
 						<iframe src="//player.vimeo.com/video/215234056" width="760" height="360" frameBorder="0" ></iframe>
-						<p className="pressnext"><i>When you have watched the video: <br/> Press the start button <u>below</u> to start the training task</i></p>
+						<p className="pressnext"><i>When you have watched the video:</i> <br/> Press the start button <u>below</u> to start the training task</p>
 					</div>
 					)
 			} else {

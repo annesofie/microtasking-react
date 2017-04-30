@@ -63,7 +63,8 @@ class metadataTask extends Component{
 		return (
 			<div className="">
 				<h5>2. Select the {this.props.elementsInTask} most informative {row_s} that describes {building_s}</h5>
-				<p><i>Think that the information should be informative for everyone, independent of education, background etc.</i></p>
+				<hr/>
+				<p className="margin-sides-small-top"><i>Each row represents a new building. Think that the information should be informative for everyone, independent of education, background etc.</i></p>
 				<table key={'meta-table'} className="table table-striped">
 					<thead>
 					<tr>

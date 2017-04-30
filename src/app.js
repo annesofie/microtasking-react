@@ -113,7 +113,7 @@ export default class extends Component {
 	}
 	_changeEnableBtnState(isChosen) {
 		this.numOfChosenElem = isChosen ?  this.numOfChosenElem+1 : this.numOfChosenElem-1;
-		if (this.numOfChosenElem == this.elementsInTask){
+		if (this.numOfChosenElem >= this.elementsInTask){
 			this.setState({
 						enableBtn: true});
 		} else if (this.numOfChosenElem !== this.elementsInTask) {
@@ -125,9 +125,9 @@ export default class extends Component {
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
 				this.setState({mode: this.viewState.REGISTERVIEW});
-				//this._handleTaskMode(true, function(str) {
-				//	this.setState({mode: this.viewState.TASKVIEW});
-				//}.bind(this))
+				// this._handleTaskMode(true, function(str) {
+				// 	this.setState({mode: this.viewState.TASKVIEW});
+				// }.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
