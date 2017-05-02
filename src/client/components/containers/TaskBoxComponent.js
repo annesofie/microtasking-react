@@ -36,7 +36,7 @@ class TaskBoxComponent extends Component {
 
 		this.state = {
 			taskType: this.task.INFOTASK,
-			btnName: 'Start training task',
+			btnName: (this.props.task.id == this.props.testTaskId ? 'Start training task' : 'Start'),
 			shownTask: null,
 			showTaskProgress: !(this.props.task.id == this.props.testTaskId),
 			checkedMeta: this.checkedVariables,
@@ -234,8 +234,10 @@ class TaskBoxComponent extends Component {
 				shownTask = (
 					<div className="padding-infotext">
 						<p><b>{intro}</b></p>
-						<p><i>First watch the instructions about how to do the survey:</i></p>
-						<iframe src="//player.vimeo.com/video/215234056" width="760" height="360" frameBorder="0" ></iframe>
+						<p><i>First watch the instructions about how to do the survey [Requires sound]:</i></p>
+						<video width="80%" height="80%" controls>
+							<source src="training_movie_5.mp4" type="video/mp4" />
+						</video>
 						<p className="pressnext"><i>When you have watched the video:</i> <br/> Press the start button <u>below</u> to start the training task</p>
 					</div>
 					)

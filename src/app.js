@@ -45,6 +45,10 @@ export default class extends Component {
 			taskresultId: null
 		};
 
+		let buildingOrder = [[1, 2, 3, 4, 5, 6], [9, 10, 11, 12, 13, 14], [15, 16, 17, 18, 19, 20]];
+		this.taskBuildingOrder = shuffle(buildingOrder);
+
+
 		this.testTaskId = 4;
 		this.randomOrderTaskElements = [];
 		this.chosenGeomLayer=[];
@@ -125,9 +129,9 @@ export default class extends Component {
 		switch (this.state.mode) {
 			case this.viewState.HOMEVIEW:
 				this.setState({mode: this.viewState.REGISTERVIEW});
-				// this._handleTaskMode(true, function(str) {
-				// 	this.setState({mode: this.viewState.TASKVIEW});
-				// }.bind(this));
+				 //this._handleTaskMode(true, function(str) {
+				 //	this.setState({mode: this.viewState.TASKVIEW});
+				 //}.bind(this));
 				break;
 			case this.viewState.REGISTERVIEW:
 				this._handleTaskMode(true, function(str) {
@@ -137,6 +141,11 @@ export default class extends Component {
 			case this.viewState.TASKVIEW:
 				const base = this.timeResult;
 				base['totalTime']=base['geomTime']+base['metaTime'];
+				saveTaskResult(this.taskMode, this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task, function(resp) {
+					this.setState({
+						taskresultId: resp.data.id
+					});
+				}.bind(this));
 				this.setState({mode: this.viewState.SURVEYVIEW});
 				break;
 			case this.viewState.SURVEYVIEW:
@@ -212,12 +221,7 @@ export default class extends Component {
 			}.bind(this));
 
 		} else if (!isFirst){
-			saveTaskResult(this.taskMode, this.chosenGeomLayer, this.chosenMetadata, this.timeResult, this.state.taskorder, this.state.participant, this.state.task, function(resp) {
-				this.setState({
-					taskresultId: resp.data.id
-				});
-				this._handleModeChange(); //Go to Survey view
-			}.bind(this));
+			this._handleModeChange(); //Go to Survey view
 		}
 	}
 	_getNextTask(callback) {
@@ -235,6 +239,7 @@ export default class extends Component {
 			hidemap: true
 		});
 		taskApi.getTask(this.state.taskorder[this.taskMode]).then(elem => {
+			elem.buildings = this.taskBuildingOrder[this.taskMode-1];
 			this.elementsInTask = elem.num_of_elements;
 			this.setState({task: elem});
 			this._handleTaskMode(false, function (resp) {
@@ -377,7 +382,6 @@ function saveTaskResult(taskordernumber, geomlay, metalay, timeres, taskorder, p
 
 
 	resultApi.saveTaskResult(result).then(resp => {
-		console.log(resp);
 		if (callback) callback(resp)
 	});
 
@@ -385,9 +389,8 @@ function saveTaskResult(taskordernumber, geomlay, metalay, timeres, taskorder, p
 
 function getAllBuildingElements(buildinglist, callback) {
 	let x = Math.floor(Math.random() * ((4-1)+1));
-	let y = Math.floor(Math.random() * ((4-1)+1));
-	const colormap1 = ['#3fe5e5', '#43cd80', '#63137a', '#8e374d'];
-	const colormap2 = ['#105576', '#2a7a13', '#7A4065', '#e68e74'];
+	const colormap1 = ['#744fd0', '#dbbe6d', '#790000', '#73388c'];
+	const colormap2 = ['#ba96a9', '#203e94', '#508c89', '#90c879'];
 	taskApi.getBuildingLayersInTask(buildinglist)
 		.then(list => {
 			for (let i=0; i<list.length; i++) {
@@ -396,7 +399,7 @@ function getAllBuildingElements(buildinglist, callback) {
 				list[i][0].properties.buildingColor = colormap1[x];
 				list[i][1].properties.title = 'Shape ' + (2).toString();
 				list[i][1].properties.buildingName = 'Building ' + (i+1).toString();
-				list[i][1].properties.buildingColor = colormap2[y];
+				list[i][1].properties.buildingColor = colormap2[x];
 				list[i][2] = list[i][0].properties.building_nr;
 				if (i === list.length-1){
 					callback(list);
@@ -405,3 +408,13 @@ function getAllBuildingElements(buildinglist, callback) {
 		});
 }
 
+function shuffle(list) {
+	let j, x, i;
+	for (i = list.length; i; i--) {
+		j = Math.floor(Math.random() * i);
+		x = list[i - 1];
+		list[i - 1] = list[j];
+		list[j] = x;
+	}
+	return(list);
+}

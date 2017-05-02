@@ -43,9 +43,7 @@ export default class RegisterFormComponent extends Component {
 				})
 		} else if (!isRegistration){
 			data.taskresult = this.props.taskresultId;
-			console.log(data);
 			resultApi.saveTaskSurvey(data).then(resp => {
-					console.log(resp);
 					if (resp.response && resp.response.status == 400) {
 						this.setState({showMessage: true});
 					} else {

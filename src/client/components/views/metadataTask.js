@@ -59,7 +59,7 @@ class metadataTask extends Component{
 		let tableInput = this.setInputInMetaTable();
 		let row_s = (this.props.elementsInTask == 1) ? 'row' : ' rows';
 		let alternative_s = (this.props.elementsInTask == 1) ? 'alternative' : ' alternatives';
-		let building_s = (this.props.elementsInTask == 1) ? 'an arbitrary building best' : ' arbitrary buildings best';
+		let building_s = (this.props.elementsInTask == 1) ? 'an random building best' : ' random buildings best';
 		return (
 			<div className="">
 				<h5>2. Select the {this.props.elementsInTask} most informative {row_s} that describes {building_s}</h5>

@@ -38,7 +38,6 @@ class AfterEachTaskSurvey extends Component {
 		this.initialData.besteffort = this.checkInput(this.initialData.besteffort);
 		this.initialData.interupted = this.checkInput(this.initialData.interupted);
 		this.initialData.comment = this.refs.comment.value;
-		console.log(this.initialData);
 		this.props.handleRegisterSubmit(this.initialData, false);
 	}
 

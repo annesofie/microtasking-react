@@ -23,8 +23,6 @@ export function saveTaskSurvey(data) {
 
 export function saveTaskResult(data) {
 
-	console.log(data);
-
 	return axios.post(apiURL+'taskresult/', {
 		taskorder: data.taskorder, //JSON
 		geomtasktime: data.time.geomTime, //int
